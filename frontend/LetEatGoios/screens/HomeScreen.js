@@ -11,10 +11,12 @@ import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Top5Page from '../pages/Top5Page';
 import {Dimensions} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 function HomeScreen() {
+  const navigation = useNavigation();
   const {top} = useSafeAreaInsets();
 
   return (
@@ -23,12 +25,12 @@ function HomeScreen() {
         edges={['bottom']}
         style={{flex: 1, backgroundColor: 'white'}}>
         <View style={[styles.statusBarPlaceholder, {height: top}]} />
-        <StatusBar barStyle="dark-content" />
+        <StatusBar barStyle="light-content" />
         <View style={styles.block}>
           <Text style={styles.text}>입맛춤</Text>
           <TouchableOpacity activeOpacity={0.65}>
             <Image
-              style={{marginRight: '5.01%', marginTop: '0.24%'}}
+              style={{marginRight: '5.01%', marginTop: '6%'}}
               source={require('../assets/icons/Search.png')}
             />
           </TouchableOpacity>
@@ -46,7 +48,11 @@ function HomeScreen() {
           <View>
             <Text style={styles.BeforeText}>내 취향에 맞는 레시피</Text>
           </View>
-          <TouchableOpacity activeOpacity={0.8}>
+          <TouchableOpacity
+            activeOpacity={0.65}
+            onPress={() => {
+              navigation.navigate('Selection');
+            }}>
             <View style={styles.TextBox}>
               <Text style={styles.ButtonText}>찾아보기</Text>
             </View>
@@ -56,7 +62,7 @@ function HomeScreen() {
           <View>
             <Text style={styles.BeforeText}>나의 식습관 지표 MBTI</Text>
           </View>
-          <TouchableOpacity activeOpacity={0.8}>
+          <TouchableOpacity activeOpacity={0.65}>
             <View style={styles.TextBox}>
               <Text style={styles.ButtonText}>알아보기</Text>
             </View>
@@ -78,7 +84,7 @@ const styles = StyleSheet.create({
     marginBottom: Height * 0.006,
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    alignContent: 'center',
+    alignItems: 'center',
   },
   text: {
     fontSize: 18,

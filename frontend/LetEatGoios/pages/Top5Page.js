@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -12,15 +12,29 @@ import PaginationDot from 'react-native-animated-pagination-dot';
 
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
+const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
+  const paddingToBottom = 20;
+  return (
+    layoutMeasurement.height + contentOffset.y >=
+    contentSize.height - paddingToBottom
+  );
+};
+
 function Top5Page() {
-  const [curPage] = React.useState(0);
+  const [Page, setPage] = useState(0);
   return (
     <View>
       <Text style={styles.text}>Top5 레시피</Text>
       <ScrollView
         horizontal
         pagingEnabled
-        showsHorizontalScrollIndicator={false}>
+        showsHorizontalScrollIndicator={false}
+        onScroll={({nativeEvent}) => {
+          console.dir(nativeEvent);
+          // if (!isCloseToBottom(nativeEvent)) {
+          // Page === 0 ? setPage(1) : setPage(0);
+          // }
+        }}>
         <Image
           style={styles.image}
           source={require('../assets/Images/food1.jpeg')}></Image>
@@ -37,7 +51,7 @@ function Top5Page() {
           style={styles.image}
           source={require('../assets/Images/food5.jpeg')}></Image>
       </ScrollView>
-      <PaginationDot activeDotColor={'#FFAAB3'} curPage={curPage} maxPage={2} />
+      <PaginationDot activeDotColor={'#FFAAB3'} curPage={Page} maxPage={2} />
     </View>
   );
 }

@@ -13,19 +13,7 @@ import axios from 'axios';
 
 function Login() {
   const navigation = useNavigation();
-  // async function postData(id, password) {
-  //   try {
-  //     const response = await axios.post('https://127.0.0.1:8088/signin', {
-  //       id,
-  //       password,
-  //     });
 
-  //     console.log(response.data);
-  //   } catch (e) {
-  //     console.log('e here');
-  //     console.log(e);
-  //   }
-  // }
   const signin = async () => {
     let body = {id: userId, password: userPassword};
 
@@ -75,7 +63,8 @@ function Login() {
             style={styles.btn}
             // onPress={() => postData(userId, userPassword)}
             onPress={() => {
-              signin();
+              //signin();
+              navigation.replace('Main');
             }}>
             <Text style={{color: 'white'}}>로그인</Text>
           </TouchableOpacity>

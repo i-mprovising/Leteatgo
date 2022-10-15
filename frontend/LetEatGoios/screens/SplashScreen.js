@@ -24,7 +24,7 @@ const SplashScreen = () => {
       />
       <ActivityIndicator
         animating={animating}
-        color="#6990F7"
+        color="white"
         size="large"
         style={styles.ActivityIndicator}
       />
@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
   },
   ActivityIndicator: {
     alignItems: 'center',
+
     height: 80,
   },
 });

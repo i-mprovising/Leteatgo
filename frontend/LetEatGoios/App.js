@@ -6,6 +6,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SignInScreen from './screens/SignInScreen';
 import RegisterScreen from './screens/RegisterScreen';
+import SelectionPage from './pages/SelectionPage';
+
 Stack = createNativeStackNavigator();
 function Splash_Screen() {
   return <SplashScreen />;
@@ -20,6 +22,9 @@ function Main_Screen() {
 function Register_Screen() {
   return <RegisterScreen />;
 }
+function Selection_Screen() {
+  return <SelectionPage />;
+}
 function App() {
   return (
     <NavigationContainer>
@@ -27,7 +32,10 @@ function App() {
         <Stack.Screen
           name="Splash"
           component={Splash_Screen}
-          options={{title: '', headerTransparent: true}}
+          options={{
+            title: '',
+            headerTransparent: true,
+          }}
         />
         <Stack.Screen
           name="SignIn"
@@ -37,12 +45,30 @@ function App() {
         <Stack.Screen
           name="Main"
           component={Main_Screen}
-          options={{title: '', headerTransparent: true}}
+          options={{
+            title: '',
+            headerShown: false,
+            headerTintColor: 'white',
+          }}
         />
         <Stack.Screen
           name="Register"
           component={Register_Screen}
-          options={{title: '', headerTransparent: true}}
+          options={{
+            title: '',
+            headerTransparent: true,
+            headerTintColor: 'white',
+          }}
+        />
+        <Stack.Screen
+          name="Selection"
+          component={Selection_Screen}
+          options={{
+            title: '',
+            headerTransparent: true,
+            headerBackTitleVisible: false,
+            headerTintColor: 'white',
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

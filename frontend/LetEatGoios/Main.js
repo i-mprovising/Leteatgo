@@ -1,13 +1,44 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Text, StyleSheet, Image} from 'react-native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {Text, Image, TextInput, Dimensions} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import HomeScreen from './screens/HomeScreen';
-
+import SearchPage from './pages/SearchPage';
+import styles from './style';
 const Tab = createBottomTabNavigator();
-
-function Home_Screen() {
+const HomeStack = createNativeStackNavigator();
+function Search_Page({navigation}) {
+  return <SearchPage />;
+}
+function Home_Screen({navigation}) {
   return <HomeScreen />;
+}
+
+function HomeStackScreen() {
+  return (
+    <HomeStack.Navigator>
+      <HomeStack.Screen
+        name="HomeStack"
+        component={Home_Screen}
+        options={{
+          title: '',
+          headerShown: false,
+          headerBackTitleVisible: false,
+          headerTintColor: 'white',
+        }}
+      />
+      <HomeStack.Screen
+        name="Search"
+        component={Search_Page}
+        options={{
+          headerShown: false,
+          headerBackTitleVisible: false,
+          headerTintColor: 'white',
+        }}
+      />
+    </HomeStack.Navigator>
+  );
 }
 
 function CartScreen() {
@@ -52,7 +83,7 @@ function Main() {
       }}>
       <Tab.Screen
         name="Home"
-        component={Home_Screen}
+        component={HomeStackScreen}
         options={{
           tabBarIcon: ({focused}) => {
             return <Image source={require('./assets/icons/Home.png')} />;
@@ -92,9 +123,4 @@ function Main() {
   );
 }
 
-const styles = StyleSheet.create({
-  top: {
-    backgroundColor: '#FFAAB3',
-  },
-});
 export default Main;

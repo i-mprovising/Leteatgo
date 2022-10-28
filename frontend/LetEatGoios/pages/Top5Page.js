@@ -1,75 +1,52 @@
 import React, {useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  ActivityIndicator,
-  Image,
-  ScrollView,
-} from 'react-native';
-import {Dimensions} from 'react-native';
-import PaginationDot from 'react-native-animated-pagination-dot';
-
-const Height = Dimensions.get('window').height;
-const Width = Dimensions.get('window').width;
-const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
-  const paddingToBottom = 20;
-  return (
-    layoutMeasurement.height + contentOffset.y >=
-    contentSize.height - paddingToBottom
-  );
-};
+import {View, Text, ActivityIndicator, Image} from 'react-native';
+import Slick from 'react-native-slick';
+import styles from '../style';
 
 function Top5Page() {
-  const [Page, setPage] = useState(0);
   return (
     <View>
-      <Text style={styles.text}>Top5 레시피</Text>
-      <ScrollView
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        onScroll={({nativeEvent}) => {
-          console.dir(nativeEvent);
-          // if (!isCloseToBottom(nativeEvent)) {
-          // Page === 0 ? setPage(1) : setPage(0);
-          // }
-        }}>
-        <Image
-          style={styles.image}
-          source={require('../assets/Images/food1.jpeg')}></Image>
-        <Image
-          style={styles.image}
-          source={require('../assets/Images/food2.jpeg')}></Image>
-        <Image
-          style={styles.image}
-          source={require('../assets/Images/food3.jpeg')}></Image>
-        <Image
-          style={styles.image}
-          source={require('../assets/Images/food4.jpeg')}></Image>
-        <Image
-          style={styles.image}
-          source={require('../assets/Images/food5.jpeg')}></Image>
-      </ScrollView>
-      <PaginationDot activeDotColor={'#FFAAB3'} curPage={Page} maxPage={2} />
+      <Text style={styles.InBoxtext}>Top5 레시피</Text>
+      <Slick
+        loadMinimalLoader={<ActivityIndicator />}
+        autoplay
+        dotStyle={{
+          backgroundColor: '#FFCDD2',
+        }}
+        activeDotStyle={{
+          backgroundColor: '#FFAAB3',
+        }}
+        paginationStyle={{bottom: 6}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignContent: 'center',
+          }}>
+          <Image
+            style={styles.image}
+            source={require('../assets/Images/food1.jpeg')}></Image>
+          <Image
+            style={styles.image}
+            source={require('../assets/Images/food2.jpeg')}></Image>
+          <Image
+            style={styles.image}
+            source={require('../assets/Images/food3.jpeg')}></Image>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+          }}>
+          <Image
+            style={{...styles.image, marginRight: '7%'}}
+            source={require('../assets/Images/food4.jpeg')}></Image>
+          <Image
+            style={styles.image}
+            source={require('../assets/Images/food5.jpeg')}></Image>
+        </View>
+      </Slick>
     </View>
   );
 }
-const styles = StyleSheet.create({
-  text: {
-    fontFamily: 'Happiness-Sans-Bold',
-    fontWeight: '900',
-    fontSize: 19,
-    marginTop: Height * 0.017,
-    marginBottom: Height * 0.017,
-    paddingLeft: '35%',
-  },
-  image: {
-    height: Height * 0.138,
-    width: Height * 0.135,
-    marginHorizontal: Width * 0.01,
-    marginBottom: Height * 0.04,
-    borderBottomRightRadius: 13,
-  },
-});
 export default Top5Page;

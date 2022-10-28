@@ -1,6 +1,5 @@
 import React from 'react';
 import Main from './Main';
-import {View, Text} from 'react-native';
 import SplashScreen from './screens/SplashScreen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -9,6 +8,10 @@ import RegisterScreen from './screens/RegisterScreen';
 import SelectionPage from './pages/SelectionPage';
 
 Stack = createNativeStackNavigator();
+
+function Selection_Screen() {
+  return <SelectionPage />;
+}
 function Splash_Screen() {
   return <SplashScreen />;
 }
@@ -21,9 +24,6 @@ function Main_Screen() {
 
 function Register_Screen() {
   return <RegisterScreen />;
-}
-function Selection_Screen() {
-  return <SelectionPage />;
 }
 function App() {
   return (

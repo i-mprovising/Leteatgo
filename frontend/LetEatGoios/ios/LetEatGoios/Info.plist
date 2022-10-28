@@ -39,6 +39,8 @@
 	<string/>
 	<key>UIAppFonts</key>
 	<array>
+		<string>Roboto-Italic.ttf</string>
+		<string>Roboto-Bold.ttf</string>
 		<string>PretendardVariable-Regular.ttf</string>
 		<string>Happiness-Sans-Bold.ttf</string>
 		<string>Happiness-Sans-Regular</string>

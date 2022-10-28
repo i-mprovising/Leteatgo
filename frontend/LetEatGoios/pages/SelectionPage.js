@@ -34,7 +34,7 @@ function ImageList(Props) {
           marginLeft: Width * 0.025,
         }}>
         <Image
-          style={styles.image}
+          style={styles.selectImage}
           source={require('../assets/Images/food1.jpeg')}></Image>
         <TouchableOpacity
           activeOpacity={1}
@@ -58,7 +58,7 @@ function SelectionPage() {
       <SafeAreaView edges={['bottom']} style={{backgroundColor: 'white'}}>
         <View style={[styles.statusBarPlaceholder, {height: top}]} />
         <StatusBar barStyle="light-content" />
-        <View style={styles.block}>
+        <View style={{...styles.block, justifyContent: 'center'}}>
           <Text style={styles.title}>내 취향 레시피 찾아보기</Text>
         </View>
         <View style={styles.box}>

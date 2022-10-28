@@ -34,6 +34,13 @@ const styles = StyleSheet.create({
     marginBottom: Height * 0.04,
     borderBottomRightRadius: 13,
   },
+  selectImage: {
+    height: Height * 0.138,
+    width: Height * 0.135,
+    marginHorizontal: Width * 0.01,
+    marginBottom: Height * 0.01,
+    borderBottomRightRadius: 13,
+  },
   InfoText: {
     fontFamily: 'Happiness-Sans-Bold',
     fontWeight: '400',
@@ -109,7 +116,7 @@ const styles = StyleSheet.create({
   },
   TextInput: {
     backgroundColor: 'white',
-    width: Width * 0.85,
+    width: Width * 0.86,
     height: Height * 0.045,
     marginLeft: '3%',
     borderRadius: 17,
@@ -123,6 +130,17 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.15,
     shadowRadius: 2,
+  },
+  SearchHistory: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderRadius: 20,
+    marginHorizontal: '2%',
+    marginVertical: '2%',
+    padding: '2%',
+    borderColor: '#FFAAB3',
   },
 });
 

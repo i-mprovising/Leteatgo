@@ -17,6 +17,8 @@
 		8602BF6428EB205000AF89DE /* Happiness-Sans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 825844D36E124AEFA06135E9 /* Happiness-Sans-Regular.ttf */; };
 		8602BF6528EB205000AF89DE /* Happiness-Sans-Title.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B34B8E59FDE548A193250331 /* Happiness-Sans-Title.ttf */; };
 		8602BF6628EB205000AF89DE /* Cafe24Ssurround.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CF6BB18BD4C04555B6A9200E /* Cafe24Ssurround.ttf */; };
+		F7BB1DE30CEE4EABA8ABA089 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88E94672DA714CF4A59C9149 /* Roboto-Bold.ttf */; };
+		C2838BC13DE94A2C9B35F5C3 /* Roboto-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2E73B55FEAAE442D8A5C1D73 /* Roboto-Italic.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +57,8 @@
 		B34B8E59FDE548A193250331 /* Happiness-Sans-Title.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Happiness-Sans-Title.ttf"; path = "../assets/fonts/Happiness-Sans-Title.ttf"; sourceTree = "<group>"; };
 		CF6BB18BD4C04555B6A9200E /* Cafe24Ssurround.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Cafe24Ssurround.ttf; path = ../assets/fonts/Cafe24Ssurround.ttf; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		88E94672DA714CF4A59C9149 /* Roboto-Bold.ttf */ = {isa = PBXFileReference; name = "Roboto-Bold.ttf"; path = "../assets/fonts/Roboto-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		2E73B55FEAAE442D8A5C1D73 /* Roboto-Italic.ttf */ = {isa = PBXFileReference; name = "Roboto-Italic.ttf"; path = "../assets/fonts/Roboto-Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +131,8 @@
 				CF6BB18BD4C04555B6A9200E /* Cafe24Ssurround.ttf */,
 				A8D21751C7A74B8EB92C9842 /* PretendardVariable.ttf */,
 				411D326F28A840D58E5D0598 /* PretendardVariable-Regular.ttf */,
+				88E94672DA714CF4A59C9149 /* Roboto-Bold.ttf */,
+				2E73B55FEAAE442D8A5C1D73 /* Roboto-Italic.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -272,6 +278,8 @@
 				8602BF6528EB205000AF89DE /* Happiness-Sans-Title.ttf in Resources */,
 				8602BF6628EB205000AF89DE /* Cafe24Ssurround.ttf in Resources */,
 				8602BF6228EB203600AF89DE /* fonts in Resources */,
+				F7BB1DE30CEE4EABA8ABA089 /* Roboto-Bold.ttf in Resources */,
+				C2838BC13DE94A2C9B35F5C3 /* Roboto-Italic.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

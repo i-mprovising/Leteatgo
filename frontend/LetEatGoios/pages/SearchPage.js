@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   StatusBar,
@@ -14,10 +14,14 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {TextInput} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 import styles from '../style';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const STORAGE_KEY = '@userId'; // userId 얻어와서 저장
+
 function SearchHistory(Props) {
   const text = Props.text;
   return (
-    <View style={styles.SearchHistory}>
+    <View style={styles.SearchHistory} key={Props.key}>
       <Text style={{paddingRight: '3%', color: '#FFAAB3'}}>{text}</Text>
       <TouchableOpacity style={{paddingLeft: '2%'}} activeOpacity={0.7}>
         <Text style={{color: '#FFAAB3'}}>X</Text>
@@ -55,7 +59,46 @@ function SearchPage() {
   const navigation = useNavigation();
   const {top} = useSafeAreaInsets();
   const [text, setText] = useState('');
+  const [history, setHistory] = useState({0: text});
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    loadHistory();
+  }, []);
+
   const onChangeText = payload => setText(payload);
+  const saveHistory = async toSave => {
+    // console.log(toSave);
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
+  };
+  const loadHistory = async () => {
+    // AsyncStorage.removeItem(STORAGE_KEY);
+    const s = await AsyncStorage.getItem(STORAGE_KEY);
+    console.log(s);
+    setHistory(JSON.parse(s));
+  };
+  const addHistory = async () => {
+    setCount(count + 1);
+    console.log(text);
+    if (text === '') {
+      return;
+    }
+    console.log(history);
+    const newHistory = {
+      ...history,
+      [Date.now()]: {text},
+    };
+    console.log('newhistory');
+    console.log(newHistory);
+    setHistory(newHistory);
+    await saveHistory(newHistory);
+    setText('');
+  };
+  const deleteHistory = key => {
+    const newHistory = {...history};
+    delete newHistory[key];
+    setHistory(newHistory);
+    saveHistory(newHistory);
+  };
   return (
     <SafeAreaProvider>
       <SafeAreaView
@@ -82,6 +125,7 @@ function SearchPage() {
           </TouchableOpacity>
           <TextInput
             placeholder="검색어를 입력해주세요."
+            onSubmitEditing={addHistory}
             onChangeText={onChangeText}
             style={styles.TextInput}
             value={text}></TextInput>
@@ -123,12 +167,9 @@ function SearchPage() {
               flexWrap: 'wrap',
               marginBottom: '8%',
             }}>
-            <SearchHistory text={'떡볶이'} />
-            <SearchHistory text={'김치찜'} />
-            <SearchHistory text={'파스타'} />
-            <SearchHistory text={'파스타'} />
-            <SearchHistory text={'파스타'} />
-            <SearchHistory text={'파스타'} />
+            {Object.keys(history).map(key => (
+              <SearchHistory key={key} text={history[key].text} />
+            ))}
           </View>
           <View
             style={{
@@ -137,7 +178,12 @@ function SearchPage() {
               marginLeft: '5%',
               borderColor: '#F1F1F1',
             }}></View>
-          <View style={{paddingTop: '13%', flexDirection: 'row'}}>
+          <View
+            style={{
+              paddingTop: '13%',
+              paddingBottom: '5%',
+              flexDirection: 'row',
+            }}>
             <Text
               style={{
                 fontSize: 21,
@@ -153,7 +199,7 @@ function SearchPage() {
                 paddingTop: '1%',
                 fontFamily: 'Happiness-Sans-Regular',
               }}>
-              지금 이 순간 가장 많이 검색되고 있어요!
+              "지금 이 순간 가장 많이 검색되고 있어요!""
             </Text>
           </View>
           <PopularTerms />
@@ -166,4 +212,5 @@ function SearchPage() {
     </SafeAreaProvider>
   );
 }
+
 export default SearchPage;

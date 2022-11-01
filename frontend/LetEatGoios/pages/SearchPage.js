@@ -3,7 +3,6 @@ import {
   View,
   StatusBar,
   Image,
-  Dimensions,
   Text,
   TouchableOpacity,
   ScrollView,
@@ -16,14 +15,17 @@ import {useNavigation} from '@react-navigation/native';
 import styles from '../style';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const STORAGE_KEY = '@userId'; // userId 얻어와서 저장
+const STORAGE_KEY = '@userId'; // 나중에 userId 얻어와서 저장
 
 function SearchHistory(Props) {
   const text = Props.text;
   return (
-    <View style={styles.SearchHistory} key={Props.key}>
+    <View style={styles.SearchHistory} key={Props.Key}>
       <Text style={{paddingRight: '3%', color: '#FFAAB3'}}>{text}</Text>
-      <TouchableOpacity style={{paddingLeft: '2%'}} activeOpacity={0.7}>
+      <TouchableOpacity
+        style={{paddingLeft: '2%'}}
+        activeOpacity={0.7}
+        onPress={() => Props.deleteHistory(Props.Key)}>
         <Text style={{color: '#FFAAB3'}}>X</Text>
       </TouchableOpacity>
     </View>
@@ -59,36 +61,37 @@ function SearchPage() {
   const navigation = useNavigation();
   const {top} = useSafeAreaInsets();
   const [text, setText] = useState('');
-  const [history, setHistory] = useState({0: text});
-  const [count, setCount] = useState(0);
+  const [history, setHistory] = useState({});
+
   useEffect(() => {
     loadHistory();
   }, []);
 
   const onChangeText = payload => setText(payload);
   const saveHistory = async toSave => {
-    // console.log(toSave);
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
   };
   const loadHistory = async () => {
-    // AsyncStorage.removeItem(STORAGE_KEY);
     const s = await AsyncStorage.getItem(STORAGE_KEY);
-    console.log(s);
-    setHistory(JSON.parse(s));
+
+    if (s === null) {
+      setHistory({});
+    } else {
+      console.log(s);
+      setHistory(JSON.parse(s));
+    }
   };
   const addHistory = async () => {
-    setCount(count + 1);
-    console.log(text);
     if (text === '') {
       return;
     }
-    console.log(history);
+
+    doubleCheck(text) === undefined ? null : delete history[doubleCheck(text)];
     const newHistory = {
       ...history,
       [Date.now()]: {text},
     };
-    console.log('newhistory');
-    console.log(newHistory);
+
     setHistory(newHistory);
     await saveHistory(newHistory);
     setText('');
@@ -98,6 +101,14 @@ function SearchPage() {
     delete newHistory[key];
     setHistory(newHistory);
     saveHistory(newHistory);
+  };
+  const doubleCheck = text => {
+    for (const key in history) {
+      if (history[key].text === text) {
+        return key;
+      }
+    }
+    console.log('doubleCheck');
   };
   return (
     <SafeAreaProvider>
@@ -124,6 +135,7 @@ function SearchPage() {
             <Image source={require('../assets/icons/back.png')}></Image>
           </TouchableOpacity>
           <TextInput
+            autoCorrect={false}
             placeholder="검색어를 입력해주세요."
             onSubmitEditing={addHistory}
             onChangeText={onChangeText}
@@ -149,7 +161,11 @@ function SearchPage() {
             </Text>
             <TouchableOpacity
               activeOpacity={0.7}
-              style={{marginTop: '8%', paddingRight: '5%'}}>
+              style={{marginTop: '8%', paddingRight: '5%'}}
+              onPress={() => {
+                AsyncStorage.removeItem(STORAGE_KEY);
+                setHistory({});
+              }}>
               <Text
                 style={{
                   textDecorationLine: 'underline',
@@ -167,9 +183,15 @@ function SearchPage() {
               flexWrap: 'wrap',
               marginBottom: '8%',
             }}>
-            {Object.keys(history).map(key => (
-              <SearchHistory key={key} text={history[key].text} />
-            ))}
+            {Object.keys(history)
+              .reverse()
+              .map(key => (
+                <SearchHistory
+                  Key={key}
+                  text={history[key].text}
+                  deleteHistory={deleteHistory}
+                />
+              ))}
           </View>
           <View
             style={{

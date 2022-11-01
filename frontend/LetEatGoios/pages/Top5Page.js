@@ -17,34 +17,22 @@ function Top5Page() {
           backgroundColor: '#FFAAB3',
         }}
         paginationStyle={{bottom: 6}}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignContent: 'center',
-          }}>
-          <Image
-            style={styles.image}
-            source={require('../assets/Images/food1.jpeg')}></Image>
-          <Image
-            style={styles.image}
-            source={require('../assets/Images/food2.jpeg')}></Image>
-          <Image
-            style={styles.image}
-            source={require('../assets/Images/food3.jpeg')}></Image>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-          }}>
-          <Image
-            style={{...styles.image, marginRight: '7%'}}
-            source={require('../assets/Images/food4.jpeg')}></Image>
-          <Image
-            style={styles.image}
-            source={require('../assets/Images/food5.jpeg')}></Image>
-        </View>
+        <Image
+          style={styles.image}
+          source={require('../assets/Images/food1.jpeg')}></Image>
+        <Image
+          style={styles.image}
+          source={require('../assets/Images/food2.jpeg')}></Image>
+        <Image
+          style={styles.image}
+          source={require('../assets/Images/food3.jpeg')}></Image>
+
+        <Image
+          style={{...styles.image, marginRight: '7%'}}
+          source={require('../assets/Images/food4.jpeg')}></Image>
+        <Image
+          style={styles.image}
+          source={require('../assets/Images/food5.jpeg')}></Image>
       </Slick>
     </View>
   );

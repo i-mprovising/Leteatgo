@@ -1,14 +1,23 @@
-import React from 'react';
-import {View, Text, StatusBar, Image, TouchableOpacity} from 'react-native';
+import React, {useState} from 'react';
+import {
+  Text,
+  TextInput,
+  StatusBar,
+  Image,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import Top5Page from '../pages/Top5Page';
 import {useNavigation} from '@react-navigation/native';
 import styles from '../style';
 import LinearGradient from 'react-native-linear-gradient';
-function HomeScreen() {
+function RefrigeratorScreen() {
   const navigation = useNavigation();
   const {top} = useSafeAreaInsets();
+  const [text, setText] = useState('');
+
+  const onChangeText = payload => setText(payload);
 
   return (
     <SafeAreaProvider>
@@ -27,7 +36,7 @@ function HomeScreen() {
           end={{x: 1, y: 0}}
           colors={['#FFCDD2', '#FFAAB3']}
           style={{...styles.block, justifyContent: 'flex-end'}}>
-          <Text style={styles.text}>입맛춤</Text>
+          <Text style={styles.text}>냉장고</Text>
           <TouchableOpacity
             activeOpacity={0.65}
             onPress={() => {
@@ -45,36 +54,42 @@ function HomeScreen() {
             />
           </TouchableOpacity>
         </LinearGradient>
-        <View style={{...styles.HomeBox, flex: 1.15}}>
-          <Top5Page />
-        </View>
-        <View style={{...styles.HomeBox, flex: 1.15}}>
-          <View>
-            <Text style={styles.BeforeText}>내 취향에 맞는 레시피</Text>
-          </View>
-          <TouchableOpacity
-            activeOpacity={0.65}
-            onPress={() => {
-              navigation.navigate('Selection');
+
+        <Text
+          style={{
+            paddingLeft: 20,
+            paddingVertical: 30,
+            fontSize: 15.5,
+            fontWeight: '800',
+          }}>
+          나의 냉장고
+        </Text>
+        <View style={{position: 'relative'}}>
+          <Text
+            style={{
+              paddingLeft: 20,
+              paddingVertical: 17,
+              fontSize: 15.5,
+              fontWeight: '800',
             }}>
-            <View style={styles.TextBox}>
-              <Text style={styles.ButtonText}>찾아보기</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-        <View style={{...styles.HomeBox, flex: 1, marginBottom: '10%'}}>
-          <View>
-            <Text style={styles.BeforeText}>나의 식습관 지표 MBTI</Text>
-          </View>
-          <TouchableOpacity activeOpacity={0.65}>
-            <View style={styles.TextBox}>
-              <Text style={styles.ButtonText}>알아보기</Text>
-            </View>
-          </TouchableOpacity>
+            재료 추가하기
+          </Text>
+          <TextInput
+            autoCorrect={false}
+            // onSubmitEditing={addHistory}
+            onChangeText={onChangeText}
+            style={styles.refrigeSearch}
+            value={text}></TextInput>
+          <Image
+            source={require('../assets/icons/PinkSearch.png')}
+            style={{
+              position: 'absolute',
+              top: '68%',
+              left: '86%',
+            }}></Image>
         </View>
       </SafeAreaView>
     </SafeAreaProvider>
   );
 }
-
-export default HomeScreen;
+export default RefrigeratorScreen;

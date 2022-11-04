@@ -6,6 +6,8 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import HomeScreen from './screens/HomeScreen';
 import SearchPage from './pages/SearchPage';
 import styles from './style';
+import RefrigeratorScreen from './screens/RefrigeratorScreen';
+
 const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
 function Search_Page({navigation}) {
@@ -49,11 +51,7 @@ function CartScreen() {
   );
 }
 function Refrigerator() {
-  return (
-    <SafeAreaView>
-      <Text>Home</Text>
-    </SafeAreaView>
-  );
+  return <RefrigeratorScreen />;
 }
 function ManageScreen() {
   return (

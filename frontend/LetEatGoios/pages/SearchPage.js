@@ -31,7 +31,7 @@ function SearchHistory(Props) {
     </View>
   );
 }
-function PopularTerms() {
+function PopularTerms(Props) {
   return (
     <View style={{flexDirection: 'row', marginVertical: '5%'}}>
       <Text
@@ -43,7 +43,7 @@ function PopularTerms() {
           color: '#FFAAB3',
           fontSize: 28,
         }}>
-        1
+        {Props.rank}
       </Text>
       <TouchableOpacity style={{paddingVertical: '1%'}} activeOpacity={0.7}>
         <Text
@@ -51,7 +51,7 @@ function PopularTerms() {
             fontFamily: 'Happiness-Sans-Regular',
             fontSize: 20,
           }}>
-          다이어트
+          {Props.keyWord}
         </Text>
       </TouchableOpacity>
     </View>
@@ -73,13 +73,7 @@ function SearchPage() {
   };
   const loadHistory = async () => {
     const s = await AsyncStorage.getItem(STORAGE_KEY);
-
-    if (s === null) {
-      setHistory({});
-    } else {
-      console.log(s);
-      setHistory(JSON.parse(s));
-    }
+    s === null ? setHistory({}) : setHistory(JSON.parse(s));
   };
   const addHistory = async () => {
     if (text === '') {
@@ -108,7 +102,6 @@ function SearchPage() {
         return key;
       }
     }
-    console.log('doubleCheck');
   };
   return (
     <SafeAreaProvider>
@@ -202,33 +195,33 @@ function SearchPage() {
             }}></View>
           <View
             style={{
-              paddingTop: '13%',
-              paddingBottom: '5%',
-              flexDirection: 'row',
+              paddingTop: '7%',
             }}>
             <Text
               style={{
                 fontSize: 21,
                 fontWeight: '700',
-                paddingHorizontal: '5%',
+                paddingHorizontal: '7%',
+                fontFamily: 'Happiness-Sans-Regular',
               }}>
-              인기 순위
+              Top5 Recipe 🥇
             </Text>
             <Text
               style={{
                 color: '#FFAAB3',
-                fontSize: 14,
-                paddingTop: '1%',
+                fontSize: 15,
+                paddingTop: '5%',
+                paddingLeft: '30%',
                 fontFamily: 'Happiness-Sans-Regular',
               }}>
-              "지금 이 순간 가장 많이 검색되고 있어요!""
+              앱 내에서 가장 인기가 좋은 레시피에요!
             </Text>
           </View>
-          <PopularTerms />
-          <PopularTerms />
-          <PopularTerms />
-          <PopularTerms />
-          <PopularTerms />
+          <PopularTerms rank={1} keyWord={'제육볶음'} />
+          <PopularTerms rank={2} keyWord={'된장찌개'} />
+          <PopularTerms rank={3} keyWord={'닭갈비'} />
+          <PopularTerms rank={4} keyWord={'떡볶이'} />
+          <PopularTerms rank={5} keyWord={'계란찜'} />
         </ScrollView>
       </SafeAreaView>
     </SafeAreaProvider>

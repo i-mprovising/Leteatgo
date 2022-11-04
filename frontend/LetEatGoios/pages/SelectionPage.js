@@ -75,27 +75,6 @@ function SelectionPage() {
                 flexDirection: 'row',
               }}>
               <ImageList />
-              <ImageList />
-              <ImageList />
-              <ImageList />
-              <ImageList />
-              <ImageList />
-              <ImageList />
-              <ImageList />
-              <ImageList />
-              <ImageList />
-              <ImageList />
-              <ImageList />
-              <ImageList />
-              <ImageList />
-              <ImageList />
-              <ImageList />
-              <ImageList />
-              <ImageList />
-              <ImageList />
-              <ImageList />
-              <ImageList />
-              <ImageList />
             </View>
           </ScrollView>
         </View>

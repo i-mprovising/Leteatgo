@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   InfoText: {
     fontFamily: 'Happiness-Sans-Bold',
     fontWeight: '400',
-    fontSize: 13,
+    fontSize: 16,
     paddingTop: Height * 0.005,
     marginBottom: Height * 0.005,
   },

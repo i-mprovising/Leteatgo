@@ -1,5 +1,4 @@
 const User = require('../models/user');
-const { auth, Auth } = require('../models');
 const bcrypt = require('bcrypt');
 const CODE = require('../modules/statusCode');
 
@@ -17,7 +16,7 @@ const user = {
                     }
                 });
                 if(checkId){
-                    return res.json({ statusCode: CODE.DUPLICATE, msg: "email that already exists"});
+                    return res.json({ statusCode: CODE.DUPLICATE, msg: "id that already exists"});
                 }
                 if(checkNickname){
                     return res.json({ statusCode: CODE.DUPLICATE, msg: "nickname that already exists"});

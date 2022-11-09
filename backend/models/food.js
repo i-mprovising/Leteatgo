@@ -9,16 +9,20 @@ module.exports = class Food extends Sequelize.Model{
                 autoIncrement: true,
                 primaryKey: true
             },
-            foodname: {
+            material: {
+                type: Sequelize.JSON,
+                allowNull: false,
+            },
+            Name: {
                 type: Sequelize.STRING(30),
                 allowNull: false,
             },
-            kind: {
+            Kind: {
                 type: Sequelize.TINYINT,
                 allowNull: false,
             },
-            image: {
-                type: Sequelize.STRING(1000),
+            Image: {
+                type: Sequelize.TEXT,
                 allowNull: true
             }
         }, {
@@ -34,7 +38,11 @@ module.exports = class Food extends Sequelize.Model{
     }
     static associate(db) {
         db.Food.hasOne(db.Recipe, {
-            foreignKey: "foodid", sourceKey: "userid"
+            foreignKey: "foodid", sourceKey: "foodid"
+        });
+        db.Food.belongsToMany(db.Recipe, {
+            foreignKey: "foodid",
+            sourceKey: "foodid",
         });
     }
     

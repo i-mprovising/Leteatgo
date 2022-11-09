@@ -1,4 +1,4 @@
-const { INTEGER } = require('sequelize');
+const { INTEGER, STRING } = require('sequelize');
 const Sequelize = require('sequelize');
 
 module.exports = class Recipe extends Sequelize.Model{
@@ -11,16 +11,12 @@ module.exports = class Recipe extends Sequelize.Model{
                 primaryKey: true
             },
             material: {
-                type: Sequelize.JSON,
+                type: Sequelize.TEXT,
                 allowNull: false,
             },
             order: {
                 type: Sequelize.JSON,
                 allowNull: false,
-            },
-            video: {
-                type: Sequelize.STRING(1000),
-                allowNull: true
             }
         }, {
             sequelize,
@@ -36,7 +32,7 @@ module.exports = class Recipe extends Sequelize.Model{
 
     static associate(db) {
         db.Recipe.belongsTo(db.Food, {
-            foreignKey: "userid", sourceKey: "userid"
+            foreignKey: "foodid", sourceKey: "foodid"
         });
     }
 };

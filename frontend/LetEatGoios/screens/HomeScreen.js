@@ -66,7 +66,11 @@ function HomeScreen() {
           <View>
             <Text style={styles.BeforeText}>나의 식습관 지표 MBTI</Text>
           </View>
-          <TouchableOpacity activeOpacity={0.65}>
+          <TouchableOpacity
+            activeOpacity={0.65}
+            onPress={() => {
+              navigation.navigate('MbtiSurvey');
+            }}>
             <View style={styles.TextBox}>
               <Text style={styles.ButtonText}>알아보기</Text>
             </View>

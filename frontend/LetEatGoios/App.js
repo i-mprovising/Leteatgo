@@ -6,7 +6,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SignInScreen from './screens/SignInScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import SelectionPage from './pages/SelectionPage';
-
+import MbitSurvery from './pages/MbtiSurvey';
 Stack = createNativeStackNavigator();
 
 function Selection_Screen() {
@@ -20,6 +20,9 @@ function SignIn_Screen() {
 }
 function Main_Screen() {
   return <Main />;
+}
+function MbitSurvery_Screen() {
+  return <MbitSurvery />;
 }
 
 function Register_Screen() {
@@ -63,6 +66,16 @@ function App() {
         <Stack.Screen
           name="Selection"
           component={Selection_Screen}
+          options={{
+            title: '',
+            headerTransparent: true,
+            headerBackTitleVisible: false,
+            headerTintColor: 'white',
+          }}
+        />
+        <Stack.Screen
+          name="MbtiSurvey"
+          component={MbitSurvery_Screen}
           options={{
             title: '',
             headerTransparent: true,

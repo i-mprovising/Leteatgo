@@ -4,6 +4,7 @@ import {
   TextInput,
   StatusBar,
   Image,
+  ScrollView,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -12,11 +13,14 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 import styles from '../style';
 import LinearGradient from 'react-native-linear-gradient';
+import Category from '../data/categoryIndex';
+import IngreCategory from '../pages/IngredientsAdd';
+
 function RefrigeratorScreen() {
   const navigation = useNavigation();
   const {top} = useSafeAreaInsets();
   const [text, setText] = useState('');
-
+  // console.log(Category);
   const onChangeText = payload => setText(payload);
 
   return (
@@ -54,12 +58,11 @@ function RefrigeratorScreen() {
             />
           </TouchableOpacity>
         </LinearGradient>
-
         <Text
           style={{
             paddingLeft: 20,
             paddingVertical: 30,
-            fontSize: 15.5,
+            fontSize: 16,
             fontWeight: '800',
           }}>
           나의 냉장고
@@ -69,7 +72,7 @@ function RefrigeratorScreen() {
             style={{
               paddingLeft: 20,
               paddingVertical: 17,
-              fontSize: 15.5,
+              fontSize: 16,
               fontWeight: '800',
             }}>
             재료 추가하기
@@ -88,6 +91,11 @@ function RefrigeratorScreen() {
               left: '86%',
             }}></Image>
         </View>
+        <ScrollView>
+          {Category.map(key => (
+            <IngreCategory category={key.name} array={key.array} />
+          ))}
+        </ScrollView>
       </SafeAreaView>
     </SafeAreaProvider>
   );

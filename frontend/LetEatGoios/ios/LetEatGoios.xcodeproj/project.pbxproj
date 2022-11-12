@@ -17,8 +17,8 @@
 		8602BF6428EB205000AF89DE /* Happiness-Sans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 825844D36E124AEFA06135E9 /* Happiness-Sans-Regular.ttf */; };
 		8602BF6528EB205000AF89DE /* Happiness-Sans-Title.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B34B8E59FDE548A193250331 /* Happiness-Sans-Title.ttf */; };
 		8602BF6628EB205000AF89DE /* Cafe24Ssurround.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CF6BB18BD4C04555B6A9200E /* Cafe24Ssurround.ttf */; };
-		F7BB1DE30CEE4EABA8ABA089 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88E94672DA714CF4A59C9149 /* Roboto-Bold.ttf */; };
 		C2838BC13DE94A2C9B35F5C3 /* Roboto-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2E73B55FEAAE442D8A5C1D73 /* Roboto-Italic.ttf */; };
+		F7BB1DE30CEE4EABA8ABA089 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88E94672DA714CF4A59C9149 /* Roboto-Bold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +42,7 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = LetEatGoios/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = LetEatGoios/main.m; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-LetEatGoios-LetEatGoiosTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LetEatGoios-LetEatGoiosTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2E73B55FEAAE442D8A5C1D73 /* Roboto-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Italic.ttf"; path = "../assets/fonts/Roboto-Italic.ttf"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-LetEatGoios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LetEatGoios.debug.xcconfig"; path = "Target Support Files/Pods-LetEatGoios/Pods-LetEatGoios.debug.xcconfig"; sourceTree = "<group>"; };
 		411D326F28A840D58E5D0598 /* PretendardVariable-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "PretendardVariable-Regular.ttf"; path = "../assets/fonts/PretendardVariable-Regular.ttf"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-LetEatGoios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LetEatGoios.release.xcconfig"; path = "Target Support Files/Pods-LetEatGoios/Pods-LetEatGoios.release.xcconfig"; sourceTree = "<group>"; };
@@ -52,13 +53,12 @@
 		8465677860E448C1B5585244 /* Happiness-Sans-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Happiness-Sans-Bold.ttf"; path = "../assets/fonts/Happiness-Sans-Bold.ttf"; sourceTree = "<group>"; };
 		8602BF5F28EB1FF600AF89DE /* Cafe24Ssurround.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Cafe24Ssurround.ttf; sourceTree = "<group>"; };
 		86338A2628E53D12009A500F /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = fonts; path = ../assets/fonts; sourceTree = "<group>"; };
+		88E94672DA714CF4A59C9149 /* Roboto-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Bold.ttf"; path = "../assets/fonts/Roboto-Bold.ttf"; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-LetEatGoios-LetEatGoiosTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LetEatGoios-LetEatGoiosTests.release.xcconfig"; path = "Target Support Files/Pods-LetEatGoios-LetEatGoiosTests/Pods-LetEatGoios-LetEatGoiosTests.release.xcconfig"; sourceTree = "<group>"; };
 		A8D21751C7A74B8EB92C9842 /* PretendardVariable.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = PretendardVariable.ttf; path = ../assets/fonts/PretendardVariable.ttf; sourceTree = "<group>"; };
 		B34B8E59FDE548A193250331 /* Happiness-Sans-Title.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Happiness-Sans-Title.ttf"; path = "../assets/fonts/Happiness-Sans-Title.ttf"; sourceTree = "<group>"; };
 		CF6BB18BD4C04555B6A9200E /* Cafe24Ssurround.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Cafe24Ssurround.ttf; path = ../assets/fonts/Cafe24Ssurround.ttf; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		88E94672DA714CF4A59C9149 /* Roboto-Bold.ttf */ = {isa = PBXFileReference; name = "Roboto-Bold.ttf"; path = "../assets/fonts/Roboto-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		2E73B55FEAAE442D8A5C1D73 /* Roboto-Italic.ttf */ = {isa = PBXFileReference; name = "Roboto-Italic.ttf"; path = "../assets/fonts/Roboto-Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */

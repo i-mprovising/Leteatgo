@@ -13,29 +13,15 @@ import {Dimensions} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import styles from '../style';
 import LinearGradient from 'react-native-linear-gradient';
+import selectIcon from '../data/selectionIcon';
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 function SelectCount(Props) {
   count = Props.count;
-
-  if (count == 0) {
-    return <Image source={require('../assets/survey/none.png')}></Image>;
-  } else if (count == 1) {
-    return <Image source={require('../assets/survey/filled1.png')}></Image>;
-  } else if (count == 2) {
-    return <Image source={require('../assets/survey/filled2.png')}></Image>;
-  } else if (count == 3) {
-    return <Image source={require('../assets/survey/filled3.png')}></Image>;
-  } else if (count == 4) {
-    return <Image source={require('../assets/survey/filled4.png')}></Image>;
-  } else {
-    return (
-      <Animated.Image
-        style={animatedStyle}
-        source={require('../assets/survey/filledAll.png')}></Animated.Image>
-    );
-  }
+  count <= 4 ? (id = count) : (id = 5);
+  return <Image source={selectIcon[id].src}></Image>;
 }
+
 function ButtonImage(Props) {
   if (Props.Select === true) {
     return <Image source={require('../assets/icons/CheckButton.png')}></Image>;
@@ -102,6 +88,12 @@ function SelectionPage() {
                 flexWrap: 'wrap',
                 flexDirection: 'row',
               }}>
+              <ImageList count={count} setCount={setCount} />
+              <ImageList count={count} setCount={setCount} />
+              <ImageList count={count} setCount={setCount} />
+              <ImageList count={count} setCount={setCount} />
+              <ImageList count={count} setCount={setCount} />
+              <ImageList count={count} setCount={setCount} />
               <ImageList count={count} setCount={setCount} />
               <ImageList count={count} setCount={setCount} />
               <ImageList count={count} setCount={setCount} />

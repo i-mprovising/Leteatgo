@@ -34,6 +34,12 @@ const styles = StyleSheet.create({
     marginBottom: Height * 0.04,
     borderBottomRightRadius: 13,
   },
+  IconImage: {
+    height: Height * 0.075,
+    width: Height * 0.075,
+    resizeMode: 'contain',
+    paddingHorizontal: '12%',
+  },
   selectImage: {
     height: Height * 0.138,
     width: Height * 0.135,
@@ -158,6 +164,16 @@ const styles = StyleSheet.create({
     marginVertical: '2%',
     padding: '2%',
     borderColor: '#FFAAB3',
+  },
+  CategoryBox: {
+    width: '20%',
+    paddingVertical: 6,
+    fontStyle: '',
+    alignItems: 'center',
+    marginLeft: '7%',
+    width: '35%',
+    marginTop: '6%',
+    flexDirection: 'row',
   },
 });
 

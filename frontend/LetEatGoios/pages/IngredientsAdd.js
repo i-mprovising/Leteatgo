@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {Text, Image, TouchableOpacity, View} from 'react-native';
 import {
   Collapse,
@@ -10,7 +10,10 @@ import ItemList from './IngreComponent';
 function IngreCategory(Props) {
   category = Props.category;
   array = Props.array;
-  const isItemSelect = Array(array.length).fill(false);
+  const setSelectedList = Props.setSelectedList;
+  const selectedList = Props.selectedList;
+  const [submit, setSubmit] = useState(false);
+  const [List, setList] = useState([]);
 
   return (
     <Collapse>
@@ -35,10 +38,24 @@ function IngreCategory(Props) {
             flexWrap: 'wrap',
           }}>
           {array.map(key => (
-            <ItemList Key={key} Array={array} />
+            <ItemList
+              Key={key}
+              Array={array}
+              Submit={submit}
+              setSubmit={setSubmit}
+              List={List}
+            />
           ))}
         </View>
-        <TouchableOpacity activeOpacity={0.7} style={{alignItems: 'center'}}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={{alignItems: 'center'}}
+          onPress={() => {
+            setSubmit(true);
+            newList = [].concat(List, selectedList);
+            setSelectedList(newList);
+            setList([]);
+          }}>
           <Image
             source={require('../assets/icons/addButton.png')}
             style={{marginTop: '2%'}}></Image>

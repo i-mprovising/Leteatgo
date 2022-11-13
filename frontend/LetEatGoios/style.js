@@ -40,6 +40,13 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     paddingHorizontal: '12%',
   },
+  ListImage: {
+    height: Height * 0.05,
+    width: Height * 0.05,
+    resizeMode: 'contain',
+    paddingHorizontal: '12%',
+  },
+
   selectImage: {
     height: Height * 0.138,
     width: Height * 0.135,
@@ -170,7 +177,7 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     fontStyle: '',
     alignItems: 'center',
-    marginLeft: '7%',
+    marginLeft: '5%',
     width: '35%',
     marginTop: '6%',
     flexDirection: 'row',

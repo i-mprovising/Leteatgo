@@ -1,27 +1,41 @@
-import React, {useState} from 'react';
-import {Text, Image, TouchableOpacity, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Text, Image, TouchableOpacity, View, SectionList} from 'react-native';
 
 import styles from '../style';
 function ItemList(Props) {
-  category = Props.category;
-  array = Props.array;
-  key = Props.Key;
-  array = Props.Array;
+  const [array] = useState(Props.Array);
+  const [key] = useState(Props.Key);
   const [select, setSelect] = useState(false);
   const [opacity, setOpacity] = useState(1);
+
+  useEffect(() => {
+    if (Props.Submit) {
+      setOpacity(1);
+      Props.setSubmit(false);
+    }
+  }, [Props.Submit]);
+
   return (
     <TouchableOpacity
       activeOpacity={1}
       onPress={() => {
         select ? setOpacity(1) : setOpacity(0.3);
+        if (select) {
+          Props.List.forEach((item, index) => {
+            if (item.id === key.id) {
+              Props.List.splice(index, key.id);
+            }
+          });
+        } else {
+          Props.List.push(key);
+        }
         setSelect(!select);
-        console.log(key);
       }}
       style={{alignItems: 'center'}}>
       <Image
         Key={key}
         source={array[key.id].src}
-        style={{...styles.IconImage, opacity: opacity}}
+        style={{...styles.IconImage, opacity: Props.Submit ? 1 : opacity}}
       />
       <Text
         style={{

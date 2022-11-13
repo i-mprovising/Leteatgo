@@ -68,22 +68,22 @@ const Fruits = [
   {
     id: 13,
     src: require('../../assets/ingredients/Fruits/13.png'),
-    foodname: '체리',
+    foodname: '포도',
   },
   {
     id: 14,
     src: require('../../assets/ingredients/Fruits/14.png'),
-    foodname: '키위',
+    foodname: '체리',
   },
   {
     id: 15,
     src: require('../../assets/ingredients/Fruits/15.png'),
-    foodname: '파인애플',
+    foodname: '키위',
   },
   {
     id: 16,
     src: require('../../assets/ingredients/Fruits/16.png'),
-    foodname: '포도',
+    foodname: '파인애플',
   },
 ];
 

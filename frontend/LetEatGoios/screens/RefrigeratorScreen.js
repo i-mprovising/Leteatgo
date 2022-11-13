@@ -20,9 +20,8 @@ function RefrigeratorScreen() {
   const navigation = useNavigation();
   const {top} = useSafeAreaInsets();
   const [text, setText] = useState('');
-  // console.log(Category);
   const onChangeText = payload => setText(payload);
-
+  const [selectedList, setSelectedList] = useState([]);
   return (
     <SafeAreaProvider>
       <SafeAreaView
@@ -61,12 +60,55 @@ function RefrigeratorScreen() {
         <Text
           style={{
             paddingLeft: 20,
-            paddingVertical: 30,
+            paddingVertical: 17,
             fontSize: 16,
             fontWeight: '800',
           }}>
           나의 냉장고
         </Text>
+        <View style={{flexDirection: 'row', flexWrap: 'wrap', marginLeft: 17}}>
+          {selectedList.reverse().map(key => (
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginBottom: 10,
+              }}>
+              <Image
+                key={key.id}
+                source={key.src}
+                style={{...styles.ListImage}}
+              />
+              <View style={{flexDirection: 'row'}}>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    // marginLeft: 18,
+                    fontFamily: 'Happiness-Sans-Regular',
+                  }}>
+                  {key.foodname}
+                </Text>
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  onPress={() => {
+                    // console.log(selectedList);
+                    const newList = selectedList;
+                    newList.forEach((item, index) => {
+                      if (item.foodname === key.foodname) {
+                        newList.splice(index, key.id);
+                      }
+                    });
+                    setSelectedList(newList);
+                  }}>
+                  <Image
+                    source={require('../assets/icons/deleteIcon.png')}
+                    style={{width: 17, height: 17, marginLeft: 5}}></Image>
+                </TouchableOpacity>
+              </View>
+            </View>
+          ))}
+        </View>
+
         <View style={{position: 'relative'}}>
           <Text
             style={{
@@ -93,7 +135,12 @@ function RefrigeratorScreen() {
         </View>
         <ScrollView>
           {Category.map(key => (
-            <IngreCategory category={key.name} array={key.array} />
+            <IngreCategory
+              category={key.name}
+              array={key.array}
+              selectedList={selectedList}
+              setSelectedList={setSelectedList}
+            />
           ))}
         </ScrollView>
       </SafeAreaView>

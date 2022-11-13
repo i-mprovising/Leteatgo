@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {View, Text, ActivityIndicator, Image} from 'react-native';
 import Slick from 'react-native-slick';
 import styles from '../style';
-
+import Top5Image from '../data/Top5';
 function Top5Page() {
   return (
     <View>
@@ -19,24 +19,27 @@ function Top5Page() {
           backgroundColor: '#FFAAB3',
         }}
         paginationStyle={{bottom: 6}}>
-        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-          <Image
-            style={styles.image}
-            source={require('../assets/Images/food1.jpeg')}></Image>
-          <Image
-            style={styles.image}
-            source={require('../assets/Images/food2.jpeg')}></Image>
-          <Image
-            style={styles.image}
-            source={require('../assets/Images/food3.jpeg')}></Image>
+        <View style={{flexDirection: 'row'}}>
+          {Top5Image.map(key =>
+            key.id <= 2 ? (
+              <Image
+                Key={key}
+                style={styles.image}
+                source={Top5Image[key.id].src}
+              />
+            ) : null,
+          )}
         </View>
-        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-          <Image
-            style={{...styles.image, marginRight: '7%'}}
-            source={require('../assets/Images/food4.jpeg')}></Image>
-          <Image
-            style={styles.image}
-            source={require('../assets/Images/food5.jpeg')}></Image>
+        <View style={{flexDirection: 'row'}}>
+          {Top5Image.map(key =>
+            key.id > 2 ? (
+              <Image
+                Key={key}
+                style={styles.image}
+                source={Top5Image[key.id].src}
+              />
+            ) : null,
+          )}
         </View>
       </Slick>
     </View>

@@ -27,9 +27,9 @@ module.exports = class Prefer extends Sequelize.Model {
           allowNull: true,
         },
         view: {
-          type: Sequelize.INTEGER,
+          type: Sequelize.SMALLINT,
           allowNull: true,
-        },
+        }
       },
       {
         sequelize,

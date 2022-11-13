@@ -1,6 +1,9 @@
 const User = require('../models/user');
+const Food = require('../models/food');
 const bcrypt = require('bcrypt');
 const CODE = require('../modules/statusCode');
+const Prefer = require("../models/prefer");
+const { Op } = require("sequelize");
 
 const user = {
     signup: async (req, res ,next) => {
@@ -62,7 +65,62 @@ const user = {
             console.error(error);
             return res.json({ statusCode: CODE.SERVER_ERROR, msg: "server error"});
         }
+    },
+    made: async(req, res, err) => {
+        try{
+            const userMade = await Prefer.findAll({
+                attributes : ['foodid'],
+                raw:true,
+                where:{
+                    userid: req.query.userid,
+                    made: true
+                }
+            });
+            let foodarr = [];
+            for(let i = 0 ; i<userMade.length; i++){
+                foodarr.push(userMade[i].foodid);
+            }
+            console.log(foodarr);
+            const foodData = await Food.findAll({
+                attributes: ['Name', 'Image', 'foodid'],
+                raw:true,
+                where: {
+                    foodid : {[Op.in]: foodarr}
+                }
+            });
+            return res.json({ statusCode: CODE.SUCCESS, msg: "만들어본 음식들 리스트입니다.", result: foodData});
+        }catch(err){
+            console.error(err);
+            return res.json({statusCode: CODE.FAIL, msg:"데이터베이스 오류"});
         }
+    },
+    like : async(req, res, err) => {
+        try{
+            const userLike = await Prefer.findAll({
+                attributes : ['foodid'],
+                raw:true,
+                where:{
+                    userid: req.query.userid,
+                    favorite: true
+                }
+            });
+            let foodarr = [];
+            for(let i = 0 ; i<userLike.length; i++){
+                foodarr.push(userLike[i].foodid);
+            }
+            const foodData = await Food.findAll({
+                attributes: ['Name', 'Image', 'foodid'],
+                raw:true,
+                where: {
+                    foodid : {[Op.in]: foodarr}
+                }
+            });
+            return res.json({ statusCode: CODE.SUCCESS, msg: "해당 유저가 좋아요 누른 음식들 리스트입니다.", result: foodData});
+        }catch(err){
+            console.error(err);
+            return res.json({statusCode: CODE.FAIL, msg:"데이터베이스 오류"});
+        }
+    }
 }
 
 module.exports = user;

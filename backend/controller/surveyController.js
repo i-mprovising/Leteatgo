@@ -18,7 +18,7 @@ const survey = {
       const arr = req.body.prefer;
       const likearr = arr.like;
       const dislike = arr.dislike;
-      console.log(likearr, dislike);
+      //console.log(likearr, dislike);
       for(item of likearr){
           console.log(typeof(item));
           const likeResult = await Prefer.create({

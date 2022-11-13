@@ -14,6 +14,7 @@ const recipeRouter = require('./routes/recipe');
 const testRouter = require('./routes/test');
 const searchRouter = require('./routes/search');
 const surveyRouter = require('./routes/survey');
+const recommendRouter = require('./routes/recommend')
 const app = express();
 
 app.set('port', process.env.PORT || 80);
@@ -43,13 +44,14 @@ app.use(
     },
   })
 );    
-
-app.use('/', userRouter);
+//보유식재료 => 가지고있는거 띄워주는거, 업데이트하는거, 삭제하는거
 app.use('/', recipeRouter);
+app.use('/user', userRouter);
 app.use('/check', checkRouter);
 app.use('/test', testRouter);
 app.use('/search', searchRouter);
 app.use('/survey', surveyRouter );
+app.use('/recommend', recommendRouter);
 
 app.use((err, req, res, next) => {
     console.error(err);

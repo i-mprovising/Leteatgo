@@ -1,10 +1,31 @@
 const Recipe = require('../models/recipe');
 const CODE = require('../modules/statusCode');
 const Food = require('../models/food');
+const Prefer = require("../models/prefer");
+
 
 const recipe = {
     getRecipe: async(req, res) => {
         try{
+            const findUser = await Prefer.findOne({
+                where:{
+                    userid: req.query.userid
+                }
+            });
+            if(!findUser){
+                const makeUser = await Prefer.create({
+                    foodid: req.query.foodid,
+                    userid: req.query.userid,
+                    survey: 0
+                  });
+            };
+            const preferUser = await Prefer.increment(
+                {view:1}, {where: {
+                    userid : req.query.userid,
+                    foodid : req.query.foodid
+                }
+                }
+            );
             let recipeJson = {};
             let general = {};
             // foodid이용해서 Food table에서 material,foodname 가져오고
@@ -34,6 +55,7 @@ const recipe = {
             console.log(recipeJson);
             /*recipeJson["food"] = food;
             recipeJson["recipe"] = recipe;*/
+            console.log(recipeJson["recipe"]);
             return res.json({ statusCode: CODE.SUCCESS, recipe: recipeJson, msg: "레시피를 찾았습니다."});
         }catch(err){
             console.error(err);

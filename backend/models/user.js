@@ -30,11 +30,6 @@ module.exports = class User extends Sequelize.Model{
                 type: Sequelize.BOOLEAN,
                 allowNull: true,
                 defaultValue: false
-            },
-            totalView : {
-                type: Sequelize.INTEGER,
-                allowNull : true,
-                defaultValue: 0
             }
         }, {
             sequelize,

@@ -1,9 +1,0 @@
-/node_modules/
-package-lock.json
-.env
-.DS_Store
-mock.csv
-test.py
-testController.js
-
-    

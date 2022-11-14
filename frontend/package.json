@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "react-native-cli": "^2.0.1",
-    "react-native-safe-area-context": "^4.3.4"
-  }
-}

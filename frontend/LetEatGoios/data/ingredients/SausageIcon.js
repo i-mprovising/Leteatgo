@@ -11,7 +11,6 @@ const HamSausage = [
   },
   {
     id: 2,
-
     src: require('../../assets/ingredients/HamSausage/Maskgroup-2.png'),
     foodname: '비엔나소시지',
   },

@@ -18,22 +18,39 @@ const survey = {
       const arr = req.body.prefer;
       const likearr = arr.like;
       const dislike = arr.dislike;
-      //console.log(likearr, dislike);
       for(item of likearr){
-          console.log(typeof(item));
+          const isPrefer = await Prefer.update({  
+            survey: 1
+            }, {
+              where:{
+              userid: req.body.userid,
+              foodid: item
+            }}
+          ); // 있는지 확인하고 업데이트 없으면 0반환
+          if(!isPrefer){ //있는 경우
+            const likeResult = await Prefer.create({
+              foodid: item,
+              userid: req.body.userid,
+              survey: 1
+            });
+          }
+      }
+      for(item of dislike){
+        const isPrefer = await Prefer.update({  
+          survey: -1
+          }, {
+            where:{
+            userid: req.body.userid,
+            foodid: item
+          }}
+        ); // 있는지 확인하고 업데이트 없으면 0반환
+        if(!isPrefer){ //있는 경우
           const likeResult = await Prefer.create({
             foodid: item,
             userid: req.body.userid,
             survey: 1
           });
-          console.log("Asdasd");
-      }
-      for(let j = 0 ; j< dislike.length; j++){
-        const dislikeResult = await Prefer.create({
-            foodid: arr.dislike[j],
-            userid: req.body.userid,
-            survey: -1
-        });
+        }
       }
       return res.json({
         statusCode: CODE.SUCCESS,

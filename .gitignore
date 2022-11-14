@@ -5,5 +5,4 @@ package-lock.json
 mock.csv
 test.py
 testController.js
-
-    
+*.DS_Store.DS_Store

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Text,
   Image,
@@ -14,6 +14,9 @@ import {ScrollView} from 'react-native-gesture-handler';
 import styles from '../style';
 import LinearGradient from 'react-native-linear-gradient';
 import selectIcon from '../data/selectionIcon';
+import axios from 'axios';
+import {Food} from '../../../backend/models';
+
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 function SelectCount(Props) {
@@ -36,19 +39,21 @@ function ImageList(Props) {
   const [Select, setSelect] = useState(false);
   count = Props.count;
   setCount = Props.setCount;
+  src = Props.source;
+  foodName = Props.foodName;
+  console.log(src);
   return (
     <View
       style={{
         marginTop: Height * 0.01,
+        marginBottom: 12,
         position: 'relative',
         width: Height * 0.138,
         height: Height * 0.17,
         alignItems: 'center',
         marginLeft: Width * 0.025,
       }}>
-      <Image
-        style={styles.selectImage}
-        source={require('../assets/Images/food1.jpeg')}></Image>
+      <Image style={styles.selectImage} source={{uri: src}}></Image>
       <TouchableOpacity
         activeOpacity={1}
         style={{position: 'absolute', top: '65%', left: '78%'}}
@@ -59,13 +64,52 @@ function ImageList(Props) {
         }}>
         <ButtonImage Select={Select} count={count} />
       </TouchableOpacity>
-      <Text>음식 이름</Text>
+      <Text style={{fontWeight: '400'}}>{foodName}</Text>
     </View>
   );
 }
 function SelectionPage() {
   const {top} = useSafeAreaInsets();
   const [count, setCount] = useState(0);
+  const [food, setFood] = useState([]);
+  async function getFood() {
+    try {
+      const response = await axios.get('http://127.0.0.1:80/survey');
+      // console.log(response.data.food);
+      setFood(response.data.food);
+      // console.log(food);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const foodPost = async () => {
+    let body = {
+      userid: 3000,
+      prefer: {
+        like: [0, 1, 2],
+        dislike: [50, 10, 20],
+      },
+    };
+
+    console.log(body);
+    try {
+      const response = await axios.post(
+        'http://127.0.0.1:80/survey/save',
+        body,
+      );
+
+      console.log(response.data);
+    } catch (e) {
+      console.log('error');
+      console.log(JSON.stringify(e));
+      return e;
+    }
+  };
+
+  useEffect(() => {
+    getFood();
+  }, []);
   return (
     <SafeAreaProvider>
       <SafeAreaView edges={['bottom']} style={{backgroundColor: 'white'}}>
@@ -82,23 +126,21 @@ function SelectionPage() {
         </View>
         <View style={{height: Height * 0.78, position: 'relative'}}>
           {/* <SelectCount /> */}
-          <ScrollView>
+          <ScrollView style={{marginBottom: 40}}>
             <View
               style={{
                 flexWrap: 'wrap',
                 flexDirection: 'row',
               }}>
-              <ImageList count={count} setCount={setCount} />
-              <ImageList count={count} setCount={setCount} />
-              <ImageList count={count} setCount={setCount} />
-              <ImageList count={count} setCount={setCount} />
-              <ImageList count={count} setCount={setCount} />
-              <ImageList count={count} setCount={setCount} />
-              <ImageList count={count} setCount={setCount} />
-              <ImageList count={count} setCount={setCount} />
-              <ImageList count={count} setCount={setCount} />
-              <ImageList count={count} setCount={setCount} />
-              <ImageList count={count} setCount={setCount} />
+              {food.map((key, index) => (
+                <ImageList
+                  count={count}
+                  key={index}
+                  foodName={key.Name}
+                  setCount={setCount}
+                  source={key.Image}
+                />
+              ))}
             </View>
           </ScrollView>
           <LinearGradient

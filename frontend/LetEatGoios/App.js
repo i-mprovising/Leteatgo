@@ -7,6 +7,8 @@ import SignInScreen from './screens/SignInScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import SelectionPage from './pages/SelectionPage';
 import MbitSurvery from './pages/MbtiSurvey';
+import AfterSurvery from './pages/AfterSurvey';
+
 Stack = createNativeStackNavigator();
 
 function Selection_Screen() {
@@ -27,6 +29,9 @@ function MbitSurvery_Screen() {
 
 function Register_Screen() {
   return <RegisterScreen />;
+}
+function After_Screen() {
+  return <AfterSurvery />;
 }
 function App() {
   return (
@@ -69,6 +74,16 @@ function App() {
           options={{
             title: '',
             headerTransparent: true,
+            headerBackTitleVisible: false,
+            headerTintColor: 'white',
+          }}
+        />
+        <Stack.Screen
+          name="afterSurvey"
+          component={After_Screen}
+          options={{
+            title: '',
+            headerShown: false,
             headerBackTitleVisible: false,
             headerTintColor: 'white',
           }}

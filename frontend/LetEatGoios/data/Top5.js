@@ -13,10 +13,14 @@ const Top5Image = [
   },
   {
     id: 3,
-    src: require('../assets/Images/food4.jpeg'),
+    src: require('../assets/Images/food4.png'),
   },
   {
     id: 4,
+    src: require('../assets/Images/food5.jpeg'),
+  },
+  {
+    id: 5,
     src: require('../assets/Images/food5.jpeg'),
   },
 ];

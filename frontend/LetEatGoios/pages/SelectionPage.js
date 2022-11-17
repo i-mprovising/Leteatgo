@@ -6,6 +6,7 @@ import {
   StatusBar,
   TouchableOpacity,
   Animated,
+  ActivityIndicator,
 } from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -15,17 +16,43 @@ import styles from '../style';
 import LinearGradient from 'react-native-linear-gradient';
 import selectIcon from '../data/selectionIcon';
 import axios from 'axios';
-import {Food} from '../../../backend/models';
+import {useNavigation} from '@react-navigation/native';
 
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 function SelectCount(Props) {
   count = Props.count;
-  count <= 4 ? (id = count) : (id = 5);
-  return <Image source={selectIcon[id].src}></Image>;
+  const navigation = useNavigation();
+  if (count <= 4) {
+    id = count;
+    return <Image source={selectIcon[id].src}></Image>;
+  } else {
+    id = 5;
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          // Props.postFood();
+
+          Props.setLike([]);
+          Props.setDislike([]);
+          Props.setCount(0);
+
+          navigation.navigate('afterSurvey');
+          Props.getFood();
+        }}>
+        <Image source={selectIcon[id].src}></Image>
+      </TouchableOpacity>
+    );
+  }
 }
 
 function ButtonImage(Props) {
+  useEffect(() => {
+    if (Props.count == 0) {
+      Props.setSelect(false);
+    }
+  }, [Props.count]);
+
   if (Props.Select === true) {
     return <Image source={require('../assets/icons/CheckButton.png')}></Image>;
   } else {
@@ -37,11 +64,13 @@ function ButtonImage(Props) {
 
 function ImageList(Props) {
   const [Select, setSelect] = useState(false);
+
   count = Props.count;
   setCount = Props.setCount;
-  src = Props.source;
+
   foodName = Props.foodName;
-  console.log(src);
+  src = Props.source;
+
   return (
     <View
       style={{
@@ -53,16 +82,42 @@ function ImageList(Props) {
         alignItems: 'center',
         marginLeft: Width * 0.025,
       }}>
-      <Image style={styles.selectImage} source={{uri: src}}></Image>
+      <Image
+        style={styles.selectImage}
+        source={
+          src
+            ? {
+                uri: src,
+              }
+            : null
+        }></Image>
       <TouchableOpacity
         activeOpacity={1}
         style={{position: 'absolute', top: '65%', left: '78%'}}
         onPress={() => {
-          console.log(Select);
-          Select === true ? setCount(count - 1) : setCount(count + 1);
+          if (Select) {
+            setCount(count - 1);
+            newdisLike = Props.dislike;
+            newdisLike.push(Props.foodId);
+            Props.setDislike(newdisLike);
+          } else {
+            setCount(count + 1);
+            newLike = Props.like;
+            newLike.push(Props.foodId);
+            Props.setLike(newLike);
+            Props.dislike.forEach((item, index) => {
+              if (item === Props.foodId) {
+                newDislike = Props.dislike;
+                newDislike = newDislike.filter(
+                  element => element != Props.foodId,
+                );
+                Props.setDislike(newDislike);
+              }
+            });
+          }
           setSelect(!Select);
         }}>
-        <ButtonImage Select={Select} count={count} />
+        <ButtonImage Select={Select} setSelect={setSelect} count={count} />
       </TouchableOpacity>
       <Text style={{fontWeight: '400'}}>{foodName}</Text>
     </View>
@@ -72,34 +127,42 @@ function SelectionPage() {
   const {top} = useSafeAreaInsets();
   const [count, setCount] = useState(0);
   const [food, setFood] = useState([]);
+  const [like, setLike] = useState([]);
+  const [dislike, setDislike] = useState([]);
   async function getFood() {
     try {
       const response = await axios.get('http://127.0.0.1:80/survey');
-      // console.log(response.data.food);
+
       setFood(response.data.food);
-      // console.log(food);
+      if (response.data.food) {
+        const newDislike = Object.keys(response.data.food).map(
+          key => response.data.food[key].foodid,
+        );
+        setDislike(newDislike);
+      }
     } catch (error) {
       console.error(error);
     }
   }
 
-  const foodPost = async () => {
+  const postFood = async () => {
     let body = {
-      userid: 3000,
+      userid: 3003,
       prefer: {
-        like: [0, 1, 2],
-        dislike: [50, 10, 20],
+        like,
+        dislike,
       },
     };
 
     console.log(body);
+
     try {
       const response = await axios.post(
         'http://127.0.0.1:80/survey/save',
         body,
       );
 
-      console.log(response.data);
+      // console.log(response.data);
     } catch (e) {
       console.log('error');
       console.log(JSON.stringify(e));
@@ -110,6 +173,7 @@ function SelectionPage() {
   useEffect(() => {
     getFood();
   }, []);
+
   return (
     <SafeAreaProvider>
       <SafeAreaView edges={['bottom']} style={{backgroundColor: 'white'}}>
@@ -126,21 +190,35 @@ function SelectionPage() {
         </View>
         <View style={{height: Height * 0.78, position: 'relative'}}>
           {/* <SelectCount /> */}
-          <ScrollView style={{marginBottom: 40}}>
+          <ScrollView>
             <View
               style={{
+                marginBottom: 30,
                 flexWrap: 'wrap',
                 flexDirection: 'row',
               }}>
-              {food.map((key, index) => (
-                <ImageList
-                  count={count}
-                  key={index}
-                  foodName={key.Name}
-                  setCount={setCount}
-                  source={key.Image}
+              {food ? (
+                food.map((key, index) => (
+                  <ImageList
+                    count={count}
+                    key={index}
+                    foodName={key.Name}
+                    setCount={setCount}
+                    source={key.Image}
+                    foodId={key.foodid}
+                    like={like}
+                    setLike={setLike}
+                    dislike={dislike}
+                    setDislike={setDislike}
+                  />
+                ))
+              ) : (
+                <ActivityIndicator
+                  animating={true}
+                  color="white"
+                  size="large"
                 />
-              ))}
+              )}
             </View>
           </ScrollView>
           <LinearGradient
@@ -155,7 +233,16 @@ function SelectionPage() {
             start={{x: 0, y: 0}}
             end={{x: 0, y: 1}}
             colors={['#ffffff00', 'white']}>
-            <SelectCount count={count} />
+            <SelectCount
+              count={count}
+              setCount={setCount}
+              postFood={postFood}
+              like={like}
+              getFood={getFood}
+              setLike={setLike}
+              dislike={dislike}
+              setDislike={setDislike}
+            />
           </LinearGradient>
         </View>
       </SafeAreaView>

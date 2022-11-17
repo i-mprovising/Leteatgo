@@ -112,13 +112,13 @@ const styles = StyleSheet.create({
   BeforeText: {
     fontWeight: '900',
     fontSize: 20,
-    fontFamily: 'Cafe24Ssurround',
+    fontFamily: 'Happiness-Sans-Regular',
     paddingBottom: '1%',
   },
   ButtonText: {
     fontWeight: '700',
     fontSize: 18,
-    fontFamily: 'Cafe24Ssurround',
+    fontFamily: 'Happiness-Sans-Regular',
     color: 'white',
   },
   TextBox: {
@@ -181,6 +181,70 @@ const styles = StyleSheet.create({
     width: '35%',
     marginTop: '6%',
     flexDirection: 'row',
+  },
+  CongratIcon: {
+    marginTop: '30%',
+    marginBottom: '7%',
+    width: Width * 0.2,
+    height: Width * 0.2,
+  },
+  topButton: {
+    height: Height * 0.05,
+    backgroundColor: 'white',
+    flexDirection: 'row',
+    borderRadius: 20,
+    width: Width * 0.15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: Width * 0.01,
+    elevation: 1,
+  },
+  bottomButton: {
+    height: Height * 0.05,
+    backgroundColor: 'white',
+    flexDirection: 'row',
+    borderRadius: 20,
+    width: Width * 0.2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: Width * 0.01,
+    elevation: 1,
+  },
+  bottomButtonText: {
+    fontSize: 19,
+    backgroundColor: 'white',
+    marginLeft: 5,
+  },
+  bottomButtonText2: {
+    fontSize: 13,
+    backgroundColor: 'white',
+    marginLeft: 5,
+  },
+  recipeText: {
+    fontSize: 17,
+    fontWeight: '900',
+    padding: 5,
+    flex: 0.5,
+  },
+  topButtonText: {
+    fontSize: 14,
+    backgroundColor: 'white',
+    marginLeft: 5,
+  },
+  iconArea: {
+    backgroundColor: 'white',
+    height: Height * 0.12,
+    width: Width * 0.12,
+  },
+  icon: {
+    height: Height * 0.12,
+    width: Width * 0.12,
+    marginRight: Width * 0.07,
+  },
+  texticon: {
+    height: Height * 0.02,
+    width: Width * 0.02,
+    margin: Width * 0.04,
   },
 });
 

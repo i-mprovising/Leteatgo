@@ -5,14 +5,19 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {useNavigation} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SplashScreen = () => {
+  AsyncStorage.removeItem('user_id');
+
   const navigation = useNavigation();
   const [animating, setAnimating] = useState(true);
   useEffect(() => {
     setTimeout(() => {
       setAnimating(false);
-      navigation.replace('SignIn');
+      AsyncStorage.getItem('user_id').then(value =>
+        navigation.replace(value === null ? 'SignIn' : 'Main'),
+      );
     }, 3000);
   }, []);
 

@@ -14,7 +14,7 @@ import {useNavigation} from '@react-navigation/native';
 import styles from '../style';
 import LinearGradient from 'react-native-linear-gradient';
 import Category from '../data/categoryIndex';
-import IngreCategory from '../pages/IngredientsAdd';
+import IngreCategory from '../components/IngredientsAdd';
 
 function RefrigeratorScreen() {
   const navigation = useNavigation();

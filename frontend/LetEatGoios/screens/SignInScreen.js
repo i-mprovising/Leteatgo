@@ -7,32 +7,46 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {useNavigation} from '@react-navigation/native';
-import AsyncStorage from '@react-native-community/async-storage';
-import {useTheme} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-
+const STORAGE_KEY = 'user_id';
 function Login() {
   const navigation = useNavigation();
-
-  const signin = async () => {
-    let body = {id: userId, password: userPassword};
-
-    console.log(body);
-    try {
-      const response = await axios.post('http://127.0.0.1:80/signin', body);
-
-      console.log(response.data);
-    } catch (e) {
-      console.log('error');
-      console.log(JSON.stringify(e));
-      return e;
-    }
-  };
-
   const [userId, setUserId] = useState('');
   const [userPassword, setUserPassword] = useState('');
-  const [loading, setLoading] = useState(false);
   const [errortext, setErrortext] = useState('');
+
+  async function postData(id, password) {
+    setErrortext('');
+    if (!id) {
+      alert('아이디를 입력해주세요 .');
+      return;
+    }
+    if (!password) {
+      alert('비밀번호를 입력해주세요 .');
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://127.0.0.1:80/user/signin', {
+        id,
+        password,
+      });
+
+      // console.log(response.data);
+
+      if (response.data.msg === 'login success') {
+        AsyncStorage.setItem(STORAGE_KEY, userId);
+
+        navigation.replace('Main');
+      } else {
+        alert('아이디와 비밀번호를 다시 확인해주세요 .');
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   return (
     <LinearGradient colors={['#FFCDD2', '#FFAAB3']} style={styles.container}>
       <View style={styles.topArea}>
@@ -48,6 +62,7 @@ function Login() {
           placeholder="ID"
           onChangeText={userId => setUserId(userId)}
           autoCapitalize="none"
+          autoCorrect={false}
         />
         <TextInput
           style={styles.textFormBottom}
@@ -55,17 +70,16 @@ function Login() {
           onChangeText={userPassword => setUserPassword(userPassword)}
           autoCapitalize="none"
           secureTextEntry={true}
+          autoCorrect={false}
         />
       </View>
-      <View style={{flex: 2}}>
-        <View style={styles.btnArea}>
+      <View>
+        <View style={{...styles.btnArea, marginVertical: '2%'}}>
           <TouchableOpacity
             style={styles.btn}
-            // onPress={() => postData(userId, userPassword)}
-            onPress={() => {
-              //signin();
-              navigation.replace('Main');
-            }}>
+            onPress={() => postData(userId, userPassword)}
+            // onPress={() => navigation.navigate('Main')}
+          >
             <Text style={{color: 'white'}}>로그인</Text>
           </TouchableOpacity>
         </View>
@@ -125,7 +139,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 7,
     borderTopRightRadius: 7,
     width: '100%',
-    height: hp(8),
+    height: hp(9),
     paddingLeft: 10,
     paddingRight: 10,
     backgroundColor: 'white',
@@ -137,7 +151,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 7,
     borderBottomRightRadius: 7,
     width: '100%',
-    height: hp(8),
+    height: hp(9),
     paddingLeft: 10,
     paddingRight: 10,
     backgroundColor: 'white',
@@ -146,7 +160,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: hp(8),
-    paddingBottom: hp(1),
+    paddingBottom: hp(0.5),
   },
   btn: {
     flex: 1,

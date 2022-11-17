@@ -5,70 +5,83 @@ const { PythonShell } = require("python-shell");
 const Food = require('../models/food');
 const { Op } = require("sequelize");
 const User = require('../models/user');
+const path = require('path');
+const fs = require('fs');
 
 const recommend = {
-    best: async(req, res,err) => {
-    try{
+    write: async() => {
         let data = [];
         const csvWriter = createCsvWriter({
             path: './prefer.csv',
             header: [
             {id: 'userid', title: 'userid'},
+            {id: 'sex', title: 'sex'},
             {id: 'foodid', title: 'foodid'},
             {id: 'survey', title: 'survey'},
             {id: 'like', title: 'like'},
             {id: 'made', title: 'made'},
-            {id: 'view', title: 'view'},
-           // {id: 'sex', title: 'sex'}
+            {id: 'view', title: 'view'}
             ]
         });
-        let options = {
-            scriptPath: "."
-        };
-        let top5 = [];
-
+        let userid = [];
         const totalPrefer = await Prefer.findAll();
-        /*for(let j = 0 ; j< totalPrefer.length; j++){
+        for(let j = 0 ; j< totalPrefer.length; j++){
             userid.push(totalPrefer[j].dataValues.userid);
         }
         const set = new Set(userid);
         const uniqueid = [...set];
-        console.log(uniqueid);
+        //console.log(uniqueid);
         const userSex = await User.findAll({
             attributes: ['sex', 'userid'],
+            row:true,
             where: {
                 userid: {[Op.in]: uniqueid}
             }
         });
-        console.log(userSex.length);*/
-        
-        //console.log(totalPrefer[0].dataValues);
+        let sexInfo = [];
+        for(let i = 0 ; i< userSex.length; i++){
+            sexInfo[i] = userSex[i].dataValues.sex;
+        }
         for(let i = 0 ; i < totalPrefer.length; i++ ){
             let made = totalPrefer[i].dataValues.made;
             let favorite = totalPrefer[i].dataValues.favorite;
+            let userid = totalPrefer[i].dataValues.userid;
+            //console.log(userid);
+            let sex = sexInfo[userid];
+            //console.log(sex);
             if(made) made = 1;
             else made = 0;
             if(favorite) favorite = 1;
             else favorite = 0;
+            if(sex)  sex = 1;
+            else sex = 0;
+            
             data.push({
-                userid: totalPrefer[i].dataValues.userid,
+                userid: userid,
+                sex: sex,
                 foodid: totalPrefer[i].dataValues.foodid,
-                like: favorite,
                 survey: totalPrefer[i].dataValues.survey,
+                like: favorite,
                 made: made,
                 view:  totalPrefer[i].dataValues.view,
-                totalview:  totalPrefer[i].dataValues.totalview
-                //sex :
+
             })
         }
-        csvWriter.writeRecords(data).
-        then(()=> {
-            console.log('The CSV file was written successfully');
+        //console.log(data);
+        csvWriter.writeRecords(data)
+        console.log('The CSV file was written successfully');
+    },
+    best: async(req, res,err) => {
+    try{
+            let options = {
+                scriptPath: "."
+            };
+            let top5 = [];
             PythonShell.run("prefer.py", options, async function(err, data) {
                 if (err) throw err;
                 console.log(data);
-                for(let i = 1; i<6;i++){
-                    top5[i-1] = data[i].split(' ', 1).toString();
+                for(let i = 0; i<data.length;i++){
+                    top5[i] = data[i].split(' ', 1).toString();
                 }
                 const topFood = await Food.findAll({
                     attributes: ['Name', 'Image', 'foodid'],
@@ -85,12 +98,8 @@ const recommend = {
                 top5.push(foodjson);
             }
             return res.json({msg: "top 5 음식들입니다.", statusCode : CODE.SUCCESS, result: top5})
-        })})
-        .catch(function(error){
-            console.error(error);
-            return res.json({msg: "fail", statusCode: CODE.FAIL});
-        })
-    }catch(error){
+        })}
+    catch(error){
         console.error(error);
         return res.json({msg: "fail", statusCode: CODE.FAIL});
     }

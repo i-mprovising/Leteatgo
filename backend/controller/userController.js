@@ -42,6 +42,8 @@ const user = {
         try{        
             const userpassword = req.body.password;
             const userInfo = await User.findOne({
+                attributes:['userid', 'password'],
+                row:true,
                 where :{
                     id: req.body.id
                 }
@@ -55,7 +57,7 @@ const user = {
                 const isEqualPw = await bcrypt.compare(userpassword, userInfo.password);
 
                 if(isEqualPw) {
-                    return res.json({ statusCode: CODE.SUCCESS, msg: "login success"});
+                    return res.json({ statusCode: CODE.SUCCESS, msg: "login success", result: userInfo.userid});
                 } 
                 else{
                     return res.json({ statusCode: CODE.FAIL, msg: "signin fail"});
@@ -119,6 +121,47 @@ const user = {
         }catch(err){
             console.error(err);
             return res.json({statusCode: CODE.FAIL, msg:"데이터베이스 오류"});
+        }
+    },
+    updateLike: async(req, res , err) => {
+        try{
+            const updateUser = await Prefer.update({  
+                favorite: req.body.favorite
+                }, {
+                    where:{
+                        userid: req.body.userid,
+                        foodid: req.body.foodid
+                    }}
+              ); // User 찾고 좋아요 업데이트
+            if(updateUser){
+                return res.json({statusCode: CODE.SUCCESS, msg:"좋아요를 업데이트시켰습니다."});
+            } else{
+                return res.json({statusCode: CODE.FAIL, msg:"업데이트 시킬 데이터가 없습니다."});
+            }
+        }catch(err){
+            console.error(err);
+            return res.json({statusCode: CODE.FAIL, msg:"db 오류"});
+        }
+    },
+    updateMade: async(req, res, err) => {
+        try{
+            const deleteFood = await Prefer.update({
+                made: false
+            }, {
+                where: {
+                    userid: req.body.userid,
+                    foodid: req.body.foodid
+                }
+            });
+
+            if(deleteFood){
+                return res.json({statusCOde: CODE.SUCCESS, msg:"만들어본 음식을 삭제하였습니다."});
+            }else{
+                return res,json({statusCode: CODE.FAIL, msg:"해당 유저의 선택한 음식이 데이터베이스에 없습니다."});
+            }
+        }catch(error){
+            console.error(error);
+            return res.json({statusCode: CODE.FAIL, msg:"db 오류"});
         }
     }
 }

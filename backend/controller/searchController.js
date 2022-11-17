@@ -6,9 +6,10 @@ const Op = Sequelize.Op;
 const search = async (req, res, next) => {
     try{
         const searchWord = req.query.key;
-        const keylist = searchWord.split(" ");
+        const keylist = searchWord.split(' ');
         let result = [];
         for (i of keylist){
+            console.log(i);
             if(i){
             const found = await Food.findAll({
                 attributes: ['Name', 'Image', 'foodid'],
@@ -16,11 +17,11 @@ const search = async (req, res, next) => {
                     Name: {[Op.like]: '%' + i +'%'}
                 }
             });
-                for(item of found){
-                    result.push(item);
-                }
+            for(item of found){
+                result.push(item);
             }
         }
+    }
         console.log(result.length);
         return res.json({ statusCode: CODE.SUCCESS, msg: "search successfully", result: result});
     }

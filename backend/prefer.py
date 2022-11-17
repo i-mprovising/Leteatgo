@@ -6,7 +6,7 @@ import os
 
 
 if __name__ == '__main__':
-    r_cols = ['userid', 'foodid', 'survey', 'like', 'made', 'view']
+    r_cols = ['userid', 'sex','foodid', 'survey', 'like', 'made', 'view']
     a, b, c, d = 1, 1, 1, 2
     ratings = pd.read_csv("./prefer.csv", names=r_cols, encoding='latin-1')
     ratings=ratings.iloc[1:]
@@ -28,10 +28,10 @@ if __name__ == '__main__':
     df = ratings.pivot_table(index='userid', columns='foodid', values='rate').fillna(0)
     df = pd.DataFrame(df)
 
-    result = df.sum().nlargest(6, keep='first')
+    result = df.sum().nlargest(5, keep='first')
     out = []
     for i in result.index:
-        out.append(int(float(i)))
+        out.append(int(i))
 
     for item in out:
         print(item)

@@ -28,11 +28,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Happiness-Sans-Bold',
   },
   image: {
-    height: Height * 0.138,
-    width: Height * 0.135,
+    height: Height * 0.23,
+    width: Height * 0.3,
     marginHorizontal: Width * 0.01,
-    marginBottom: Height * 0.04,
-    borderBottomRightRadius: 13,
+    marginBottom: Height * 0.015,
+    borderRadius: 10,
   },
   IconImage: {
     height: Height * 0.075,
@@ -64,10 +64,9 @@ const styles = StyleSheet.create({
   InBoxtext: {
     fontFamily: 'Happiness-Sans-Bold',
     fontWeight: '900',
-    fontSize: 16,
+    fontSize: 18,
     marginTop: Height * 0.017,
-    marginBottom: Height * 0.017,
-    paddingLeft: '15%',
+    marginBottom: Height * 0.02,
   },
   SearchWord: {
     color: 'black',
@@ -88,11 +87,10 @@ const styles = StyleSheet.create({
   },
   HomeBox: {
     flex: 1,
-    paddingHorizontal: Width * 0.013,
+    width: Width * 0.95,
     marginTop: Height * 0.012,
     marginBottom: Height * 0.012,
     backgroundColor: 'white',
-    marginHorizontal: Width * 0.018,
     borderWidth: 1.8,
     borderBottomRightRadius: 23,
     borderColor: '#FFCDD2',
@@ -110,7 +108,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   BeforeText: {
-    fontWeight: '900',
+    fontWeight: '500',
     fontSize: 20,
     fontFamily: 'Happiness-Sans-Regular',
     paddingBottom: '1%',
@@ -239,12 +237,20 @@ const styles = StyleSheet.create({
   icon: {
     height: Height * 0.12,
     width: Width * 0.12,
-    marginRight: Width * 0.07,
+    marginHorizontal: '6%',
+    // marginRight: Width * 0.07,
   },
   texticon: {
     height: Height * 0.02,
     width: Width * 0.02,
     margin: Width * 0.04,
+  },
+  RecipeImage: {
+    height: Height * 0.2,
+    width: Height * 0.35,
+    marginLeft: '9.5%',
+    marginVertical: Height * 0.015,
+    borderRadius: 10,
   },
 });
 

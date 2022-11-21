@@ -8,9 +8,8 @@ import RegisterScreen from './screens/RegisterScreen';
 import SelectionPage from './pages/SelectionPage';
 import MbitSurvery from './pages/MbtiSurvey';
 import AfterSurvery from './pages/AfterSurvey';
-
 Stack = createNativeStackNavigator();
-
+import {RecoilRoot} from 'recoil';
 function Selection_Screen() {
   return <SelectionPage />;
 }
@@ -35,71 +34,73 @@ function After_Screen() {
 }
 function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Splash">
-        <Stack.Screen
-          name="Splash"
-          component={Splash_Screen}
-          options={{
-            title: '',
-            headerTransparent: true,
-          }}
-        />
-        <Stack.Screen
-          name="SignIn"
-          component={SignIn_Screen}
-          options={{title: '', headerTransparent: true}}
-        />
-        <Stack.Screen
-          name="Main"
-          component={Main_Screen}
-          options={{
-            title: '',
-            headerShown: false,
-            headerTintColor: 'white',
-          }}
-        />
-        <Stack.Screen
-          name="Register"
-          component={Register_Screen}
-          options={{
-            title: '',
-            headerTransparent: true,
-            headerTintColor: 'white',
-          }}
-        />
-        <Stack.Screen
-          name="Selection"
-          component={Selection_Screen}
-          options={{
-            title: '',
-            headerTransparent: true,
-            headerBackTitleVisible: false,
-            headerTintColor: 'white',
-          }}
-        />
-        <Stack.Screen
-          name="afterSurvey"
-          component={After_Screen}
-          options={{
-            title: '',
-            headerShown: false,
-            headerBackTitleVisible: false,
-            headerTintColor: 'white',
-          }}
-        />
-        <Stack.Screen
-          name="MbtiSurvey"
-          component={MbitSurvery_Screen}
-          options={{
-            title: '',
-            headerTransparent: true,
-            headerBackTitleVisible: false,
-            headerTintColor: 'white',
-          }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <RecoilRoot>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Splash">
+          <Stack.Screen
+            name="Splash"
+            component={Splash_Screen}
+            options={{
+              title: '',
+              headerTransparent: true,
+            }}
+          />
+          <Stack.Screen
+            name="SignIn"
+            component={SignIn_Screen}
+            options={{title: '', headerTransparent: true}}
+          />
+          <Stack.Screen
+            name="Main"
+            component={Main_Screen}
+            options={{
+              title: '',
+              headerShown: false,
+              headerTintColor: 'white',
+            }}
+          />
+          <Stack.Screen
+            name="Register"
+            component={Register_Screen}
+            options={{
+              title: '',
+              headerTransparent: true,
+              headerTintColor: 'white',
+            }}
+          />
+          <Stack.Screen
+            name="Selection"
+            component={Selection_Screen}
+            options={{
+              title: '',
+              headerTransparent: true,
+              headerBackTitleVisible: false,
+              headerTintColor: 'white',
+            }}
+          />
+          <Stack.Screen
+            name="afterSurvey"
+            component={After_Screen}
+            options={{
+              title: '',
+              headerShown: false,
+              headerBackTitleVisible: false,
+              headerTintColor: 'white',
+            }}
+          />
+          <Stack.Screen
+            name="MbtiSurvey"
+            component={MbitSurvery_Screen}
+            options={{
+              title: '',
+              headerTransparent: true,
+              headerBackTitleVisible: false,
+              headerTintColor: 'white',
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </RecoilRoot>
   );
 }
 export default App;

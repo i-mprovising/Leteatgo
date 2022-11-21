@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, {useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -7,281 +7,444 @@ import {
   Image,
   StyleSheet,
   Dimensions,
+  StatusBar,
   Share,
 } from 'react-native';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
-import {useNavigation} from '@react-navigation/native';
-import axios from 'axios';
-import styles from '../style';
 
-function Recipe({route}) {
+import RecipeOrder from '../components/recipeOrder';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
+import {useNavigation} from '@react-navigation/native';
+import styles from '../style';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import YoutubePlayer from 'react-native-youtube-iframe';
+
+import {useRecoilValue} from 'recoil';
+import foodid from '../recoil/foodid';
+import recipename from '../recoil/recipename';
+
+const Height = Dimensions.get('window').height;
+
+function Recipe() {
+  const Width = Dimensions.get('window').width;
+  const navigation = useNavigation();
+  const FoodId = useRecoilValue(foodid);
+  const [error, setError] = useState('');
   const [like, setLike] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const [made, setMade] = useState(false);
   const [madeCount, setMadeCount] = useState(0);
   const [view, setView] = useState(174334);
+  const [orders, setOrders] = useState([]);
   const [detail, setDetail] = useState('');
-  const navigation = useNavigation();
-  {
-    // useEffect(()=>{
-    //   const getData = async ()=>{
+  const [showDetail, setShowDetail] = useState(false);
+  const [playing, setPlaying] = useState(true);
+  // const [foodName, setFoodName] = useState('');
 
-    //   }
-    // },[])
-    async function getData(food_id) {
-      try {
-        const response = await axios.get(
-          `http://127.0.0.1:80/recipe?foodid=2&userid=3004`,
-        );
-        console.log(response.data);
-        // setDetail(response.data.recipe.detail);
-      } catch (e) {
-        console.log(e);
-      }
-    }
+  const RecipeName = useRecoilValue(recipename);
 
-    const link =
-      'https://www.youtube.com/watch?v=oEWZ4DOgVK4&ab_channel=GONGSAMTABLE%EC%9D%B4%EA%B3%B5%EC%82%BC';
-
-    const onShare = async () => {
-      try {
-        const result = await Share.share({
-          message: link,
-        });
-
-        if (result.action === Share.sharedAction) {
-          if (result.activityType) {
-            console.log('activityType!');
-          } else {
-            console.log('Share!');
-          }
-        } else if (result.action === Share.dismissedAction) {
-          console.log('dismissed!');
+  const [params, setParams] = useState({
+    key: 'AIzaSyC5Ss_A2H0Z9kWdY21AcQawsWCJRvFPA3k',
+    q: '제육볶음',
+    type: 'video',
+    maxResults: 3,
+    part: 'snippet',
+  });
+  const {top} = useSafeAreaInsets();
+  axios.defaults.baseURL = 'https://www.googleapis.com/youtube/v3';
+  useEffect(() => {
+    getData(FoodId);
+  }, []);
+  const findLink = useCallback(() => {
+    axios
+      .get('/search', {params})
+      .then(response => {
+        console.log(response.data.items);
+        if (!response) {
+          setError('검색된 영상이 없습니다');
+          return;
         }
-      } catch (error) {
-        alert(error.message);
-      }
-    };
+        // console.log(response.data.item)
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, [params]);
 
-    return (
-      <SafeAreaProvider>
-        <SafeAreaView edges={['bottom']} style={{backgroundColor: 'white'}}>
-          <View style={[styles.statusBarPlaceholder, {height: top}]} />
-          <StatusBar barStyle="light-content" />
-          <View style={{...styles.block, justifyContent: 'center'}}>
-            <Text style={styles.title}>내 취향 레시피 찾아보기</Text>
+  async function getData(FoodId) {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:80/recipe?foodid=${FoodId}&userid=3002`,
+      );
+      console.log(response.data);
+
+      setDetail(response.data.recipe.detail);
+      console.log(detail);
+
+      setOrders(response.data.recipe.general.order);
+      console.log(orders);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  // useEffect(()=>{
+  //   const getData = async ()=>{
+
+  //   }
+  // },[])
+
+  const link =
+    'https://www.youtube.com/watch?v=oEWZ4DOgVK4&ab_channel=GONGSAMTABLE%EC%9D%B4%EA%B3%B5%EC%82%BC';
+
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: link,
+      });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          console.log('activityType!');
+        } else {
+          console.log('Share!');
+        }
+      } else if (result.action === Share.dismissedAction) {
+        console.log('dismissed!');
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  console.log(FoodId);
+  return (
+    <SafeAreaProvider>
+      <SafeAreaView
+        edges={['bottom']}
+        style={{backgroundColor: 'white', flex: 1}}>
+        <View style={[styles.statusBarPlaceholder, {height: top}]} />
+        <StatusBar barStyle="light-content" />
+        <View style={{...styles.block, justifyContent: 'center'}}>
+          <Text style={styles.title}>{RecipeName}</Text>
+        </View>
+
+        <View style={{flex: 0.55, padding: 5}}>
+          <View style={{flex: 0.65}}>
+            <YoutubePlayer
+              height={300}
+              play={playing}
+              videoId={'oEWZ4DOgVK4'}
+            />
           </View>
 
-          <View style={{flex: 0.55, padding: 5}}>
-            <View style={{flex: 0.65}}>
-              <Image
-                source={require('../assets/Images/food1.jpeg')}
-                style={{width: '100%', height: '100%'}}
-                resizeMode="stretch"
-              />
+          <View style={{flex: 0.35, marginTop: Height * 0.005}}>
+            <Text style={styles.recipeText}>제육볶음 레시피</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: 5,
+                flex: 0.5,
+              }}>
+              <View style={{flexDirection: 'row'}}>
+                <TouchableOpacity
+                  style={styles.bottomButton}
+                  onPress={
+                    like === false
+                      ? () => {
+                          setLike(true);
+                          setLikeCount(likeCount + 1);
+                        }
+                      : () => {
+                          setLike(false);
+                          setLikeCount(likeCount - 1);
+                        }
+                  }>
+                  <Image
+                    source={
+                      like === true
+                        ? require('../assets/icons/Heart.png')
+                        : require('../assets/icons/EmptyHeart.png')
+                    }
+                  />
+                  <Text style={styles.bottomButtonText}>{likeCount}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.bottomButton}
+                  onPress={
+                    made === false
+                      ? () => {
+                          setMade(true);
+                          setMadeCount(madeCount + 1);
+                        }
+                      : () => {
+                          setMade(false);
+                          setMadeCount(madeCount - 1);
+                        }
+                  }>
+                  <Image
+                    source={
+                      made === true
+                        ? require('../assets/icons/Checked.png')
+                        : require('../assets/icons/Check.png')
+                    }
+                  />
+                  <Text style={styles.bottomButtonText}>{madeCount}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.bottomButton}
+                  onPress={() => onShare()}>
+                  <Image source={require('../assets/icons/Share.png')} />
+                  <Text style={styles.bottomButtonText2}>공유하기</Text>
+                </TouchableOpacity>
+              </View>
+              <Text>조회수 {view.toString()}회</Text>
             </View>
-
-            <View style={{flex: 0.35, marginTop: Height * 0.005}}>
-              <Text style={styles.recipeText}>
-                [ASMR MUKBANG] 직접 만든 떡볶이 불닭볶음면 양념 치킨먹방! &
-                레시피
-              </Text>
+          </View>
+        </View>
+        <View style={{flex: 0.45, marginBottom: 20}}>
+          <ScrollView
+            style={{
+              paddingLeft: Width * 0.03,
+              paddingRight: Width * 0.03,
+              flex: 1,
+            }}>
+            <View style={{flex: 0.45}}>
               <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
-                  alignItems: 'center',
-                  padding: 5,
-                  flex: 0.5,
                 }}>
-                <View style={{flexDirection: 'row'}}>
-                  <TouchableOpacity
-                    style={styles.bottomButton}
-                    onPress={
-                      like === false
-                        ? () => {
-                            setLike(true);
-                            setLikeCount(likeCount + 1);
-                          }
-                        : () => {
-                            setLike(false);
-                            setLikeCount(likeCount - 1);
-                          }
-                    }>
-                    <Image
-                      source={
-                        like === true
-                          ? require('../../android/app/assets/icons/Heart.png')
-                          : require('../../android/app/assets/icons/EmptyHeart.png')
-                      }
-                    />
-                    <Text style={styles.bottomButtonText}>{likeCount}</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.bottomButton}
-                    onPress={
-                      made === false
-                        ? () => {
-                            setMade(true);
-                            setMadeCount(madeCount + 1);
-                          }
-                        : () => {
-                            setMade(false);
-                            setMadeCount(madeCount - 1);
-                          }
-                    }>
-                    <Image
-                      source={
-                        made === true
-                          ? require('../../android/app/assets/icons/Checked.png')
-                          : require('../../android/app/assets/icons/Check.png')
-                      }
-                    />
-                    <Text style={styles.bottomButtonText}>{madeCount}</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.bottomButton}>
-                    <Image
-                      source={require('../../android/app/assets/icons/Share.png')}
-                    />
-                    <Text
-                      style={styles.bottomButtonText2}
-                      onPress={() => onShare()}>
-                      공유하기
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                <Text>
-                  조회수{' '}
-                  {view
-                    .toString()
-                    .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')}
-                  회
+                <Text
+                  style={{
+                    color: '#FFCDD2',
+                    fontSize: 15,
+                    marginLeft: 10,
+                    fontWeight: '700',
+                  }}>
+                  식재료
                 </Text>
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: '#A4A4A4',
+                    borderRadius: 10,
+                    padding: 3,
+                  }}
+                  onPress={() => {
+                    showDetail ? setShowDetail(false) : setShowDetail(true);
+                  }}>
+                  <Text style={{fontSize: 12, color: 'white'}}>
+                    자세히 보기
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  // justifyContent: 'space-between',
+                  flexWrap: 'wrap',
+                  marginBottom: Height * 0.01,
+                }}>
+                <Image
+                  source={require('../assets/ingredients/Seafoods/Maskgroup-0.png')}
+                  style={styles.icon}
+                />
+                <Image
+                  source={require('../assets/ingredients/Seafoods/Maskgroup-0.png')}
+                  style={styles.icon}
+                />
+
+                <Image
+                  source={require('../assets/ingredients/Seafoods/Maskgroup-0.png')}
+                  style={styles.icon}
+                />
+                <Image
+                  source={require('../assets/ingredients/Seafoods/Maskgroup-0.png')}
+                  style={styles.icon}
+                />
               </View>
             </View>
-          </View>
-          <View style={{flex: 0.45}}>
-            <ScrollView
+            <View style={{flex: 1}}>
+              <Text
+                style={{
+                  color: '#FFCDD2',
+                  marginLeft: 10,
+                  fontSize: 15,
+                  fontWeight: '700',
+                }}>
+                조미료
+              </Text>
+
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  flexWrap: 'wrap',
+                  marginBottom: Height * 0.01,
+                }}>
+                <Image
+                  source={require('../assets/ingredients/Seafoods/Maskgroup-0.png')}
+                  style={styles.icon}
+                />
+                <Image
+                  source={require('../assets/ingredients/Seafoods/Maskgroup-0.png')}
+                  style={styles.icon}
+                />
+              </View>
+            </View>
+
+            <Text>{showDetail ? detail : null}</Text>
+
+            <View
               style={{
-                paddingLeft: Width * 0.03,
-                paddingRight: Width * 0.03,
-                flex: 1,
+                flex: 0.1,
+                marginBottom: Height * 0.05,
+                marginTop: Height * 0.02,
               }}>
-              <View style={{flex: 0.45}}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <Text style={{color: '#FFCDD2'}}>식재료</Text>
-                  <TouchableOpacity
+              <Text style={{color: '#FFCDD2'}}>레시피</Text>
+              {orders.Order1 ? (
+                <View>
+                  <View
                     style={{
-                      backgroundColor: '#A4A4A4',
-                      borderRadius: 10,
-                      padding: 3,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+
+                      // justifyContent: 'center',
                     }}>
                     <Text
-                      style={{fontSize: 12, color: 'white'}}
-                      onPress={() => {
-                        console.log(typeof route.params.food_id);
-                        getData(route.params.food_id);
+                      style={{
+                        paddingHorizontal: '7%',
+                        fontFamily: 'Roboto-Bold',
+                        fontStyle: 'italic',
+                        fontWeight: '900',
+                        color: '#FFAAB3',
+                        fontSize: 28,
+                        marginTop: '4%',
                       }}>
-                      자세히 보기
+                      1
                     </Text>
-                  </TouchableOpacity>
-                </View>
 
-                <View
-                  style={{flexDirection: 'row', marginBottom: Height * 0.01}}>
+                    <Text style={{marginTop: Width * 0.04, flexShrink: 1}}>
+                      {orders.Order1.substring(2)}
+                    </Text>
+                  </View>
                   <Image
-                    source={require('../../android/app/assets/Ingredient/chicken.png')}
-                    style={styles.icon}
-                  />
-                  <Image
-                    source={require('../../android/app/assets/Ingredient/sausage.png')}
-                    style={styles.icon}
-                  />
-
-                  <Image
-                    source={require('../../android/app/assets/Ingredient/meatball.png')}
-                    style={styles.icon}
-                  />
-                  <Image
-                    source={require('../../android/app/assets/Ingredient/ramen.png')}
-                    style={styles.icon}
+                    style={styles.RecipeImage}
+                    source={{
+                      uri: orders.Order1_img,
+                    }}
                   />
                 </View>
-              </View>
-              <View style={{flex: 1}}>
-                <Text style={{color: '#FFCDD2'}}>조미료</Text>
+              ) : null}
+              {orders.Order2 ? (
+                <View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      // justifyContent: 'center',
+                    }}>
+                    <Text
+                      style={{
+                        paddingHorizontal: '7%',
+                        fontFamily: 'Roboto-Bold',
+                        fontStyle: 'italic',
+                        fontWeight: '900',
+                        color: '#FFAAB3',
+                        fontSize: 28,
+                        marginTop: '2%',
+                      }}>
+                      2
+                    </Text>
 
+                    <Text style={{marginTop: Width * 0.04, flexShrink: 1}}>
+                      {orders.Order2.substring(2)}
+                    </Text>
+                  </View>
+                  <Image
+                    style={styles.RecipeImage}
+                    source={{
+                      uri: orders.Order2_img,
+                    }}
+                  />
+                </View>
+              ) : null}
+            </View>
+            {orders.Order3 ? (
+              <View>
                 <View
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
-                    marginBottom: Height * 0.01,
+                    // justifyContent: 'center',
                   }}>
-                  <Image
-                    source={require('../../android/app/assets/Ingredient/sesame_oil.png')}
-                    style={styles.icon}
-                  />
-                  <Image
-                    source={require('../../android/app/assets/Ingredient/soy_sauce.png')}
-                    style={styles.icon}
-                  />
+                  <Text
+                    style={{
+                      paddingHorizontal: '7%',
+                      fontFamily: 'Roboto-Bold',
+                      fontStyle: 'italic',
+                      fontWeight: '900',
+                      color: '#FFAAB3',
+                      fontSize: 28,
+                      marginTop: '2%',
+                    }}>
+                    3
+                  </Text>
+
+                  <Text style={{marginTop: Width * 0.04, flexShrink: 1}}>
+                    {orders.Order3.substring(2)}
+                  </Text>
                 </View>
+                <Image
+                  style={styles.RecipeImage}
+                  source={{
+                    uri: orders.Order3_img,
+                  }}
+                />
               </View>
-
-              <Text>{detail}</Text>
-
-              <View
-                style={{
-                  flex: 0.1,
-                  marginBottom: Height * 0.05,
-                  marginTop: Height * 0.02,
-                }}>
-                <Text style={{color: '#FFCDD2'}}>레시피</Text>
+            ) : null}
+            {orders.Order4 ? (
+              <View>
                 <View
                   style={{
                     flexDirection: 'row',
+                    alignItems: 'center',
+                    // justifyContent: 'center',
                   }}>
-                  <Image
-                    source={require('../../android/app/assets/icons/1.png')}
-                    style={styles.texticon}
-                  />
-                  <Text style={{marginTop: Width * 0.04, flexShrink: 1}}>
-                    양파는 채썰고 슬라이스햄은 먹기 좋은 크기로 썰어줍니다.
+                  <Text
+                    style={{
+                      paddingHorizontal: '7%',
+                      fontFamily: 'Roboto-Bold',
+                      fontStyle: 'italic',
+                      fontWeight: '900',
+                      color: '#FFAAB3',
+                      fontSize: 28,
+                      marginTop: '3%',
+                    }}>
+                    4
                   </Text>
-                </View>
 
-                <View style={{flexDirection: 'row'}}>
-                  <Image
-                    source={require('../../android/app/assets/icons/2.png')}
-                    style={styles.texticon}
-                  />
                   <Text style={{marginTop: Width * 0.04, flexShrink: 1}}>
-                    끓는 물에 면을 먼저 데쳐줍니다. 이때 면은 완전히 삶는 것이
-                    아닌 면이 살짝 풀어질 정도로만 데리고, 데친 면은 찬물에 담가
-                    면이 불지 않도록 식혀주세요.
+                    {orders.Order4.substring(2)}
                   </Text>
                 </View>
-                <View style={{flexDirection: 'row'}}>
-                  <Image
-                    source={require('../../android/app/assets/icons/3.png')}
-                    style={styles.texticon}
-                  />
-                  <Text style={{marginTop: Width * 0.04, flexShrink: 1}}>
-                    달궈진 팬에 오일을 두르고 슬라이스햄과 다진마늘, 채썬 양파를
-                    약불에서 5분간 볶아주세요.
-                  </Text>
-                </View>
+                <Image
+                  style={styles.RecipeImage}
+                  source={{
+                    uri: orders.Order4_img,
+                  }}
+                />
               </View>
-            </ScrollView>
-          </View>
-        </SafeAreaView>
-      </SafeAreaProvider>
-    );
-  }
+            ) : null}
+          </ScrollView>
+        </View>
+      </SafeAreaView>
+    </SafeAreaProvider>
+  );
 }
 
 export default Recipe;

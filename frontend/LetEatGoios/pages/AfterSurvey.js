@@ -6,10 +6,10 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 import styles from '../style';
-function AfterSurvery() {
-  const {top} = useSafeAreaInsets();
-  const navigation = useNavigation();
 
+function AfterSurvery() {
+  const navigation = useNavigation();
+  const {top} = useSafeAreaInsets();
   return (
     <SafeAreaProvider>
       <SafeAreaView edges={['bottom']} style={{backgroundColor: 'white'}}>

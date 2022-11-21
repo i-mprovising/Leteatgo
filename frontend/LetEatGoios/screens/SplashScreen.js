@@ -6,15 +6,22 @@ import {
 } from 'react-native-responsive-screen';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useRecoilState} from 'recoil';
+import usernickname from '../recoil/userNickname';
 
 const SplashScreen = () => {
-  AsyncStorage.removeItem('user_id');
+  // AsyncStorage.removeItem('user_id');
 
   const navigation = useNavigation();
   const [animating, setAnimating] = useState(true);
+
+  const [userNickname, setUserNickName] = useRecoilState(usernickname);
   useEffect(() => {
     setTimeout(() => {
       setAnimating(false);
+      AsyncStorage.getItem('USERNICKNAME').then(value =>
+        setUserNickName(value),
+      );
       AsyncStorage.getItem('user_id').then(value =>
         navigation.replace(value === null ? 'SignIn' : 'Main'),
       );

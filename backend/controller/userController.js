@@ -42,13 +42,13 @@ const user = {
         try{        
             const userpassword = req.body.password;
             const userInfo = await User.findOne({
-                attributes:['userid', 'password'],
+                attributes:['userid', 'password', 'nickname'],
                 row:true,
                 where :{
                     id: req.body.id
                 }
             }); 
-            console.log(userInfo);
+            
 
             if(!userInfo){
                 return res.json({ statusCode: CODE.FAIL, msg: "signin fail"});
@@ -57,7 +57,8 @@ const user = {
                 const isEqualPw = await bcrypt.compare(userpassword, userInfo.password);
 
                 if(isEqualPw) {
-                    return res.json({ statusCode: CODE.SUCCESS, msg: "login success", result: userInfo.userid});
+                    let userData = { userid: userInfo.userid, nickname: userInfo.nickname};
+                    return res.json({ statusCode: CODE.SUCCESS, msg: "login success", result: userData});
                 } 
                 else{
                     return res.json({ statusCode: CODE.FAIL, msg: "signin fail"});

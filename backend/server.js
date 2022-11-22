@@ -17,6 +17,8 @@ const searchRouter = require('./routes/search');
 const surveyRouter = require('./routes/survey');
 const recommendRouter = require('./routes/recommend');
 const mainRouter = require('./routes/main');
+const cartRouter = require('./routes/cart');
+const ingredientRouter = require('./routes/ingredient');
 const recommend = require('./controller/recommendController');
 const main = require('./controller/mainController');
 const startInterval = (seconds, callback) => {
@@ -79,6 +81,8 @@ app.use('/check', checkRouter);
 app.use('/search', searchRouter);
 app.use('/survey', surveyRouter );
 app.use('/recommend', recommendRouter);
+app.use('/user/cart', cartRouter);
+app.use('/user/ingredient', ingredientRouter);
 
 app.use((err, req, res, next) => {
     console.error(err);

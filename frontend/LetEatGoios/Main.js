@@ -7,7 +7,8 @@ import HomeScreen from './screens/HomeScreen';
 import SearchPage from './pages/SearchPage';
 import styles from './style';
 import RefrigeratorScreen from './screens/RefrigeratorScreen';
-
+import Recipe from './pages/Recipe';
+import Cart from './screens/CartScreen';
 const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
 function Search_Page({navigation}) {
@@ -15,6 +16,10 @@ function Search_Page({navigation}) {
 }
 function Home_Screen({navigation}) {
   return <HomeScreen />;
+}
+
+function Recipe_Page({navigation}) {
+  return <Recipe />;
 }
 
 function HomeStackScreen() {
@@ -39,16 +44,22 @@ function HomeStackScreen() {
           headerTintColor: 'white',
         }}
       />
+      <HomeStack.Screen
+        name="Recipe"
+        component={Recipe_Page}
+        options={{
+          headerTransparent: true,
+          headerBackTitleVisible: false,
+          title: '',
+          headerTintColor: 'white',
+        }}
+      />
     </HomeStack.Navigator>
   );
 }
 
 function CartScreen() {
-  return (
-    <SafeAreaView>
-      <Text>Home</Text>
-    </SafeAreaView>
-  );
+  return <Cart />;
 }
 function Refrigerator() {
   return <RefrigeratorScreen />;

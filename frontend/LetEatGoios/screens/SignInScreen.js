@@ -9,11 +9,16 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import {useRecoilState} from 'recoil';
+import userid from '../recoil/userId';
+import usernickname from '../recoil/userNickname';
+
 const STORAGE_KEY = 'user_id';
 function Login() {
   const navigation = useNavigation();
-  const [userId, setUserId] = useState('');
+  const [userId, setUserId] = useRecoilState(userid);
   const [userPassword, setUserPassword] = useState('');
+  const [userNickname, setUserNickName] = useRecoilState(usernickname);
   const [errortext, setErrortext] = useState('');
 
   async function postData(id, password) {
@@ -32,12 +37,10 @@ function Login() {
         id,
         password,
       });
-
-      // console.log(response.data);
-
+      setUserNickName(response.data.result.nickname);
       if (response.data.msg === 'login success') {
         AsyncStorage.setItem(STORAGE_KEY, userId);
-
+        AsyncStorage.setItem('USERNICKNAME', response.data.result.nickname);
         navigation.replace('Main');
       } else {
         alert('아이디와 비밀번호를 다시 확인해주세요 .');

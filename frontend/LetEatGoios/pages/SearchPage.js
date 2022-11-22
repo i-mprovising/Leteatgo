@@ -1,4 +1,6 @@
 import React, {useEffect, useState} from 'react';
+import axios from 'axios';
+import {useRecoilState} from 'recoil';
 import {
   View,
   StatusBar,
@@ -6,6 +8,7 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
@@ -14,9 +17,10 @@ import {TextInput} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 import styles from '../style';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import Main from '../Main';
 const STORAGE_KEY = '@userId'; // 나중에 userId 얻어와서 저장
-
+import foodid from '../recoil/foodid';
+import PopularTerms from '../components/PopularTerms';
 function SearchHistory(Props) {
   const text = Props.text;
   return (
@@ -31,38 +35,14 @@ function SearchHistory(Props) {
     </View>
   );
 }
-function PopularTerms(Props) {
-  return (
-    <View style={{flexDirection: 'row', marginVertical: '5%'}}>
-      <Text
-        style={{
-          paddingHorizontal: '7%',
-          fontFamily: 'Roboto-Bold',
-          fontStyle: 'italic',
-          fontWeight: '900',
-          color: '#FFAAB3',
-          fontSize: 28,
-        }}>
-        {Props.rank}
-      </Text>
-      <TouchableOpacity style={{paddingVertical: '1%'}} activeOpacity={0.7}>
-        <Text
-          style={{
-            fontFamily: 'Happiness-Sans-Regular',
-            fontSize: 20,
-          }}>
-          {Props.keyWord}
-        </Text>
-      </TouchableOpacity>
-    </View>
-  );
-}
+
 function SearchPage() {
   const navigation = useNavigation();
   const {top} = useSafeAreaInsets();
   const [text, setText] = useState('');
   const [history, setHistory] = useState({});
-
+  const [FoodId, setFoodId] = useRecoilState(foodid);
+  const [top5, setTop5] = useState();
   useEffect(() => {
     loadHistory();
   }, []);
@@ -79,7 +59,7 @@ function SearchPage() {
     if (text === '') {
       return;
     }
-
+    sendWord(text);
     doubleCheck(text) === undefined ? null : delete history[doubleCheck(text)];
     const newHistory = {
       ...history,
@@ -103,6 +83,45 @@ function SearchPage() {
       }
     }
   };
+  const getTop5 = async () => {
+    try {
+      const response = await axios.get('http://127.0.0.1:80/recommend/best');
+      console.log('top5');
+
+      setTop5(response.data.result);
+
+      console.log(response.data.result);
+    } catch (e) {
+      console.error(e);
+      console.log(JSON.stringify(e));
+      return e;
+    }
+  };
+  const sendWord = async key => {
+    // console.log(key);
+    try {
+      const response = await axios.get(
+        'http://127.0.0.1:80/search/keyword',
+        {
+          params: {key: key},
+        },
+        {withCredentials: true},
+      );
+
+      setFoodId(response.data.result[0].foodid);
+      navigation.navigate('Recipe');
+
+      // console.log(response.data.result[0].foodid);
+    } catch (e) {
+      console.error(e);
+      console.log(JSON.stringify(e));
+      return e;
+    }
+  };
+  useEffect(() => {
+    getTop5();
+  }, []);
+
   return (
     <SafeAreaProvider>
       <SafeAreaView
@@ -217,11 +236,39 @@ function SearchPage() {
               앱 내에서 가장 인기가 좋은 레시피에요!
             </Text>
           </View>
-          <PopularTerms rank={1} keyWord={'제육볶음'} />
-          <PopularTerms rank={2} keyWord={'된장찌개'} />
-          <PopularTerms rank={3} keyWord={'닭갈비'} />
-          <PopularTerms rank={4} keyWord={'떡볶이'} />
-          <PopularTerms rank={5} keyWord={'계란찜'} />
+          {top5 === undefined ? null : (
+            <PopularTerms
+              rank={1}
+              keyWord={top5[0].name}
+              FoodId={top5[0].foodid}
+            />
+          )}
+          {top5 === undefined ? null : (
+            <PopularTerms
+              rank={2}
+              keyWord={top5[1].name}
+              FoodId={top5[1].foodid}
+            />
+          )}
+          {top5 === undefined ? null : (
+            <PopularTerms rank={3} keyWord={top5[2].name} />
+          )}
+          {top5 === undefined ? null : (
+            <PopularTerms
+              rank={4}
+              keyWord={top5[3].name}
+              FoodId={top5[3].foodid}
+            />
+          )}
+          {top5 === undefined ? (
+            <ActivityIndicator style={{marginTop: 30}} />
+          ) : (
+            <PopularTerms
+              rank={5}
+              keyWord={top5[4].name}
+              FoodId={top5[4].foodid}
+            />
+          )}
         </ScrollView>
       </SafeAreaView>
     </SafeAreaProvider>

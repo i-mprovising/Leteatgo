@@ -17,7 +17,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import selectIcon from '../data/selectionIcon';
 import axios from 'axios';
 import {useNavigation} from '@react-navigation/native';
-
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 function SelectCount(Props) {

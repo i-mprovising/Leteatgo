@@ -1,0 +1,29 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/Cafe24Ssurround.ttf",
+      "sha1": "cfa785ae62a9386830c1c5acc165275418f60aee"
+    },
+    {
+      "path": "assets/fonts/Happiness-Sans-Bold.ttf",
+      "sha1": "2b7441cc78be18cb08567c2dadac0fd324508163"
+    },
+    {
+      "path": "assets/fonts/Happiness-Sans-Regular.ttf",
+      "sha1": "d218e112bb009d3aa67e15d792f0a855870a3daa"
+    },
+    {
+      "path": "assets/fonts/Happiness-Sans-Title.ttf",
+      "sha1": "ffbadf3976badbdc0d93538205d529308cf0baff"
+    },
+    {
+      "path": "assets/fonts/Roboto-Bold.ttf",
+      "sha1": "62442a18a9fe9457c1afeabf683d263a691b7798"
+    },
+    {
+      "path": "assets/fonts/Roboto-Italic.ttf",
+      "sha1": "65f3f6a7e1bd2fa6f2df35e4b07775d7f1dde4f0"
+    }
+  ]
+}

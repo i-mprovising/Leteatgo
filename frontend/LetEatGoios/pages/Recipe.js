@@ -10,7 +10,7 @@ import {
   StatusBar,
   Share,
 } from 'react-native';
-
+import {useRecoilState} from 'recoil';
 import RecipeOrder from '../components/recipeOrder';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
@@ -22,6 +22,7 @@ import YoutubePlayer from 'react-native-youtube-iframe';
 import {useRecoilValue} from 'recoil';
 import foodid from '../recoil/foodid';
 import recipename from '../recoil/recipename';
+import userid from '../recoil/userId';
 
 const Height = Dimensions.get('window').height;
 
@@ -42,7 +43,7 @@ function Recipe() {
   // const [foodName, setFoodName] = useState('');
 
   const RecipeName = useRecoilValue(recipename);
-
+  const [userId, setUserId] = useRecoilState(userid);
   const [params, setParams] = useState({
     key: 'AIzaSyC5Ss_A2H0Z9kWdY21AcQawsWCJRvFPA3k',
     q: '제육볶음',
@@ -74,7 +75,7 @@ function Recipe() {
   async function getData(FoodId) {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:80/recipe?foodid=${FoodId}&userid=3002`,
+        `http://127.0.0.1:80/recipe?foodid=${FoodId}&userid=${userId}`,
       );
       console.log(response.data);
 
@@ -263,7 +264,8 @@ function Recipe() {
                   style={styles.icon}
                 />
                 <Image
-                  source={require('../assets/ingredients/Seafoods/Maskgroup-0.png')}
+                  // source={require('../assets/ingredients/Seafoods/Maskgroup-0.png')}
+                  source={require('../assets/ingredients/none.png')}
                   style={styles.icon}
                 />
               </View>

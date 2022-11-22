@@ -14,7 +14,7 @@ function IngreCategory(Props) {
   const selectedList = Props.selectedList;
   const [submit, setSubmit] = useState(false);
   const [List, setList] = useState([]);
-
+  console.log(category);
   return (
     <Collapse>
       <CollapseHeader>
@@ -53,6 +53,8 @@ function IngreCategory(Props) {
           onPress={() => {
             setSubmit(true);
             newList = [].concat(List, selectedList);
+            console.log('newList');
+            console.log(newList);
             setSelectedList(newList);
             setList([]);
           }}>

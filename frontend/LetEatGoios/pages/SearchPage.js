@@ -175,42 +175,44 @@ function SearchPage() {
               left: '13%',
             }}></Image>
         </LinearGradient>
-        <ScrollView style={{marginLeft: 20}}>
-          {searchResult.length
-            ? searchResult.map((key, index) => (
-                <View style={{flexDirection: 'row', padding: 10}}>
-                  <Image
+
+        {searchResult.length ? (
+          <ScrollView style={{marginLeft: 20}}>
+            {searchResult.map((key, index) => (
+              <View style={{flexDirection: 'row', padding: 10}}>
+                <Image
+                  style={{
+                    height: 20,
+                    width: 20,
+                    marginTop: 5,
+                    marginRight: 10,
+                  }}
+                  source={require('../assets/icons/recipeSearch.png')}></Image>
+                <TouchableOpacity
+                  activeOpacity={0.3}
+                  onPress={() => {
+                    setFoodId(key.foodid);
+                    setRecipename(key.Name);
+                    navigation.navigate('Recipe');
+                    setResult([]);
+                    setText('');
+                  }}>
+                  <Text
                     style={{
-                      height: 20,
-                      width: 20,
-                      marginTop: 5,
-                      marginRight: 10,
+                      fontSize: 16,
+                      fontWeight: '400',
+                      padding: 3,
+                      fontFamily: 'Happiness-Sans-regular',
                     }}
-                    source={require('../assets/icons/recipeSearch.png')}></Image>
-                  <TouchableOpacity
-                    activeOpacity={0.3}
-                    onPress={() => {
-                      setFoodId(key.foodid);
-                      setRecipename(key.Name);
-                      navigation.navigate('Recipe');
-                      setResult([]);
-                      setText('');
-                    }}>
-                    <Text
-                      style={{
-                        fontSize: 16,
-                        fontWeight: '400',
-                        padding: 3,
-                        fontFamily: 'Happiness-Sans-regular',
-                      }}
-                      key={index}>
-                      {key.Name}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              ))
-            : null}
-        </ScrollView>
+                    key={index}>
+                    {key.Name}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            ))}
+          </ScrollView>
+        ) : null}
+
         <ScrollView>
           <View
             style={{

@@ -267,6 +267,49 @@ const styles = StyleSheet.create({
 
     borderWidth: 1,
   },
+  mybox: {
+    flex: 1,
+    // paddingHorizontal: Width * 0.013,
+    marginTop: Height * 0.012,
+    marginBottom: Height * 0.012,
+    backgroundColor: 'white',
+    // marginHorizontal: Width * 0.018,
+    borderWidth: 1.8,
+    borderBottomRightRadius: 23,
+    borderColor: '#FFCDD2',
+    borderStyle: 'solid',
+    shadowColor: '#F1825E',
+    shadowOffset: {
+      width: 1,
+      height: 1,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 1,
+
+    alignItems: 'center',
+    paddingLeft: Width * 0.01,
+  },
+  myblock: {
+    backgroundColor: '#FFCDD2',
+    paddingTop: Height * 0.01,
+    borderBottomRightRadius: 23,
+    // marginBottom: Height * 0.006,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignContent: 'center',
+    width: Width * 0.46,
+    elevation: 3,
+  },
+  mylogoutText: {
+    fontSize: 13,
+    color: '#FFAAB3',
+    fontVariant: '',
+    marginLeft: Width * 0.04,
+    marginTop: Height * 0.005,
+  },
+  myicon: {
+    marginHorizontal: Width * 0.015,
+  },
 });
 
 export default styles;

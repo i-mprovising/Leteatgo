@@ -252,6 +252,21 @@ const styles = StyleSheet.create({
     marginVertical: Height * 0.015,
     borderRadius: 10,
   },
+  cartList: {
+    borderRadius: 23,
+    borderColor: '#949494',
+    borderStyle: 'solid',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 5,
+    paddingLeft: 10,
+    marginHorizontal: 4,
+    marginTop: 5,
+    width: Width * 0.42,
+
+    borderWidth: 1,
+  },
 });
 
 export default styles;

@@ -21,10 +21,13 @@ import Main from '../Main';
 const STORAGE_KEY = '@userId'; // 나중에 userId 얻어와서 저장
 import foodid from '../recoil/foodid';
 import PopularTerms from '../components/PopularTerms';
+import recipename from '../recoil/recipename';
+import searchresult from '../recoil/searchWord';
+import searchtext from '../recoil/keyword';
 function SearchHistory(Props) {
   const text = Props.text;
   return (
-    <View style={styles.SearchHistory} key={Props.Key}>
+    <View key={Props.Key} style={{flexDirection: 'row'}}>
       <Text style={{paddingRight: '3%', color: '#FFAAB3'}}>{text}</Text>
       <TouchableOpacity
         style={{paddingLeft: '2%'}}
@@ -39,15 +42,20 @@ function SearchHistory(Props) {
 function SearchPage() {
   const navigation = useNavigation();
   const {top} = useSafeAreaInsets();
-  const [text, setText] = useState('');
+  const [text, setText] = useRecoilState(searchtext);
   const [history, setHistory] = useState({});
   const [FoodId, setFoodId] = useRecoilState(foodid);
+  const [RecipeName, setRecipename] = useRecoilState(recipename);
   const [top5, setTop5] = useState();
+  const [searchResult, setResult] = useRecoilState(searchresult);
   useEffect(() => {
     loadHistory();
   }, []);
 
-  const onChangeText = payload => setText(payload);
+  const onChangeText = payload => {
+    sendWord(payload);
+    setText(payload);
+  };
   const saveHistory = async toSave => {
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
   };
@@ -65,10 +73,9 @@ function SearchPage() {
       ...history,
       [Date.now()]: {text},
     };
-
+    navigation.navigate('SearchResult');
     setHistory(newHistory);
     await saveHistory(newHistory);
-    setText('');
   };
   const deleteHistory = key => {
     const newHistory = {...history};
@@ -107,9 +114,14 @@ function SearchPage() {
         },
         {withCredentials: true},
       );
+      console.log('search Keyword');
+      console.log(key);
+      setResult(response.data.result);
+      console.log('search result');
+      console.log(response.data.result);
 
-      setFoodId(response.data.result[0].foodid);
-      navigation.navigate('Recipe');
+      // setFoodId(response.data.result[0].foodid);
+      // navigation.navigate('Recipe');
 
       // console.log(response.data.result[0].foodid);
     } catch (e) {
@@ -146,13 +158,15 @@ function SearchPage() {
             }}>
             <Image source={require('../assets/icons/back.png')}></Image>
           </TouchableOpacity>
-          <TextInput
-            autoCorrect={false}
-            placeholder="검색어를 입력해주세요."
-            onSubmitEditing={addHistory}
-            onChangeText={onChangeText}
-            style={styles.TextInput}
-            value={text}></TextInput>
+          <View>
+            <TextInput
+              autoCorrect={false}
+              placeholder="검색어를 입력해주세요."
+              onSubmitEditing={addHistory}
+              onChangeText={onChangeText}
+              style={styles.TextInput}
+              value={text}></TextInput>
+          </View>
           <Image
             source={require('../assets/icons/PinkSearch.png')}
             style={{
@@ -161,6 +175,42 @@ function SearchPage() {
               left: '13%',
             }}></Image>
         </LinearGradient>
+        <ScrollView style={{marginLeft: 20}}>
+          {searchResult.length
+            ? searchResult.map((key, index) => (
+                <View style={{flexDirection: 'row', padding: 10}}>
+                  <Image
+                    style={{
+                      height: 20,
+                      width: 20,
+                      marginTop: 5,
+                      marginRight: 10,
+                    }}
+                    source={require('../assets/icons/recipeSearch.png')}></Image>
+                  <TouchableOpacity
+                    activeOpacity={0.3}
+                    onPress={() => {
+                      setFoodId(key.foodid);
+                      setRecipename(key.Name);
+                      navigation.navigate('Recipe');
+                      setResult([]);
+                      setText('');
+                    }}>
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        fontWeight: '400',
+                        padding: 3,
+                        fontFamily: 'Happiness-Sans-regular',
+                      }}
+                      key={index}>
+                      {key.Name}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              ))
+            : null}
+        </ScrollView>
         <ScrollView>
           <View
             style={{
@@ -168,7 +218,7 @@ function SearchPage() {
               justifyContent: 'space-between',
               marginBottom: '6%',
             }}>
-            <Text style={{paddingLeft: '5%', marginTop: '6%', fontSize: 16}}>
+            <Text style={{paddingLeft: '5%', marginTop: 15, fontSize: 17}}>
               최근 검색어
             </Text>
             <TouchableOpacity
@@ -191,18 +241,27 @@ function SearchPage() {
           <View
             style={{
               flexDirection: 'row',
-              paddingHorizontal: '2%',
+              marginLeft: 12,
               flexWrap: 'wrap',
               marginBottom: '8%',
             }}>
             {Object.keys(history)
               .reverse()
               .map(key => (
-                <SearchHistory
-                  Key={key}
-                  text={history[key].text}
-                  deleteHistory={deleteHistory}
-                />
+                <TouchableOpacity
+                  activeOpacity={0.6}
+                  style={styles.SearchHistory}
+                  onPress={() => {
+                    sendWord(history[key].text);
+                    setText(history[key].text);
+                    navigation.navigate('SearchResult');
+                  }}>
+                  <SearchHistory
+                    Key={key}
+                    text={history[key].text}
+                    deleteHistory={deleteHistory}
+                  />
+                </TouchableOpacity>
               ))}
           </View>
           <View

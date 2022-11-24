@@ -8,6 +8,7 @@ import RegisterScreen from './screens/RegisterScreen';
 import SelectionPage from './pages/SelectionPage';
 import MbitSurvery from './pages/MbtiSurvey';
 import AfterSurvery from './pages/AfterSurvey';
+import SearchResult from './pages/SearchResult';
 Stack = createNativeStackNavigator();
 import {RecoilRoot} from 'recoil';
 function Selection_Screen() {
@@ -18,6 +19,9 @@ function Splash_Screen() {
 }
 function SignIn_Screen() {
   return <SignInScreen />;
+}
+function SearchResult_Screen() {
+  return <SearchResult />;
 }
 function Main_Screen() {
   return <Main />;
@@ -81,6 +85,16 @@ function App() {
           <Stack.Screen
             name="afterSurvey"
             component={After_Screen}
+            options={{
+              title: '',
+              headerShown: false,
+              headerBackTitleVisible: false,
+              headerTintColor: 'white',
+            }}
+          />
+          <Stack.Screen
+            name="SearchResult"
+            component={SearchResult_Screen}
             options={{
               title: '',
               headerShown: false,

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Text,
   TextInput,
@@ -7,7 +7,9 @@ import {
   ScrollView,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from 'react-native';
+import FindIcon from '../components/findIcon';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
@@ -15,6 +17,9 @@ import styles from '../style';
 import LinearGradient from 'react-native-linear-gradient';
 import Category from '../data/categoryIndex';
 import IngreCategory from '../components/IngredientsAdd';
+import axios from 'axios';
+import {useRecoilState} from 'recoil';
+import userid from '../recoil/userId';
 
 function RefrigeratorScreen() {
   const navigation = useNavigation();
@@ -22,6 +27,43 @@ function RefrigeratorScreen() {
   const [text, setText] = useState('');
   const onChangeText = payload => setText(payload);
   const [selectedList, setSelectedList] = useState([]);
+  const [USERID, setUserId] = useRecoilState(userid);
+  const [Delete, setDelete] = useState(false);
+
+  async function deleteIngred(userid, index) {
+    try {
+      const response = await axios.delete(
+        `http://127.0.0.1:80/user/ingredient?index=${index}userid=${userid}`,
+      );
+
+      // console.log(response.data.result);
+      setSelectedList(response.data.result);
+      setDelete(true);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  async function getIngred() {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:80/user/ingredient?userid=${USERID}`,
+      );
+
+      // console.log(response.data.result);
+      setSelectedList(response.data.result);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  useEffect(() => {
+    if (Delete) {
+      getIngred();
+    }
+  }, [Delete]);
+  useEffect(() => {
+    getIngred();
+  }, []);
+
   return (
     <SafeAreaProvider>
       <SafeAreaView
@@ -67,46 +109,51 @@ function RefrigeratorScreen() {
           나의 냉장고
         </Text>
         <View style={{flexDirection: 'row', flexWrap: 'wrap', marginLeft: 17}}>
-          {selectedList.reverse().map(key => (
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginBottom: 10,
-              }}>
-              <Image
-                key={key.id}
-                source={key.src}
-                style={{...styles.ListImage}}
-              />
-              <View style={{flexDirection: 'row'}}>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    // marginLeft: 18,
-                    fontFamily: 'Happiness-Sans-Regular',
-                  }}>
-                  {key.foodname}
-                </Text>
-                <TouchableOpacity
-                  activeOpacity={0.5}
-                  onPress={() => {
-                    // console.log(selectedList);
-                    const newList = selectedList;
-                    newList.forEach((item, index) => {
-                      if (item.foodname === key.foodname) {
-                        newList.splice(index, key.id);
-                      }
-                    });
-                    setSelectedList(newList);
-                  }}>
-                  <Image
-                    source={require('../assets/icons/deleteIcon.png')}
-                    style={{width: 17, height: 17, marginLeft: 5}}></Image>
-                </TouchableOpacity>
+          {selectedList ? (
+            selectedList.map(key => (
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginBottom: 10,
+                }}>
+                <FindIcon
+                  key={key.index}
+                  category={key.category}
+                  foodname={key.materials}
+                />
+
+                <View style={{flexDirection: 'row'}}>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      // marginLeft: 18,
+                      fontFamily: 'Happiness-Sans-Regular',
+                    }}>
+                    {key.materials}
+                  </Text>
+                  <TouchableOpacity
+                    activeOpacity={0.5}
+                    onPress={() => {
+                      deleteIngred(USERID, key.index);
+                      setDelete(false);
+                    }}>
+                    <Image
+                      source={require('../assets/icons/deleteIcon.png')}
+                      style={{
+                        width: 17,
+                        height: 17,
+                        marginLeft: 5,
+                      }}></Image>
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-          ))}
+            ))
+          ) : (
+            <ActivityIndicator
+              style={{marginLeft: '47%', marginBottom: '10%'}}
+            />
+          )}
         </View>
 
         <View style={{position: 'relative'}}>
@@ -138,6 +185,7 @@ function RefrigeratorScreen() {
             <IngreCategory
               category={key.name}
               array={key.array}
+              categoryId={key.id}
               selectedList={selectedList}
               setSelectedList={setSelectedList}
             />

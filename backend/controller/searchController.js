@@ -1,6 +1,6 @@
-const Food = require('../models/food');
-const CODE = require('../modules/statusCode');
-const Sequelize = require('sequelize');
+const Food = require("../models/food");
+const CODE = require("../modules/statusCode");
+const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
 const search = async (req, res, next) => {
@@ -33,7 +33,9 @@ const search = async (req, res, next) => {
             }
             
         }
+      }
     }
+<<<<<<< HEAD
         let deleteDup = result.filter(function(item1, idx1){
             return result.findIndex(function(item2, idx2){
                 return item1.foodid == item2.foodid
@@ -47,5 +49,25 @@ const search = async (req, res, next) => {
         return res.json({ statusCode: CODE.SERVER_ERROR, msg: "server error"});
     }
 }
+=======
+    let deleteDup = result.filter(function (item1, idx1) {
+      return (
+        result.findIndex(function (item2, idx2) {
+          return item1.foodid == item2.foodid;
+        }) == idx1
+      );
+    });
+    console.log(deleteDup.length);
+    return res.json({
+      statusCode: CODE.SUCCESS,
+      msg: "search successfully",
+      result: deleteDup,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.json({ statusCode: CODE.SERVER_ERROR, msg: "server error" });
+  }
+};
+>>>>>>> 4d7e999867c1f1b0ba99a757214b1c66e9014c9b
 
 module.exports = search;

@@ -9,6 +9,7 @@ import styles from './style';
 import RefrigeratorScreen from './screens/RefrigeratorScreen';
 import Recipe from './pages/Recipe';
 import Cart from './screens/CartScreen';
+import MyRecipe from './screens/MyPage';
 const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
 function Search_Page({navigation}) {
@@ -65,11 +66,7 @@ function Refrigerator() {
   return <RefrigeratorScreen />;
 }
 function ManageScreen() {
-  return (
-    <SafeAreaView>
-      <Text>Home</Text>
-    </SafeAreaView>
-  );
+  return <MyRecipe />;
 }
 
 function Main() {

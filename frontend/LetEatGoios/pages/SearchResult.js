@@ -22,20 +22,6 @@ import foodid from '../recoil/foodid';
 
 import recipename from '../recoil/recipename';
 import searchtext from '../recoil/keyword';
-function SearchHistory(Props) {
-  const text = Props.text;
-  return (
-    <View style={styles.SearchHistory} key={Props.Key}>
-      <Text style={{paddingRight: '3%', color: '#FFAAB3'}}>{text}</Text>
-      <TouchableOpacity
-        style={{paddingLeft: '2%'}}
-        activeOpacity={0.7}
-        onPress={() => Props.deleteHistory(Props.Key)}>
-        <Text style={{color: '#FFAAB3'}}>X</Text>
-      </TouchableOpacity>
-    </View>
-  );
-}
 
 function SearchResult() {
   const navigation = useNavigation();

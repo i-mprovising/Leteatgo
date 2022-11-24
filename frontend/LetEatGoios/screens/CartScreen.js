@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Text,
   TextInput,
@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -14,14 +15,67 @@ import {useNavigation} from '@react-navigation/native';
 import styles from '../style';
 import LinearGradient from 'react-native-linear-gradient';
 import Category from '../data/categoryIndex';
-import IngreCategory from '../components/IngredientsAdd';
-
+import CartCategory from '../components/cartAdd';
+import axios from 'axios';
+import {useRecoilState} from 'recoil';
+import userid from '../recoil/userId';
+import postRefrig from '../recoil/postRefrig';
 function Cart() {
   const navigation = useNavigation();
   const {top} = useSafeAreaInsets();
   const [text, setText] = useState('');
   const onChangeText = payload => setText(payload);
   const [selectedList, setSelectedList] = useState([]);
+  const [Delete, setDelete] = useState(false);
+  const [USERID, setUserId] = useRecoilState(userid);
+  const [POST, setPOST] = useRecoilState(postRefrig);
+
+  async function deleteList(userid, index) {
+    try {
+      const response = await axios.delete(
+        `http://127.0.0.1:80/user/cart?index=${index}userid=${userid}`,
+      );
+
+      console.log(response.data.result);
+      setSelectedList(response.data.result);
+      setDelete(true);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  async function postIngre(id, selectedList) {
+    try {
+      const response = await axios.post('http://127.0.0.1:80/user/ingredient', {
+        userid: id,
+        material: selectedList,
+      });
+      setPOST(true);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async function getList() {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:80/user/cart?userid=${USERID}`,
+      );
+
+      console.log(response.data.result);
+      setSelectedList(response.data.result);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  useEffect(() => {
+    if (Delete) {
+      getList();
+    }
+  }, [Delete]);
+  useEffect(() => {
+    getList();
+  }, []);
+
   return (
     <SafeAreaProvider>
       <SafeAreaView
@@ -60,53 +114,98 @@ function Cart() {
         <Text
           style={{
             paddingLeft: 20,
-            paddingVertical: 17,
+            paddingTop: 17,
+            paddingBottom: 6,
             fontSize: 16,
             fontWeight: '800',
           }}>
           나의 장바구니
         </Text>
-        <View style={{flexDirection: 'row', flexWrap: 'wrap', marginLeft: 17}}>
-          {selectedList.map(key => (
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginBottom: 10,
-              }}>
-              <Image
-                key={key.id}
-                source={key.src}
-                style={{...styles.ListImage}}
-              />
-              <View style={{flexDirection: 'row'}}>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    // marginLeft: 18,
-                    fontFamily: 'Happiness-Sans-Regular',
-                  }}>
-                  {key.foodname}
-                </Text>
-                <TouchableOpacity
-                  activeOpacity={0.5}
-                  onPress={() => {
-                    // console.log(selectedList);
-                    // const newList = selectedList;
-                    // newList.forEach((item, index) => {
-                    //   if (item.foodname === key.foodname) {
-                    //     newList.splice(index, key.id);
-                    //   }
-                    // });
-                    // setSelectedList(newList);
-                  }}>
-                  <Image
-                    source={require('../assets/icons/deleteIcon.png')}
-                    style={{width: 17, height: 17, marginLeft: 5}}></Image>
-                </TouchableOpacity>
+        <View style={{flexDirection: 'row'}}>
+          <Text
+            style={{
+              paddingLeft: 14,
+              paddingBottom: 10,
+              fontSize: 15,
+              fontWeight: '400',
+            }}>
+            구매하셨다면,
+          </Text>
+          <Image
+            source={require('../assets/icons/addButton.png')}
+            style={{width: 17, height: 17, marginHorizontal: 5}}></Image>
+          <Text
+            style={{
+              paddingBottom: 10,
+              fontSize: 15,
+              fontWeight: '400',
+            }}>
+            버튼을 눌러 냉장고로 식재료를 옮겨보세요!
+          </Text>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            justifyContent: 'space-between',
+            marginHorizontal: 17,
+            alignItems: 'center',
+          }}>
+          {selectedList ? (
+            selectedList.map(key => (
+              <View
+                style={{
+                  marginBottom: 10,
+                }}>
+                <View style={styles.cartList}>
+                  <Text
+                    style={{
+                      fontSize: 17,
+                      // marginLeft: 18,
+
+                      fontFamily: 'Happiness-Sans-Regular',
+                    }}>
+                    {key.materials}
+                  </Text>
+                  <TouchableOpacity
+                    activeOpacity={0.5}
+                    onPress={() => {
+                      postIngre(USERID, [{name: key.materials, category: -1}]);
+                      setPOST(false);
+                      deleteList(USERID, key.index);
+                      setDelete(false);
+                    }}>
+                    <Image
+                      source={require('../assets/icons/addButton.png')}
+                      style={{
+                        width: 20,
+                        height: 20,
+                        marginLeft: 5,
+                        marginRight: 3,
+                      }}></Image>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    activeOpacity={0.5}
+                    onPress={() => {
+                      deleteList(USERID, key.index);
+                      setDelete(false);
+                    }}>
+                    <Image
+                      source={require('../assets/icons/trashcan.png')}
+                      style={{
+                        width: 17,
+                        height: 17,
+                        marginRight: 5,
+                      }}></Image>
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-          ))}
+            ))
+          ) : (
+            <ActivityIndicator
+              style={{marginLeft: '47%', marginBottom: '10%'}}
+            />
+          )}
         </View>
 
         <View style={{position: 'relative'}}>
@@ -117,7 +216,7 @@ function Cart() {
               fontSize: 16,
               fontWeight: '800',
             }}>
-            재료 추가하기
+            장바구니 추가하기
           </Text>
           <TextInput
             autoCorrect={false}
@@ -135,7 +234,7 @@ function Cart() {
         </View>
         <ScrollView>
           {Category.map(key => (
-            <IngreCategory
+            <CartCategory
               category={key.name}
               array={key.array}
               selectedList={selectedList}

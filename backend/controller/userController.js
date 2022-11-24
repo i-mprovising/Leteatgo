@@ -30,7 +30,6 @@ const user = {
           msg: "nickname that already exists",
         });
       }
-
       const hashedpw = await bcrypt.hash(req.body.password, 12);
       await User.create({
         nickname: req.body.nickname,
@@ -47,6 +46,7 @@ const user = {
       next(err);
     }
   },
+
   signin: async (req, res, next) => {
     try {
       const userpassword = req.body.password;

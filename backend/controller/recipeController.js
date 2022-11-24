@@ -17,7 +17,7 @@ const recipe = {
                     foodid: req.query.foodid,
                     userid: req.query.userid,
                     survey: 0
-                  });
+                });
             };
             const preferUser = await Prefer.increment(
                 {view:1}, {where: {
@@ -47,15 +47,21 @@ const recipe = {
             if(recipe == null){
                 return res.json({statusCode: CODE.SUCCESS, recipe: [], msg: "찾는 음식의 레시피가 없습니다."});
             }
+            const checkPrefer = await Prefer.findOne({
+                attributes:['favorite', 'made'],
+                row: true,
+                where:{
+                    userid : req.query.userid,
+                    foodid: req.query.foodid
+                }
+            })
+
             general["foodname"] = food.Name;
             general["material"] = food.material;
             general["order"] = recipe.order;
             recipeJson["general"] = general;
             recipeJson["detail"] = recipe.material;
-            console.log(recipeJson);
-            /*recipeJson["food"] = food;
-            recipeJson["recipe"] = recipe;*/
-            console.log(recipeJson["recipe"]);
+            recipeJson["user"] = checkPrefer.dataValues;
             return res.json({ statusCode: CODE.SUCCESS, recipe: recipeJson, msg: "레시피를 찾았습니다."});
         }catch(err){
             console.error(err);

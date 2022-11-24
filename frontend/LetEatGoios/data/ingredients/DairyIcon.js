@@ -2,7 +2,7 @@ const ProcessDairy = [
   {
     id: 0,
     src: require('../../assets/ingredients/ProcessDairy/Maskgroup-0.png'),
-    foodname: '계란',
+    foodname: '달걀',
   },
   {
     id: 1,

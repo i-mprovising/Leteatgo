@@ -31,7 +31,7 @@ const updateHybrid = async() => {
     let options = {
         scriptPath: "."
     };
-    PythonShell.run("recommend.py", options, async function(err, data) {
+    PythonShell.run("./py/recommend.py", options, async function(err, data) {
         if (err) throw err;
         console.log(data);
     })

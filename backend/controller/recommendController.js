@@ -12,7 +12,7 @@ const recommend = {
     write: async() => {
         let data = [];
         const csvWriter = createCsvWriter({
-            path: './prefer.csv',
+            path: './csv/prefer.csv',
             header: [
             {id: 'userid', title: 'userid'},
             {id: 'sex', title: 'sex'},

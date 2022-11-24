@@ -251,7 +251,11 @@ function SearchPage() {
             />
           )}
           {top5 === undefined ? null : (
-            <PopularTerms rank={3} keyWord={top5[2].name} />
+            <PopularTerms
+              rank={3}
+              keyWord={top5[2].name}
+              FoodId={top5[2].foodid}
+            />
           )}
           {top5 === undefined ? null : (
             <PopularTerms

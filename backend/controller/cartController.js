@@ -54,7 +54,10 @@ const cart = {
             const totalCart = await Cart.findAll({
                 where:{
                     userid: userid
-                }
+                },order: [
+                    ['createdAt', 'DESC'],
+                    [Comment, 'createdAt', 'DESC']
+                  ]
             });  
             if(!del){
                 return res.json({msg:"삭제하고자 하는 식자재가 데이터베이스에 없습니다.", statusCode: CODE.SUCCESS, result: totalCart});

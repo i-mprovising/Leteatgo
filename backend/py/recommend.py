@@ -3,8 +3,8 @@ import numpy as np
 from sklearn.utils import shuffle
 from sklearn.metrics.pairwise import cosine_similarity
 
-readpath = "./prefer.csv"
-savepath = "./Hybrid_predict.csv"
+readpath = "./csv/prefer.csv"
+savepath = "./csv/Hybrid_predict.csv"
 
 r_cols = ['userid', 'sex','foodid', 'survey', 'like', 'made', 'view']
 a, b, c, d = 1, 1, 1, 2

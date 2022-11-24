@@ -67,7 +67,7 @@ function Cart() {
           나의 장바구니
         </Text>
         <View style={{flexDirection: 'row', flexWrap: 'wrap', marginLeft: 17}}>
-          {selectedList.reverse().map(key => (
+          {selectedList.map(key => (
             <View
               style={{
                 justifyContent: 'center',
@@ -92,13 +92,13 @@ function Cart() {
                   activeOpacity={0.5}
                   onPress={() => {
                     // console.log(selectedList);
-                    const newList = selectedList;
-                    newList.forEach((item, index) => {
-                      if (item.foodname === key.foodname) {
-                        newList.splice(index, key.id);
-                      }
-                    });
-                    setSelectedList(newList);
+                    // const newList = selectedList;
+                    // newList.forEach((item, index) => {
+                    //   if (item.foodname === key.foodname) {
+                    //     newList.splice(index, key.id);
+                    //   }
+                    // });
+                    // setSelectedList(newList);
                   }}>
                   <Image
                     source={require('../assets/icons/deleteIcon.png')}

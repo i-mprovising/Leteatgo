@@ -9,16 +9,20 @@ import LinearGradient from 'react-native-linear-gradient';
 import BeforeRecommend from '../components/beforeRecomend';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useRecoilState} from 'recoil';
-import userid from '../recoil/userId';
-import usernickname from '../recoil/userNickname';
 
+import usernickname from '../recoil/userNickname';
+import IngreRecipe from '../components/increRecipe';
+import userkey from '../recoil/userKey';
 import axios from 'axios';
+import Survey2 from '../recoil/survey';
 function HomeScreen() {
   const navigation = useNavigation();
   const {top} = useSafeAreaInsets();
   const [survey, setSurvey] = useState(false);
+  const [survey2, setSurvey2] = useRecoilState(Survey2);
   const [userResult, setuserResult] = useState();
-  const [userId, setUserId] = useRecoilState(userid);
+  const [ingreResult, setIngreResult] = useState();
+  const [KEY, setKey] = useRecoilState(userkey);
   const [userNickname, setUserNickName] = useRecoilState(usernickname);
 
   const getUserR = async key => {
@@ -26,12 +30,17 @@ function HomeScreen() {
       const response = await axios.get(
         'http://127.0.0.1:80/',
         {
-          params: {userid: 10},
+          params: {userid: 97},
         },
         {withCredentials: true},
       );
-      // console.log(response.data.data);
-      setuserResult(response.data.data);
+
+      console.log('보유식자재');
+      console.log(response.data.data[1]);
+      if (response.data) {
+        setuserResult(response.data.data[0]);
+        setIngreResult(response.data.data[1]);
+      }
     } catch (e) {
       console.error(e);
       console.log(JSON.stringify(e));
@@ -39,10 +48,13 @@ function HomeScreen() {
     }
   };
   useEffect(() => {
+    setSurvey2(false);
     getUserR();
   }, []);
-  console.log(userId);
-  console.log(userNickname);
+  useEffect(() => {
+    getUserR();
+  }, [survey2]);
+
   return (
     <SafeAreaProvider>
       <SafeAreaView
@@ -101,13 +113,20 @@ function HomeScreen() {
                 {userNickname}님에게 꼭 맞는 레시피를 추천해드릴게요!
               </Text>
             </View>
-            <BeforeRecommend
-              location={'Refrigerator'}
-              title={'나의 냉장고로 만들 수 있는 음식은?'}
-              button={'찾아보기'}
-              survey={survey}
-              setSurvey={setSurvey}
-            />
+            {survey2 ? (
+              <IngreRecipe
+                text={'내가 지금 만들 수 있는 레시피에요!'}
+                data={ingreResult}
+              />
+            ) : (
+              <BeforeRecommend
+                location={'Refrigerator'}
+                title={'나의 냉장고로 만들 수 있는 음식은?'}
+                button={'찾아보기'}
+                survey={survey2}
+                setSurvey={setSurvey2}
+              />
+            )}
             {survey ? (
               <RecomRecipe
                 text={'나의 입맛에 쏙 맞게 추천된 레시피에요!'}

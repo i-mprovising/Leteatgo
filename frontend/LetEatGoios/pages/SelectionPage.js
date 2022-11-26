@@ -17,6 +17,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import selectIcon from '../data/selectionIcon';
 import axios from 'axios';
 import {useNavigation} from '@react-navigation/native';
+import {useRecoilState} from 'recoil';
+import userkey from '../recoil/userKey';
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 function SelectCount(Props) {
@@ -128,6 +130,7 @@ function SelectionPage() {
   const [food, setFood] = useState([]);
   const [like, setLike] = useState([]);
   const [dislike, setDislike] = useState([]);
+  const [KEY, setKey] = useRecoilState(userkey);
   async function getFood() {
     try {
       const response = await axios.get('http://127.0.0.1:80/survey');
@@ -146,7 +149,7 @@ function SelectionPage() {
 
   const postFood = async () => {
     let body = {
-      userid: 3003,
+      userid: {KEY},
       prefer: {
         like,
         dislike,

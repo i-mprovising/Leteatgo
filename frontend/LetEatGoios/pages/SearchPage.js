@@ -101,6 +101,7 @@ function SearchPage() {
     } catch (e) {
       console.error(e);
       console.log(JSON.stringify(e));
+
       return e;
     }
   };

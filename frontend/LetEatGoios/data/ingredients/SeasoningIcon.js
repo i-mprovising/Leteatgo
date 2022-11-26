@@ -48,12 +48,12 @@ const Seasonings = [
   {
     id: 9,
     src: require('../../assets/ingredients/SeasoningsCondiments/Maskgroup-9.png'),
-    foodname: '데리야끼 소스',
+    foodname: '데리야끼소스',
   },
   {
     id: 10,
     src: require('../../assets/ingredients/SeasoningsCondiments/Maskgroup-10.png'),
-    foodname: '돈까스 소스',
+    foodname: '돈까스소스',
   },
   {
     id: 11,
@@ -69,7 +69,7 @@ const Seasonings = [
   {
     id: 13,
     src: require('../../assets/ingredients/SeasoningsCondiments/Maskgroup-13.png'),
-    foodname: '머스타드 소스',
+    foodname: '머스타드소스',
   },
   {
     id: 14,
@@ -110,7 +110,7 @@ const Seasonings = [
   {
     id: 21,
     src: require('../../assets/ingredients/SeasoningsCondiments/Maskgroup-21.png'),
-    foodname: '쇠고기 다시다',
+    foodname: '쇠고기다시다',
   },
   {
     id: 22,

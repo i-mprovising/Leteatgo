@@ -18,7 +18,8 @@ import Category from '../data/categoryIndex';
 import CartCategory from '../components/cartAdd';
 import axios from 'axios';
 import {useRecoilState} from 'recoil';
-import userid from '../recoil/userId';
+
+import userkey from '../recoil/userKey';
 import postRefrig from '../recoil/postRefrig';
 function Cart() {
   const navigation = useNavigation();
@@ -27,13 +28,13 @@ function Cart() {
   const onChangeText = payload => setText(payload);
   const [selectedList, setSelectedList] = useState([]);
   const [Delete, setDelete] = useState(false);
-  const [USERID, setUserId] = useRecoilState(userid);
+  const [USERID, setUserId] = useRecoilState(userkey);
   const [POST, setPOST] = useRecoilState(postRefrig);
 
   async function deleteList(userid, index) {
     try {
       const response = await axios.delete(
-        `http://127.0.0.1:80/user/cart?index=${index}userid=${userid}`,
+        `http://127.0.0.1:80/user/cart?index=${index}userid=${userid}}`,
       );
 
       console.log(response.data.result);

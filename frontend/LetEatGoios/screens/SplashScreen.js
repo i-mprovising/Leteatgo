@@ -8,17 +8,18 @@ import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useRecoilState} from 'recoil';
 import usernickname from '../recoil/userNickname';
-
+import userkey from '../recoil/userKey';
 const SplashScreen = () => {
   // AsyncStorage.removeItem('user_id');
 
   const navigation = useNavigation();
   const [animating, setAnimating] = useState(true);
-
+  const [KEY, setKEY] = useRecoilState(userkey);
   const [userNickname, setUserNickName] = useRecoilState(usernickname);
   useEffect(() => {
     setTimeout(() => {
       setAnimating(false);
+      AsyncStorage.getItem('KEY').then(value => setKEY(value));
       AsyncStorage.getItem('USERNICKNAME').then(value =>
         setUserNickName(value),
       );

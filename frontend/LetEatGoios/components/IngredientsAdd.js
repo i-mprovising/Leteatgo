@@ -9,10 +9,10 @@ import styles from '../style';
 import ItemList from './IngreComponent';
 import axios from 'axios';
 import {useRecoilState} from 'recoil';
-import userid from '../recoil/userId';
+import userkey from '../recoil/userKey';
 import postRefrig from '../recoil/postRefrig';
 function IngreCategory(Props) {
-  const [USERID, setUserId] = useRecoilState(userid);
+  const [USERID, setUserId] = useRecoilState(userkey);
   const [POST, setPOST] = useRecoilState(postRefrig);
 
   category = Props.category;
@@ -25,7 +25,7 @@ function IngreCategory(Props) {
   async function postIngre(id, selectedList) {
     try {
       const response = await axios.post('http://127.0.0.1:80/user/ingredient', {
-        userid: id,
+        userid: 97,
         material: selectedList,
       });
       setPOST(true);
@@ -37,7 +37,7 @@ function IngreCategory(Props) {
   async function getIngred() {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:80/user/ingredient?userid=${USERID}`,
+        `http://127.0.0.1:80/user/ingredient?userid=97`,
       );
 
       setSelectedList(response.data.result);

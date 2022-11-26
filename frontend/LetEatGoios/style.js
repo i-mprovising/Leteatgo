@@ -28,9 +28,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Happiness-Sans-Bold',
   },
   image: {
-    height: Height * 0.23,
-    width: Height * 0.3,
+    height: Height * 0.2,
+    width: Height * 0.27,
     marginHorizontal: Width * 0.01,
+    resizeMode: 'cover',
     marginBottom: Height * 0.015,
     borderRadius: 10,
   },
@@ -303,7 +304,6 @@ const styles = StyleSheet.create({
   mylogoutText: {
     fontSize: 13,
     color: '#FFAAB3',
-    fontVariant: '',
     marginLeft: Width * 0.04,
     marginTop: Height * 0.005,
   },

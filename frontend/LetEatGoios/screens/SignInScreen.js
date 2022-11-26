@@ -12,7 +12,7 @@ import axios from 'axios';
 import {useRecoilState} from 'recoil';
 import userid from '../recoil/userId';
 import usernickname from '../recoil/userNickname';
-
+import userkey from '../recoil/userKey';
 const STORAGE_KEY = 'user_id';
 function Login() {
   const navigation = useNavigation();
@@ -20,7 +20,7 @@ function Login() {
   const [userPassword, setUserPassword] = useState('');
   const [userNickname, setUserNickName] = useRecoilState(usernickname);
   const [errortext, setErrortext] = useState('');
-
+  const [key, setKey] = useRecoilState(userkey);
   async function postData(id, password) {
     setErrortext('');
     if (!id) {
@@ -40,6 +40,9 @@ function Login() {
       setUserNickName(response.data.result.nickname);
       if (response.data.msg === 'login success') {
         AsyncStorage.setItem(STORAGE_KEY, userId);
+        setKey(response.data.result.userid);
+        console.log(key);
+
         AsyncStorage.setItem('USERNICKNAME', response.data.result.nickname);
         navigation.replace('Main');
       } else {

@@ -9,10 +9,10 @@ import styles from '../style';
 import ItemList from './IngreComponent';
 import axios from 'axios';
 import {useRecoilState} from 'recoil';
-import userid from '../recoil/userId';
 
+import userkey from '../recoil/userKey';
 function CartCategory(Props) {
-  const [USERID, setUserId] = useRecoilState(userid);
+  const [USERID, setUserId] = useRecoilState(userkey);
   category = Props.category;
   array = Props.array;
   const setSelectedList = Props.setSelectedList;
@@ -23,7 +23,7 @@ function CartCategory(Props) {
   async function postcart(id, selectedList) {
     try {
       const response = await axios.post('http://127.0.0.1:80/user/cart', {
-        userid: id,
+        userid: 97,
         material: selectedList,
       });
       console.log(selectedList);
@@ -36,7 +36,7 @@ function CartCategory(Props) {
   async function getList() {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:80/user/cart?userid=${USERID}`,
+        `http://127.0.0.1:80/user/cart?userid=97`,
       );
 
       setSelectedList(response.data.result);

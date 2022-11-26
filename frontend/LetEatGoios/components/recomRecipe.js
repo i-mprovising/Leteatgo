@@ -18,7 +18,7 @@ function RecomRecipe(Props) {
   const [RecipeName, setRecipename] = useRecoilState(recipename);
   console.log(Props.data);
   return (
-    <View style={{...styles.HomeBox, height: Height * 0.37}}>
+    <View style={{...styles.HomeBox, height: Height * 0.33}}>
       <View style={{alignItems: 'center'}}>
         <Text style={styles.InBoxtext}>{Props.text}</Text>
         <Slick

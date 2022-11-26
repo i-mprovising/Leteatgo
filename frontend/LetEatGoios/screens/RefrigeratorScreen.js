@@ -19,21 +19,21 @@ import Category from '../data/categoryIndex';
 import IngreCategory from '../components/IngredientsAdd';
 import axios from 'axios';
 import {useRecoilState} from 'recoil';
-import userid from '../recoil/userId';
 
+import userkey from '../recoil/userKey';
 function RefrigeratorScreen() {
   const navigation = useNavigation();
   const {top} = useSafeAreaInsets();
   const [text, setText] = useState('');
   const onChangeText = payload => setText(payload);
   const [selectedList, setSelectedList] = useState([]);
-  const [USERID, setUserId] = useRecoilState(userid);
+  const [USERID, setUserId] = useRecoilState(userkey);
   const [Delete, setDelete] = useState(false);
 
   async function deleteIngred(userid, index) {
     try {
       const response = await axios.delete(
-        `http://127.0.0.1:80/user/ingredient?index=${index}userid=${userid}`,
+        `http://127.0.0.1:80/user/ingredient?index=${index}userid=97`,
       );
 
       // console.log(response.data.result);
@@ -46,7 +46,7 @@ function RefrigeratorScreen() {
   async function getIngred() {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:80/user/ingredient?userid=${USERID}`,
+        `http://127.0.0.1:80/user/ingredient?userid=97`,
       );
 
       // console.log(response.data.result);

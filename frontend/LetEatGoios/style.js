@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
     marginBottom: Height * 0.006,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 2,
@@ -28,12 +29,27 @@ const styles = StyleSheet.create({
     fontFamily: 'Happiness-Sans-Bold',
   },
   image: {
-    height: Height * 0.2,
-    width: Height * 0.27,
+    height: Height * 0.19,
+    width: Height * 0.26,
     marginHorizontal: Width * 0.01,
     resizeMode: 'cover',
     marginBottom: Height * 0.015,
     borderRadius: 10,
+  },
+  image2: {
+    height: Height * 0.13,
+    width: Height * 0.13,
+    marginHorizontal: Width * 0.015,
+    resizeMode: 'cover',
+    marginBottom: Height * 0.015,
+    borderRadius: 10,
+  },
+  myImage: {
+    height: Height * 0.17,
+    width: Height * 0.2,
+
+    resizeMode: 'cover',
+    borderRadius: 8,
   },
   IconImage: {
     height: Height * 0.075,
@@ -84,7 +100,7 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     color: 'white',
     fontFamily: 'Happiness-Sans-Bold',
-    paddingRight: Width * 0.226,
+    // paddingRight: Width * 0.226,
   },
   HomeBox: {
     flex: 1,
@@ -199,14 +215,12 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   bottomButton: {
-    height: Height * 0.05,
-    backgroundColor: 'white',
+    flex: 0.5,
     flexDirection: 'row',
     borderRadius: 20,
-    width: Width * 0.2,
+
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: Width * 0.01,
     elevation: 1,
   },
   bottomButtonText: {
@@ -288,28 +302,30 @@ const styles = StyleSheet.create({
     shadowRadius: 1,
 
     alignItems: 'center',
-    paddingLeft: Width * 0.01,
+    // paddingLeft: Width * 0.01,
   },
   myblock: {
     backgroundColor: '#FFCDD2',
     paddingTop: Height * 0.01,
     borderBottomRightRadius: 23,
     // marginBottom: Height * 0.006,
-    flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'center',
-    alignContent: 'center',
+    flexDirection: 'row',
+
     width: Width * 0.46,
     elevation: 3,
   },
   mylogoutText: {
     fontSize: 13,
     color: '#FFAAB3',
-    marginLeft: Width * 0.04,
+    marginLeft: Width * 0.025,
     marginTop: Height * 0.005,
   },
   myicon: {
     marginHorizontal: Width * 0.015,
   },
+  myicon2: {width: 28, height: 28, marginHorizontal: Width * 0.015},
 });
 
 export default styles;

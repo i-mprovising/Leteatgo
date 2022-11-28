@@ -94,14 +94,14 @@ function Cart() {
           end={{x: 1, y: 0}}
           colors={['#FFCDD2', '#FFAAB3']}
           style={{...styles.block, justifyContent: 'flex-end'}}>
-          <Text style={{...styles.text, marginLeft: 230}}>장바구니</Text>
+          <Text style={{...styles.text, marginRight: '22%'}}>장바구니</Text>
           <TouchableOpacity
             activeOpacity={0.65}
             onPress={() => {
               navigation.navigate('Search');
             }}>
             <Image
-              style={{marginRight: '3%', marginTop: '6%'}}
+              style={{marginRight: '4%', marginTop: '6%'}}
               source={require('../assets/icons/Search.png')}
             />
           </TouchableOpacity>

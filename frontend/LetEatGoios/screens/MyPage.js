@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -19,49 +19,72 @@ import LinearGradient from 'react-native-linear-gradient';
 import {useNavigation} from '@react-navigation/native';
 import usernickname from '../recoil/userNickname';
 import userid from '../recoil/userId';
-
+import axios from 'axios';
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 import styles from '../style';
 
-function RecipeComponent() {
+function RecipeComponent(Props) {
   const [like, setLike] = useState(false);
   const [check, setCheck] = useState(false);
 
   return (
-    <View
-      style={{
-        ...styles.mybox,
-        height: Height * 0.2,
-      }}>
-      <View style={{flex: 0.9}}></View>
+    <View style={{position: 'relative'}}>
       <View
         style={{
-          flex: 0.1,
-          paddingBottom: Height * 0.04,
+          ...styles.mybox,
+          height: Height * 0.2,
+
+          flexDirection: 'row',
         }}>
-        <View style={{width: Width * 0.85, flexDirection: 'row-reverse'}}>
-          <TouchableOpacity onPress={() => setCheck(!check)}>
-            <Image
-              source={
-                check
-                  ? require('../assets/icons/Checked2.png')
-                  : require('../assets/icons/Check2.png')
-              }
-              style={styles.myicon}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setLike(!like)}>
-            <Image
-              source={
-                like
-                  ? require('../assets/icons/Heart2.png')
-                  : require('../assets/icons/EmptyHeart2.png')
-              }
-              style={styles.myicon}
-            />
-          </TouchableOpacity>
+        <Image
+          style={{...styles.myImage, marginLeft: 10}}
+          source={{
+            uri: Props.src,
+          }}></Image>
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            maxWidth: '50%',
+            flexDirection: 'row',
+          }}>
+          <Text
+            style={{
+              fontFamily: 'Happiness-Sans-Regular',
+              fontWeight: '600',
+              marginHorizontal: Width * 0.05,
+              fontSize: 17,
+            }}>
+            {Props.Name}
+          </Text>
         </View>
+      </View>
+      <View style={{flexDirection: 'row-reverse'}}>
+        <TouchableOpacity
+          onPress={() => setCheck(!check)}
+          style={{position: 'absolute', bottom: 26, left: 10}}>
+          <Image
+            source={
+              check
+                ? require('../assets/icons/Checked2.png')
+                : require('../assets/icons/Check2.png')
+            }
+            style={styles.myicon}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => setLike(!like)}
+          style={{position: 'absolute', bottom: 26, left: 50}}>
+          <Image
+            source={
+              like
+                ? require('../assets/icons/Heart2.png')
+                : require('../assets/icons/EmptyHeart2.png')
+            }
+            style={styles.myicon2}
+          />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -73,7 +96,34 @@ function MyRecipe() {
   const navigation = useNavigation();
   const {top} = useSafeAreaInsets();
   const [active, setActive] = useState(true);
+  const [eat, setEaten] = useState([]);
+  const [favorite, setFavorite] = useState([]);
+  async function getLike() {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:80/user/like?userid=97`,
+      );
 
+      setFavorite(response.data.result);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  async function getMade() {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:80/user/made?userid=97`,
+      );
+      console.log(response.data.result);
+      setEaten(response.data.result);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  useEffect(() => {
+    getMade();
+    getLike();
+  }, []);
   return (
     <SafeAreaProvider>
       <SafeAreaView
@@ -86,19 +136,20 @@ function MyRecipe() {
           colors={['#FFCDD2', '#FFAAB3']}
         />
         <StatusBar barStyle="light-content" />
+
         <LinearGradient
           start={{x: 0, y: 0}}
           end={{x: 1, y: 0}}
           colors={['#FFCDD2', '#FFAAB3']}
           style={{...styles.block, justifyContent: 'flex-end'}}>
-          <Text style={{...styles.text, marginLeft: 218}}>마이레시피</Text>
+          <Text style={{...styles.text, marginRight: '20%'}}>마이레시피</Text>
           <TouchableOpacity
             activeOpacity={0.65}
             onPress={() => {
               navigation.navigate('Search');
             }}>
             <Image
-              style={{marginRight: '3%', marginTop: '6%'}}
+              style={{marginRight: '4%', marginTop: '6%'}}
               source={require('../assets/icons/Search.png')}
             />
           </TouchableOpacity>
@@ -153,7 +204,13 @@ function MyRecipe() {
                           },
                         ]);
                       }}>
-                      <Text style={styles.mylogoutText}>로그아웃</Text>
+                      <Text
+                        style={{
+                          ...styles.mylogoutText,
+                          textDecorationLine: 'underline',
+                        }}>
+                        로그아웃
+                      </Text>
                     </TouchableOpacity>
                   </View>
                   <Text
@@ -173,7 +230,7 @@ function MyRecipe() {
                 style={{
                   flex: 0.1,
                   flexDirection: 'row',
-                  justifyContent: 'space-evenly',
+                  justifyContent: 'center',
                 }}>
                 <TouchableOpacity
                   style={{
@@ -181,21 +238,44 @@ function MyRecipe() {
                     backgroundColor: active ? '#FFCDD2' : '#F0F0F0',
                   }}
                   onPress={active ? null : () => setActive(!active)}>
-                  <Text>만들어 본 레시피</Text>
+                  <Text
+                    style={{
+                      marginBottom: 8,
+                      fontFamily: 'Happiness-Sans-Regular',
+                      fontSize: 15,
+                      color: active ? 'white' : 'black',
+                      fontWeight: active ? '700' : '400',
+                    }}>
+                    만들어 본 레시피
+                  </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{
                     ...styles.myblock,
+
                     backgroundColor: active ? '#F0F0F0' : '#FFCDD2',
                   }}
                   onPress={active ? () => setActive(!active) : null}>
-                  <Text>관심 있는 레시피</Text>
+                  <Text
+                    style={{
+                      marginBottom: 8,
+                      fontFamily: 'Happiness-Sans-Regular',
+                      fontSize: 15,
+                      color: !active ? 'white' : 'black',
+                      fontWeight: !active ? '700' : '400',
+                    }}>
+                    관심 있는 레시피
+                  </Text>
                 </TouchableOpacity>
               </View>
               <ScrollView style={{flex: 0.9}}>
-                <RecipeComponent />
-                <RecipeComponent />
-                <RecipeComponent />
+                {active
+                  ? eat.map(key => (
+                      <RecipeComponent src={key.Image} Name={key.Name} />
+                    ))
+                  : favorite.map(key => (
+                      <RecipeComponent src={key.Image} Name={key.Name} />
+                    ))}
               </ScrollView>
             </View>
           </View>

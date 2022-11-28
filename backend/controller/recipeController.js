@@ -9,8 +9,10 @@ const recipe = {
       const findUser = await Prefer.findOne({
         where: {
           userid: req.query.userid,
+          foodid: req.query.foodid,
         },
       });
+      console.log(findUser);
       if (!findUser) {
         const makeUser = await Prefer.create({
           foodid: req.query.foodid,

@@ -44,7 +44,7 @@ function Recipe() {
   async function getData(FoodId) {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:80/recipe?foodid=${FoodId}&userid=${userId}`,
+        `http://127.0.0.1:80/recipe?foodid=${FoodId}&userid=97`,
       );
 
       setMaterial(Object.values(response.data.recipe.general.material));
@@ -85,9 +85,10 @@ function Recipe() {
               <Text
                 style={{
                   color: '#FFCDD2',
-                  fontSize: 15,
+                  fontFamily: 'Happiness-Sans-Regular',
+                  fontSize: 16,
                   marginLeft: 10,
-                  fontWeight: '700',
+                  fontWeight: '600',
                 }}>
                 식재료
               </Text>
@@ -110,7 +111,7 @@ function Recipe() {
                 alignItems: 'center',
                 // justifyContent: 'space-between',
                 flexWrap: 'wrap',
-                marginBottom: Height * 0.01,
+                marginTop: Height * 0.01,
               }}>
               {material.map((key, index) => (
                 <View
@@ -141,19 +142,26 @@ function Recipe() {
               marginBottom: Height * 0.05,
               marginTop: Height * 0.02,
             }}>
-            <Text style={{color: '#FFCDD2'}}>레시피</Text>
+            <Text
+              style={{
+                color: '#FFCDD2',
+                fontFamily: 'Happiness-Sans-Regular',
+                fontSize: 16,
+                marginLeft: 10,
+                fontWeight: '600',
+              }}>
+              레시피
+            </Text>
             {orders.order1 ? (
               <View>
                 <View
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
-
-                    // justifyContent: 'center',
                   }}>
                   <Text
                     style={{
-                      paddingHorizontal: '7%',
+                      paddingHorizontal: '3.5%',
                       fontFamily: 'Roboto-Bold',
                       fontStyle: 'italic',
                       fontWeight: '900',
@@ -164,7 +172,14 @@ function Recipe() {
                     1
                   </Text>
 
-                  <Text style={{marginTop: Width * 0.04, flexShrink: 1}}>
+                  <Text
+                    style={{
+                      marginTop: Width * 0.04,
+                      flexShrink: 1,
+                      fontSize: 15,
+                      fontWeight: '400',
+                      fontFamily: 'Happiness-Sans-Regular',
+                    }}>
                     {orders.order1.substring(2)}
                   </Text>
                 </View>
@@ -186,7 +201,7 @@ function Recipe() {
                   }}>
                   <Text
                     style={{
-                      paddingHorizontal: '7%',
+                      paddingHorizontal: '3.5%',
                       fontFamily: 'Roboto-Bold',
                       fontStyle: 'italic',
                       fontWeight: '900',
@@ -197,7 +212,14 @@ function Recipe() {
                     2
                   </Text>
 
-                  <Text style={{marginTop: Width * 0.04, flexShrink: 1}}>
+                  <Text
+                    style={{
+                      marginTop: Width * 0.04,
+                      fontSize: 15,
+                      fontWeight: '400',
+                      fontFamily: 'Happiness-Sans-Regular',
+                      flexShrink: 1,
+                    }}>
                     {orders.order2.substring(2)}
                   </Text>
                 </View>
@@ -220,7 +242,7 @@ function Recipe() {
                 }}>
                 <Text
                   style={{
-                    paddingHorizontal: '7%',
+                    paddingHorizontal: '3.5%',
                     fontFamily: 'Roboto-Bold',
                     fontStyle: 'italic',
                     fontWeight: '900',
@@ -231,7 +253,14 @@ function Recipe() {
                   3
                 </Text>
 
-                <Text style={{marginTop: Width * 0.04, flexShrink: 1}}>
+                <Text
+                  style={{
+                    // marginTop: Width * 0.04,
+                    fontSize: 15,
+                    fontWeight: '400',
+                    fontFamily: 'Happiness-Sans-Regular',
+                    flexShrink: 1,
+                  }}>
                   {orders.order3.substring(2)}
                 </Text>
               </View>
@@ -253,7 +282,7 @@ function Recipe() {
                 }}>
                 <Text
                   style={{
-                    paddingHorizontal: '7%',
+                    paddingHorizontal: '3.5%',
                     fontFamily: 'Roboto-Bold',
                     fontStyle: 'italic',
                     fontWeight: '900',
@@ -264,7 +293,14 @@ function Recipe() {
                   4
                 </Text>
 
-                <Text style={{marginTop: Width * 0.04, flexShrink: 1}}>
+                <Text
+                  style={{
+                    marginTop: Width * 0.04,
+                    fontSize: 15,
+                    fontWeight: '400',
+                    fontFamily: 'Happiness-Sans-Regular',
+                    flexShrink: 1,
+                  }}>
                   {orders.order4.substring(2)}
                 </Text>
               </View>
@@ -286,7 +322,7 @@ function Recipe() {
                 }}>
                 <Text
                   style={{
-                    paddingHorizontal: '7%',
+                    paddingHorizontal: '3.5%',
                     fontFamily: 'Roboto-Bold',
                     fontStyle: 'italic',
                     fontWeight: '900',
@@ -297,7 +333,14 @@ function Recipe() {
                   5
                 </Text>
 
-                <Text style={{marginTop: Width * 0.04, flexShrink: 1}}>
+                <Text
+                  style={{
+                    marginTop: Width * 0.04,
+                    fontSize: 15,
+                    fontWeight: '400',
+                    fontFamily: 'Happiness-Sans-Regular',
+                    flexShrink: 1,
+                  }}>
                   {orders.order5.substring(2)}
                 </Text>
               </View>
@@ -319,7 +362,7 @@ function Recipe() {
                 }}>
                 <Text
                   style={{
-                    paddingHorizontal: '7%',
+                    paddingHorizontal: '3.5%',
                     fontFamily: 'Roboto-Bold',
                     fontStyle: 'italic',
                     fontWeight: '900',
@@ -330,7 +373,14 @@ function Recipe() {
                   6
                 </Text>
 
-                <Text style={{marginTop: Width * 0.04, flexShrink: 1}}>
+                <Text
+                  style={{
+                    marginTop: Width * 0.04,
+                    fontSize: 15,
+                    fontWeight: '400',
+                    fontFamily: 'Happiness-Sans-Regular',
+                    flexShrink: 1,
+                  }}>
                   {orders.order6.substring(2)}
                 </Text>
               </View>

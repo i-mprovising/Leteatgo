@@ -7,25 +7,89 @@ import {
   TouchableOpacity,
   Image,
   Share,
+  DatePickerAndroid,
 } from 'react-native';
 
 import YoutubePlayer from 'react-native-youtube-iframe';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import axios from 'axios';
-
+import foodid from '../recoil/foodid';
+import {useRecoilValue} from 'recoil';
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 
 function RecipeTopArea({food_name}) {
   const [like, setLike] = useState(false);
-  const [likeCount, setLikeCount] = useState(0);
   const [made, setMade] = useState(false);
-  const [madeCount, setMadeCount] = useState(0);
-  const [view, setView] = useState(174334);
   const [playing, setPlaying] = useState(true);
   const [videoName, setVideoName] = useState('');
   const [videoId, setVideoId] = useState('j7s9VRsrm9o');
 
+  const FoodId = useRecoilValue(foodid);
+
+  async function getLike() {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:80/user/like?userid=97`,
+      );
+
+      response.data.result.map(key => {
+        console.log(key.foodid);
+        if (key.foodid === FoodId) {
+          setLike(true);
+          return;
+        }
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  async function getMade() {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:80/user/made?userid=97`,
+      );
+
+      response.data.result.map(key => {
+        console.log(key.foodid);
+        if (key.foodid === FoodId) {
+          setMade(true);
+          return;
+        }
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  useEffect(() => {
+    getMade();
+    getLike();
+  }, []);
+  async function putLike(Like) {
+    console.log(Like);
+    const userid = 97;
+    try {
+      const response = await axios.put('http://127.0.0.1:80/user/like/update', {
+        favorite: Like,
+        foodid: FoodId,
+        userid: userid,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  async function putMade(Made) {
+    console.log(Made);
+    try {
+      const response = await axios.put('http://127.0.0.1:80/user/made/update', {
+        made: Made,
+        foodid: FoodId,
+        userid: 97,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
   const params = {
     key: 'AIzaSyC5Ss_A2H0Z9kWdY21AcQawsWCJRvFPA3k',
     q: food_name,
@@ -40,8 +104,9 @@ function RecipeTopArea({food_name}) {
     await axios
       .get('/search', {params})
       .then(response => {
-        console.log(response.data.items[0]);
+        console.log(response.data.items[0].snippet.title);
         setVideoName(response.data.items[0].snippet.title);
+        console.log('videoName');
         setVideoId(response.data.items[0].id.videoId);
         if (!response) {
           setError('검색된 영상이 없습니다');
@@ -84,75 +149,86 @@ function RecipeTopArea({food_name}) {
   }, [findLink]);
 
   return (
-    <View style={{flex: 0.55, padding: 5, marginBottom: 15}}>
+    <View style={{flex: 1}}>
       <View
         style={{
-          flex: 0.7,
+          flex: 0.65,
           justifyContent: 'flex-end',
         }}>
         <YoutubePlayer height={'100%'} play={playing} videoId={videoId} />
       </View>
 
-      <View
-        style={{
-          flex: 0.3,
-        }}>
-        <Text style={styles.text}>{videoName}</Text>
+      <View style={{flex: 0.3}}>
+        <Text style={{...styles.text, marginLeft: 10, maxWidth: '90%'}}>
+          {videoName}
+        </Text>
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginTop: Height * 0.01,
+            marginRight: Width * 0.01,
             padding: 5,
-            flex: 0.5,
           }}>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <View style={{flex: 0.5, flexDirection: 'row'}}>
-              <TouchableOpacity
-                style={styles.bottomButton}
-                onPress={
-                  like === false
-                    ? () => {
-                        setLike(true);
-                        setLikeCount(likeCount + 1);
-                      }
-                    : () => {
-                        setLike(false);
-                        setLikeCount(likeCount - 1);
-                      }
-                }>
-                <Image
-                  source={
-                    like === true
-                      ? require('../assets/icons/Heart.png')
-                      : require('../assets/icons/EmptyHeart.png')
-                  }
-                />
-                <Text style={styles.bottomButtonText}>{likeCount}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.bottomButton}
-                onPress={
-                  made === false
-                    ? () => {
-                        setMade(true);
-                        setMadeCount(madeCount + 1);
-                      }
-                    : () => {
-                        setMade(false);
-                        setMadeCount(madeCount - 1);
-                      }
-                }>
-                <Image
-                  source={
-                    made === true
-                      ? require('../assets/icons/Checked.png')
-                      : require('../assets/icons/Check.png')
-                  }
-                />
-                <Text style={styles.bottomButtonText}>{madeCount}</Text>
-              </TouchableOpacity>
+            <View
+              style={{
+                flex: 0.5,
+                flexDirection: 'row',
+              }}>
+              <View
+                style={{
+                  flex: 0.5,
+                  borderWidth: 1,
+                  borderRadius: 20,
+                  borderColor: 'pink',
+
+                  marginRight: Width * 0.025,
+                  borderStyle: 'solid',
+                }}>
+                <TouchableOpacity
+                  style={styles.bottomButton}
+                  onPress={() => {
+                    setLike(!like);
+
+                    putLike(!like);
+                  }}>
+                  <Image
+                    style={{height: 18, width: 18}}
+                    source={
+                      like
+                        ? require('../assets/icons/Heart.png')
+                        : require('../assets/icons/EmptyHeart.png')
+                    }
+                  />
+                </TouchableOpacity>
+              </View>
+              <View
+                style={{
+                  flex: 0.5,
+                  borderWidth: 1,
+                  borderRadius: 20,
+                  marginRight: Width * 0.025,
+
+                  borderColor: 'pink',
+                  borderStyle: 'solid',
+                }}>
+                <TouchableOpacity
+                  style={styles.bottomButton}
+                  onPress={() => {
+                    setMade(!made);
+                    putMade(!made);
+                  }}>
+                  <Image
+                    style={{height: 18, width: 18}}
+                    source={
+                      made === true
+                        ? require('../assets/icons/Checked.png')
+                        : require('../assets/icons/Check.png')
+                    }
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
             <View
               style={{
@@ -162,6 +238,9 @@ function RecipeTopArea({food_name}) {
               <TouchableOpacity
                 style={{
                   ...styles.bottomButton,
+                  borderColor: 'pink',
+                  borderSyle: 'solid',
+                  borderWidth: 1,
                   width: Width * 0.25,
                   marginRight: Width * 0.01,
                 }}>
@@ -197,7 +276,7 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   bottomButton: {
-    height: Height * 0.05,
+    height: Height * 0.04,
     backgroundColor: 'white',
     flexDirection: 'row',
     borderRadius: 20,
@@ -213,9 +292,9 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   bottomButtonText2: {
-    fontSize: 13,
+    fontSize: 15,
     backgroundColor: 'white',
-    marginLeft: 5,
+    marginLeft: 10,
   },
   image: {
     height: Height * 0.15,
@@ -224,8 +303,10 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 17,
     fontWeight: '900',
-    padding: 5,
-
+    paddingTop: 5,
+    fontSize: 17,
+    fontFamily: 'Happiness-Sans-Regular',
+    fontWeight: '800',
     flex: 1,
   },
   topButtonText: {

@@ -18,19 +18,13 @@ function RecomRecipe(Props) {
   const [RecipeName, setRecipename] = useRecoilState(recipename);
   console.log(Props.data);
   return (
-    <View style={{...styles.HomeBox, height: Height * 0.33}}>
+    <View style={{...styles.HomeBox, height: Height * 0.3}}>
       <View style={{alignItems: 'center'}}>
         <Text style={styles.InBoxtext}>{Props.text}</Text>
-        <Slick
-          loadMinimalLoader={<ActivityIndicator />}
-          autoplay
-          dotStyle={{
-            backgroundColor: '#F0F0F0',
-          }}
-          activeDotStyle={{
-            backgroundColor: '#FFAAB3',
-          }}
-          paginationStyle={{bottom: 3}}>
+        <ScrollView
+          pagingEnabled
+          horizontal
+          showsHorizontalScrollIndicator={false}>
           {Props.data === undefined ? (
             <ActivityIndicator />
           ) : (
@@ -45,13 +39,13 @@ function RecomRecipe(Props) {
                 <View style={{alignItems: 'center'}}>
                   <Image
                     Key={index}
-                    style={styles.image}
+                    style={styles.image2}
                     source={{uri: Props.data[index].image}}
                   />
 
                   <Text
                     style={{
-                      fontSize: 16,
+                      fontSize: 15,
                       fontFamily: 'Happiness-Sans-Regular',
                     }}>
                     {Props.data[index].name}
@@ -60,7 +54,10 @@ function RecomRecipe(Props) {
               </TouchableOpacity>
             ))
           )}
-        </Slick>
+        </ScrollView>
+        <View style={{...styles.TextBox, marginBottom: 8}}>
+          <Text style={{...styles.ButtonText}}>추가검사 해보기</Text>
+        </View>
       </View>
     </View>
   );

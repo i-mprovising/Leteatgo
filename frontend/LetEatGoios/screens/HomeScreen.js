@@ -11,7 +11,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {useRecoilState} from 'recoil';
 
 import usernickname from '../recoil/userNickname';
-import IngreRecipe from '../components/increRecipe';
+import IngreRecipe from '../components/ingreRecipe';
 import userkey from '../recoil/userKey';
 import axios from 'axios';
 import Survey2 from '../recoil/survey';
@@ -72,7 +72,7 @@ function HomeScreen() {
           end={{x: 1, y: 0}}
           colors={['#FFCDD2', '#FFAAB3']}
           style={{...styles.block, justifyContent: 'flex-end'}}>
-          <Text style={styles.text}>입맛춤</Text>
+          <Text style={{...styles.text, marginRight: '24%'}}>입맛춤</Text>
           <TouchableOpacity
             activeOpacity={0.65}
             onPress={() => {
@@ -113,20 +113,7 @@ function HomeScreen() {
                 {userNickname}님에게 꼭 맞는 레시피를 추천해드릴게요!
               </Text>
             </View>
-            {survey2 ? (
-              <IngreRecipe
-                text={'내가 지금 만들 수 있는 레시피에요!'}
-                data={ingreResult}
-              />
-            ) : (
-              <BeforeRecommend
-                location={'Refrigerator'}
-                title={'나의 냉장고로 만들 수 있는 음식은?'}
-                button={'찾아보기'}
-                survey={survey2}
-                setSurvey={setSurvey2}
-              />
-            )}
+
             {survey ? (
               <RecomRecipe
                 text={'나의 입맛에 쏙 맞게 추천된 레시피에요!'}
@@ -139,6 +126,20 @@ function HomeScreen() {
                 button={'찾아보기'}
                 survey={survey}
                 setSurvey={setSurvey}
+              />
+            )}
+            {survey2 ? (
+              <IngreRecipe
+                text={'내가 지금 만들 수 있는 레시피에요!'}
+                data={ingreResult}
+              />
+            ) : (
+              <BeforeRecommend
+                location={'Refrigerator'}
+                title={'나의 냉장고로 만들 수 있는 음식은?'}
+                button={'찾아보기'}
+                survey={survey2}
+                setSurvey={setSurvey2}
               />
             )}
 

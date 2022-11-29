@@ -118,8 +118,11 @@ function Recipe() {
                   style={{
                     justifyContent: 'center',
                     alignItems: 'center',
-                    marginBottom: 10,
+                    marginVertical: 7,
                   }}>
+                  <Image
+                    source={require('../assets/icons/smallAddButton.png')}
+                    style={{marginLeft: 50}}></Image>
                   <FindIcon key={index} category={-1} foodname={key} />
                   <Text
                     style={{

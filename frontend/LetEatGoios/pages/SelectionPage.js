@@ -65,13 +65,10 @@ function ButtonImage(Props) {
 
 function ImageList(Props) {
   const [Select, setSelect] = useState(false);
-
   count = Props.count;
   setCount = Props.setCount;
-
   foodName = Props.foodName;
   src = Props.source;
-
   return (
     <View
       style={{

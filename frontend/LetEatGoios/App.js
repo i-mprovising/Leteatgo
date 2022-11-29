@@ -9,6 +9,7 @@ import SelectionPage from './pages/SelectionPage';
 import MbitSurvery from './pages/MbtiSurvey';
 import AfterSurvery from './pages/AfterSurvey';
 import SearchResult from './pages/SearchResult';
+import Mbti from './pages/Mbti';
 Stack = createNativeStackNavigator();
 import {RecoilRoot} from 'recoil';
 function Selection_Screen() {
@@ -28,6 +29,9 @@ function Main_Screen() {
 }
 function MbitSurvery_Screen() {
   return <MbitSurvery />;
+}
+function Mbit_Screen() {
+  return <Mbti />;
 }
 
 function Register_Screen() {
@@ -105,6 +109,16 @@ function App() {
           <Stack.Screen
             name="MbtiSurvey"
             component={MbitSurvery_Screen}
+            options={{
+              title: '',
+              headerTransparent: true,
+              headerBackTitleVisible: false,
+              headerTintColor: 'white',
+            }}
+          />
+          <Stack.Screen
+            name="MbtiResult"
+            component={Mbit_Screen}
             options={{
               title: '',
               headerTransparent: true,

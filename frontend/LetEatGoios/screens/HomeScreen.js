@@ -1,5 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StatusBar, Image, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StatusBar,
+  Dimensions,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import RecomRecipe from '../components/recomRecipe';
@@ -9,12 +16,29 @@ import LinearGradient from 'react-native-linear-gradient';
 import BeforeRecommend from '../components/beforeRecomend';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useRecoilState} from 'recoil';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import usernickname from '../recoil/userNickname';
 import IngreRecipe from '../components/ingreRecipe';
 import userkey from '../recoil/userKey';
 import axios from 'axios';
 import Survey2 from '../recoil/survey';
+const Height = Dimensions.get('window').height;
+const Width = Dimensions.get('window').width;
+import {
+  mbtiFinish,
+  eCount,
+  iCount,
+  sCount,
+  wCount,
+  uCount,
+  fCount,
+  rCount,
+  vCount,
+  aCount,
+  pCount,
+} from '../recoil/mbtiCount';
+import {useIsFocused} from '@react-navigation/native';
+import {BottomTabBarHeightCallbackContext} from '@react-navigation/bottom-tabs';
 function HomeScreen() {
   const navigation = useNavigation();
   const {top} = useSafeAreaInsets();
@@ -25,6 +49,24 @@ function HomeScreen() {
   const [KEY, setKey] = useRecoilState(userkey);
   const [userNickname, setUserNickName] = useRecoilState(usernickname);
 
+  const [finishMbti, setFinishMbti] = useState(false);
+  const [first, setFirst] = useState('');
+  const [second, setSecond] = useState('');
+  const [third, setThird] = useState('');
+  const [fourth, setFourth] = useState('');
+  const [fifth, setFifth] = useState('');
+
+  const [eTemp, setETemp] = useRecoilState(eCount);
+  const [iTemp, setITemp] = useRecoilState(iCount);
+  const [sTemp, setSTemp] = useRecoilState(sCount);
+  const [wTemp, setWTemp] = useRecoilState(wCount);
+  const [uTemp, setUTemp] = useRecoilState(uCount);
+  const [fTemp, setFTemp] = useRecoilState(fCount);
+  const [rTemp, setRTemp] = useRecoilState(rCount);
+  const [vTemp, setVTemp] = useRecoilState(vCount);
+  const [aTemp, setATemp] = useRecoilState(aCount);
+  const [pTemp, setPTemp] = useRecoilState(pCount);
+  const isFocused = useIsFocused();
   const getUserR = async key => {
     try {
       const response = await axios.get(
@@ -54,7 +96,26 @@ function HomeScreen() {
   useEffect(() => {
     getUserR();
   }, [survey2]);
-
+  useEffect(() => {
+    AsyncStorage.getItem('one').then(value => {
+      value !== null ? setFinishMbti(true) : null;
+    });
+    AsyncStorage.getItem('one').then(value => {
+      setFirst(value);
+    });
+    AsyncStorage.getItem('two').then(value => {
+      setSecond(value);
+    });
+    AsyncStorage.getItem('three').then(value => {
+      setThird(value);
+    });
+    AsyncStorage.getItem('four').then(value => {
+      setFourth(value);
+    });
+    AsyncStorage.getItem('five').then(value => {
+      setFifth(value);
+    });
+  }, [isFocused]);
   return (
     <SafeAreaProvider>
       <SafeAreaView
@@ -143,11 +204,78 @@ function HomeScreen() {
               />
             )}
 
-            <BeforeRecommend
-              location={'MbtiSurvey'}
-              title={'나의 식습관 지표 MBTI'}
-              button={'알아보기'}
-            />
+            {!finishMbti ? (
+              <BeforeRecommend
+                location={'MbtiSurvey'}
+                title={'나의 식습관 지표 MBTI'}
+                button={'알아보기'}
+                survey={survey2}
+                setSurvey={setSurvey2}
+              />
+            ) : (
+              <View
+                style={{
+                  ...styles.HomeBox,
+                  height: Height * 0.2,
+                }}>
+                <Text style={styles.BeforeText}>나의 먹비티아이는 ?</Text>
+                <View
+                // style={{
+                //   borderRadius: 7,
+                //   borderColor: 'pink',
+                //   backgroundColor: 'pink',
+                // }}
+                >
+                  <Text
+                    style={{
+                      ...styles.BeforeText,
+                      fontSize: 30,
+                      fontWeight: '900',
+                      marginVertical: 2,
+                      color: 'pink',
+                      paddingHorizontal: 10,
+                    }}>
+                    "{first}
+                    {second}
+                    {third}
+                    {fourth}-{fifth}"
+                  </Text>
+                </View>
+                <View style={{flexDirection: 'row', marginVertical: 7}}>
+                  <TouchableOpacity
+                    activeOpacity={0.65}
+                    onPress={() => {
+                      setETemp(0);
+                      setITemp(0);
+                      setSTemp(0);
+                      setWTemp(0);
+                      setUTemp(0);
+                      setFTemp(0);
+                      setRTemp(0);
+                      setVTemp(0);
+                      setATemp(0);
+                      setPTemp(0);
+                      navigation.navigate('MbtiSurvey');
+                    }}>
+                    <View style={{...styles.TextBox, alignItems: 'center'}}>
+                      <Text style={{...styles.ButtonText, paddingVertical: 5}}>
+                        재검사하기
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    activeOpacity={0.65}
+                    onPress={() => navigation.navigate('MbtiResult')}
+                    style={{marginHorizontal: Width * 0.01}}>
+                    <View style={{...styles.TextBox, alignItems: 'center'}}>
+                      <Text style={{...styles.ButtonText, paddingVertical: 5}}>
+                        검사결과 보기
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
           </View>
         </ScrollView>
       </SafeAreaView>

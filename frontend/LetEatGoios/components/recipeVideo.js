@@ -91,8 +91,8 @@ function RecipeTopArea({food_name}) {
     }
   }
   const params = {
-    key: 'AIzaSyC5Ss_A2H0Z9kWdY21AcQawsWCJRvFPA3k',
-    q: food_name,
+    key: 'AIzaSyD-zqZLGtu83XrzhC33Dhic2teJaU6-Po0',
+    q: food_name + '레시피',
     type: 'video',
     maxResults: 1,
     part: 'snippet',

@@ -85,6 +85,16 @@ const styles = StyleSheet.create({
     marginTop: Height * 0.017,
     marginBottom: Height * 0.02,
   },
+  MbtisubmitButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: Width * 0.8,
+    height: Height * 0.07,
+    backgroundColor: '#FFCDD2',
+    borderRadius: 10,
+    marginTop: Height * 0.03,
+    marginBottom: Height * 0.05,
+  },
   SearchWord: {
     color: 'black',
   },
@@ -326,6 +336,46 @@ const styles = StyleSheet.create({
     marginHorizontal: Width * 0.015,
   },
   myicon2: {width: 28, height: 28, marginHorizontal: Width * 0.015},
+
+  Rcontainer: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: 'white',
+
+    paddingHorizontal: Width * 0.01,
+  },
+  RtextArea: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: Height * 0.11,
+    // borderWidth: 1,
+    height: Height * 0.15,
+  },
+  RmbtiTitle: {
+    color: 'white',
+    fontSize: 20,
+    marginVertical: 30,
+    marginBottom: Height * 0.01,
+  },
+  RmbtiToggle: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: Width * 0.8,
+    marginBottom: Height * 0.02,
+  },
+  RmbtiActive: {
+    color: 'black',
+    fontSize: 25,
+  },
+  RmbtiPassive: {
+    color: 'white',
+    fontSize: 25,
+  },
+  resultText: {
+    fontSize: 15.5,
+    fontFamily: 'Happiness-Sans-Regular',
+    maxWidth: '90%',
+  },
 });
 
 export default styles;

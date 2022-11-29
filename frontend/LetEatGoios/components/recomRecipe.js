@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {View, Text, ActivityIndicator, Image} from 'react-native';
-import Slick from 'react-native-slick';
+
 import styles from '../style';
-import Top5Image from '../data/Top5';
+
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';

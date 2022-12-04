@@ -17,13 +17,12 @@ import {TextInput} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 import styles from '../style';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Main from '../Main';
-const STORAGE_KEY = '@userId'; // 나중에 userId 얻어와서 저장
 import foodid from '../recoil/foodid';
 import PopularTerms from '../components/PopularTerms';
 import recipename from '../recoil/recipename';
 import searchresult from '../recoil/searchWord';
 import searchtext from '../recoil/keyword';
+
 function SearchHistory(Props) {
   const text = Props.text;
   return (
@@ -38,7 +37,7 @@ function SearchHistory(Props) {
     </View>
   );
 }
-
+import userid from '../recoil/userId';
 function SearchPage() {
   const navigation = useNavigation();
   const {top} = useSafeAreaInsets();
@@ -48,6 +47,8 @@ function SearchPage() {
   const [RecipeName, setRecipename] = useRecoilState(recipename);
   const [top5, setTop5] = useState();
   const [searchResult, setResult] = useRecoilState(searchresult);
+  const [userId, setUserId] = useRecoilState(userid);
+  const STORAGE_KEY = `searchRecord${userId}`;
   useEffect(() => {
     loadHistory();
   }, []);

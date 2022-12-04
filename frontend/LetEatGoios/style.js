@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   image2: {
     height: Height * 0.13,
     width: Height * 0.13,
-    marginHorizontal: Width * 0.015,
+
     resizeMode: 'cover',
     marginBottom: Height * 0.015,
     borderRadius: 10,

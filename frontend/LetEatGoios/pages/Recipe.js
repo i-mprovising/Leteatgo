@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
+  Alert,
   StatusBar,
 } from 'react-native';
 import {useRecoilState} from 'recoil';
@@ -21,6 +22,7 @@ import foodid from '../recoil/foodid';
 import recipename from '../recoil/recipename';
 import userkey from '../recoil/userKey';
 import FindIcon from '../components/findIcon';
+
 const Height = Dimensions.get('window').height;
 
 function Recipe() {
@@ -38,13 +40,13 @@ function Recipe() {
   const {top} = useSafeAreaInsets();
   axios.defaults.baseURL = 'https://www.googleapis.com/youtube/v3';
   useEffect(() => {
-    getData(FoodId);
+    getData(userId, FoodId);
   }, []);
 
-  async function getData(FoodId) {
+  async function getData(userid, FoodId) {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:80/recipe?foodid=${FoodId}&userid=97`,
+        `http://127.0.0.1:80/recipe?foodid=${FoodId}&userid=${userid}`,
       );
 
       setMaterial(Object.values(response.data.recipe.general.material));
@@ -57,7 +59,24 @@ function Recipe() {
       console.log(e);
     }
   }
+  function addCart(item) {
+    const ingredient = [];
 
+    ingredient.push(item);
+    console.log('ingredient add');
+    console.log(ingredient);
+    postcart(userId, ingredient);
+  }
+  async function postcart(id, selectedList) {
+    try {
+      const response = await axios.post('http://127.0.0.1:80/user/cart', {
+        userid: id,
+        material: selectedList,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
   return (
     <SafeAreaProvider>
       <SafeAreaView
@@ -114,11 +133,25 @@ function Recipe() {
                 marginTop: Height * 0.01,
               }}>
               {material.map((key, index) => (
-                <View
+                <TouchableOpacity
+                  activeOpacity={0.5}
                   style={{
                     justifyContent: 'center',
                     alignItems: 'center',
                     marginVertical: 7,
+                  }}
+                  onPress={() => {
+                    Alert.alert(`장바구니에 ${key}를 추가하시겠습니까?`, '', [
+                      {
+                        text: '네',
+                        onPress: () => {
+                          addCart(key);
+                        },
+                      },
+                      {
+                        text: '아니오',
+                      },
+                    ]);
                   }}>
                   <Image
                     source={require('../assets/icons/smallAddButton.png')}
@@ -132,7 +165,7 @@ function Recipe() {
                     }}>
                     {key}
                   </Text>
-                </View>
+                </TouchableOpacity>
               ))}
             </View>
           </View>

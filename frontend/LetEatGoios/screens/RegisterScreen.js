@@ -4,7 +4,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-
+import {useNavigation} from '@react-navigation/native';
 import RNPickerSelect from 'react-native-picker-select';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -19,13 +19,13 @@ import {
 import axios from 'axios';
 
 function RegisterScreen() {
+  const navigation = useNavigation();
   const [userId, setUserId] = useState('');
   const [userPassword, setUserPassword] = useState('');
   const [userPasswordCheck, setUserPasswordCheck] = useState('');
   const [nickname, setNickname] = useState('');
   const [sex, setSex] = useState(0);
   const [errortext, setErrortext] = useState('');
-
   const placeholder = {
     label: '성별을 선택해주세요',
     value: null,
@@ -54,7 +54,7 @@ function RegisterScreen() {
       });
 
       if (response.data.statusCode === 200) {
-        navigation.replace('Login');
+        navigation.replace('SignIn');
       } else if (response.data.msg === 'id that already exists') {
         alert('동일한 아이디가 이미 존재합니다.');
       } else if (response.data.msg === 'nickname that already exists') {

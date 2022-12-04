@@ -6,6 +6,7 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -21,7 +22,7 @@ import usernickname from '../recoil/userNickname';
 import IngreRecipe from '../components/ingreRecipe';
 import userkey from '../recoil/userKey';
 import axios from 'axios';
-import Survey2 from '../recoil/survey';
+import userid from '../recoil/userId';
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 import {
@@ -38,12 +39,10 @@ import {
   pCount,
 } from '../recoil/mbtiCount';
 import {useIsFocused} from '@react-navigation/native';
-import {BottomTabBarHeightCallbackContext} from '@react-navigation/bottom-tabs';
 function HomeScreen() {
   const navigation = useNavigation();
   const {top} = useSafeAreaInsets();
-  const [survey, setSurvey] = useState(false);
-  const [survey2, setSurvey2] = useRecoilState(Survey2);
+  const [userId, setUserId] = useRecoilState(userid);
   const [userResult, setuserResult] = useState();
   const [ingreResult, setIngreResult] = useState();
   const [KEY, setKey] = useRecoilState(userkey);
@@ -72,14 +71,14 @@ function HomeScreen() {
       const response = await axios.get(
         'http://127.0.0.1:80/',
         {
-          params: {userid: 97},
+          params: {userid: KEY},
         },
         {withCredentials: true},
       );
 
-      console.log('보유식자재');
-      console.log(response.data.data[1]);
       if (response.data) {
+        console.log('dbsal');
+        console.log(response.data);
         setuserResult(response.data.data[0]);
         setIngreResult(response.data.data[1]);
       }
@@ -89,30 +88,28 @@ function HomeScreen() {
       return e;
     }
   };
-  useEffect(() => {
-    setSurvey2(false);
-    getUserR();
-  }, []);
+
   useEffect(() => {
     getUserR();
-  }, [survey2]);
+  }, [isFocused]);
+
   useEffect(() => {
-    AsyncStorage.getItem('one').then(value => {
+    AsyncStorage.getItem(`${userId}one`).then(value => {
       value !== null ? setFinishMbti(true) : null;
     });
-    AsyncStorage.getItem('one').then(value => {
+    AsyncStorage.getItem(`${userId}one`).then(value => {
       setFirst(value);
     });
-    AsyncStorage.getItem('two').then(value => {
+    AsyncStorage.getItem(`${userId}two`).then(value => {
       setSecond(value);
     });
-    AsyncStorage.getItem('three').then(value => {
+    AsyncStorage.getItem(`${userId}three`).then(value => {
       setThird(value);
     });
-    AsyncStorage.getItem('four').then(value => {
+    AsyncStorage.getItem(`${userId}four`).then(value => {
       setFourth(value);
     });
-    AsyncStorage.getItem('five').then(value => {
+    AsyncStorage.getItem(`${userId}five`).then(value => {
       setFifth(value);
     });
   }, [isFocused]);
@@ -175,42 +172,43 @@ function HomeScreen() {
               </Text>
             </View>
 
-            {survey ? (
-              <RecomRecipe
-                text={'나의 입맛에 쏙 맞게 추천된 레시피에요!'}
-                data={userResult}
+            {userResult === undefined ? (
+              <ActivityIndicator
+                size="large"
+                style={{marginTop: '50%'}}
+                color="pink"
               />
-            ) : (
+            ) : userResult.length === 0 ? (
               <BeforeRecommend
                 location={'Selection'}
                 title={'내 취향에 맞는 레시피'}
                 button={'찾아보기'}
-                survey={survey}
-                setSurvey={setSurvey}
-              />
-            )}
-            {survey2 ? (
-              <IngreRecipe
-                text={'내가 지금 만들 수 있는 레시피에요!'}
-                data={ingreResult}
               />
             ) : (
+              <RecomRecipe
+                text={'나의 입맛에 쏙 맞게 추천된 레시피에요!'}
+                data={userResult}
+              />
+            )}
+
+            {ingreResult === undefined ? null : ingreResult.length === 0 ? (
               <BeforeRecommend
                 location={'Refrigerator'}
                 title={'나의 냉장고로 만들 수 있는 음식은?'}
                 button={'찾아보기'}
-                survey={survey2}
-                setSurvey={setSurvey2}
+              />
+            ) : (
+              <IngreRecipe
+                text={'내가 지금 만들 수 있는 레시피에요!'}
+                data={ingreResult}
               />
             )}
 
-            {!finishMbti ? (
+            {userResult === undefined ? null : !finishMbti ? (
               <BeforeRecommend
                 location={'MbtiSurvey'}
                 title={'나의 식습관 지표 MBTI'}
                 button={'알아보기'}
-                survey={survey2}
-                setSurvey={setSurvey2}
               />
             ) : (
               <View

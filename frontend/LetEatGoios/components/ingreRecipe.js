@@ -5,7 +5,6 @@ import styles from '../style';
 import Top5Image from '../data/Top5';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
-import axios from 'axios';
 import {useRecoilState} from 'recoil';
 import foodid from '../recoil/foodid';
 import recipename from '../recoil/recipename';

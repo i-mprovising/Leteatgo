@@ -13,7 +13,6 @@ import {useRecoilState} from 'recoil';
 import userid from '../recoil/userId';
 import usernickname from '../recoil/userNickname';
 import userkey from '../recoil/userKey';
-const STORAGE_KEY = 'user_id';
 function Login() {
   const navigation = useNavigation();
   const [userId, setUserId] = useRecoilState(userid);
@@ -21,6 +20,8 @@ function Login() {
   const [userNickname, setUserNickName] = useRecoilState(usernickname);
   const [errortext, setErrortext] = useState('');
   const [key, setKey] = useRecoilState(userkey);
+
+  const STORAGE_KEY = `nickname`;
   async function postData(id, password) {
     setErrortext('');
     if (!id) {
@@ -39,11 +40,13 @@ function Login() {
       });
       setUserNickName(response.data.result.nickname);
       if (response.data.msg === 'login success') {
-        AsyncStorage.setItem(STORAGE_KEY, userId);
+        AsyncStorage.setItem('user_id', userId);
+        console.log(String(response.data.result.userid));
+        AsyncStorage.setItem('KEY', String(response.data.result.userid));
+        console.log('key');
         setKey(response.data.result.userid);
-        console.log(key);
 
-        AsyncStorage.setItem('USERNICKNAME', response.data.result.nickname);
+        AsyncStorage.setItem(STORAGE_KEY, response.data.result.nickname);
         navigation.replace('Main');
       } else {
         alert('아이디와 비밀번호를 다시 확인해주세요 .');
@@ -58,7 +61,7 @@ function Login() {
       <View style={styles.topArea}>
         <Image
           source={require('../assets/icons/Login_logo.png')}
-          style={{width: wp(25), resizeMode: 'contain'}}
+          style={{width: wp(50), resizeMode: 'contain'}}
         />
       </View>
 

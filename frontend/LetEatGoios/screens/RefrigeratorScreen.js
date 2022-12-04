@@ -33,7 +33,7 @@ function RefrigeratorScreen() {
   async function deleteIngred(userid, index) {
     try {
       const response = await axios.delete(
-        `http://127.0.0.1:80/user/ingredient?index=${index}userid=97`,
+        `http://127.0.0.1:80/user/ingredient?index=${index}userid=${userid}`,
       );
 
       // console.log(response.data.result);
@@ -43,10 +43,10 @@ function RefrigeratorScreen() {
       console.error(error);
     }
   }
-  async function getIngred() {
+  async function getIngred(userid) {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:80/user/ingredient?userid=97`,
+        `http://127.0.0.1:80/user/ingredient?userid=${userid}`,
       );
 
       // console.log(response.data.result);
@@ -57,11 +57,11 @@ function RefrigeratorScreen() {
   }
   useEffect(() => {
     if (Delete) {
-      getIngred();
+      getIngred(USERID);
     }
   }, [Delete]);
   useEffect(() => {
-    getIngred();
+    getIngred(USERID);
   }, []);
 
   return (

@@ -32,7 +32,7 @@ function SelectCount(Props) {
     return (
       <TouchableOpacity
         onPress={() => {
-          // Props.postFood();
+          Props.postFood();
 
           Props.setLike([]);
           Props.setDislike([]);
@@ -98,20 +98,35 @@ function ImageList(Props) {
             newdisLike = Props.dislike;
             newdisLike.push(Props.foodId);
             Props.setDislike(newdisLike);
+
+            Props.like.forEach((item, index) => {
+              if (item === Props.foodId) {
+                newLike = Props.like;
+
+                newLike = newLike.filter(element => element != Props.foodId);
+
+                Props.setLike(newLike);
+              }
+            });
           } else {
             setCount(count + 1);
             newLike = Props.like;
             newLike.push(Props.foodId);
             Props.setLike(newLike);
+
             Props.dislike.forEach((item, index) => {
               if (item === Props.foodId) {
                 newDislike = Props.dislike;
+
                 newDislike = newDislike.filter(
                   element => element != Props.foodId,
                 );
+
                 Props.setDislike(newDislike);
               }
             });
+            console.log(Props.dislike);
+            console.log(Props.like);
           }
           setSelect(!Select);
         }}>
@@ -145,8 +160,9 @@ function SelectionPage() {
   }
 
   const postFood = async () => {
+    console.log(KEY);
     let body = {
-      userid: {KEY},
+      userid: KEY,
       prefer: {
         like,
         dislike,

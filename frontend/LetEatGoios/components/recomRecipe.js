@@ -10,7 +10,7 @@ import {useRecoilState} from 'recoil';
 import foodid from '../recoil/foodid';
 import recipename from '../recoil/recipename';
 import {Dimensions} from 'react-native';
-
+const Width = Dimensions.get('window').width;
 const Height = Dimensions.get('window').height;
 function RecomRecipe(Props) {
   const navigation = useNavigation();
@@ -18,13 +18,19 @@ function RecomRecipe(Props) {
   const [RecipeName, setRecipename] = useRecoilState(recipename);
   console.log(Props.data);
   return (
-    <View style={{...styles.HomeBox, height: Height * 0.3}}>
-      <View style={{alignItems: 'center'}}>
+    <View style={{...styles.HomeBox}}>
+      <View style={{alignItems: 'center', marginLeft: Width * 0.025}}>
         <Text style={styles.InBoxtext}>{Props.text}</Text>
         <ScrollView
           pagingEnabled
           horizontal
-          showsHorizontalScrollIndicator={false}>
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{
+            // alignItems: 'center',
+
+            justifyContent: 'center',
+          }}
+          style={{marginBottom: 5}}>
           {Props.data === undefined ? (
             <ActivityIndicator />
           ) : (
@@ -36,7 +42,11 @@ function RecomRecipe(Props) {
                   setRecipename(Props.data[index].name);
                   navigation.navigate('Recipe');
                 }}>
-                <View style={{alignItems: 'center'}}>
+                <View
+                  style={{
+                    alignItems: 'center',
+                    marginRight: Width * 0.025,
+                  }}>
                   <Image
                     Key={index}
                     style={styles.image2}
@@ -45,7 +55,8 @@ function RecomRecipe(Props) {
 
                   <Text
                     style={{
-                      fontSize: 15,
+                      fontSize: 14,
+                      maxWidth: Height * 0.127,
                       fontFamily: 'Happiness-Sans-Regular',
                     }}>
                     {Props.data[index].name}
@@ -56,7 +67,9 @@ function RecomRecipe(Props) {
           )}
         </ScrollView>
         <View style={{...styles.TextBox, marginBottom: 8}}>
-          <Text style={{...styles.ButtonText}}>추가검사 해보기</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Selection')}>
+            <Text style={{...styles.ButtonText}}>추가검사 해보기</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>

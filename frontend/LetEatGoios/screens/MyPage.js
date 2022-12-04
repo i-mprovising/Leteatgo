@@ -18,12 +18,13 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import {useNavigation} from '@react-navigation/native';
 import usernickname from '../recoil/userNickname';
+import userkey from '../recoil/userKey';
 import userid from '../recoil/userId';
 import axios from 'axios';
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 import styles from '../style';
-
+import {useIsFocused} from '@react-navigation/native';
 function RecipeComponent(Props) {
   const [like, setLike] = useState(false);
   const [check, setCheck] = useState(false);
@@ -98,10 +99,13 @@ function MyRecipe() {
   const [active, setActive] = useState(true);
   const [eat, setEaten] = useState([]);
   const [favorite, setFavorite] = useState([]);
-  async function getLike() {
+  const isFocused = useIsFocused();
+  const [KEY, setKEY] = useRecoilState(userkey);
+
+  async function getLike(userid) {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:80/user/like?userid=97`,
+        `http://127.0.0.1:80/user/like?userid=${userid}`,
       );
 
       setFavorite(response.data.result);
@@ -109,10 +113,10 @@ function MyRecipe() {
       console.log(e);
     }
   }
-  async function getMade() {
+  async function getMade(userid) {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:80/user/made?userid=97`,
+        `http://127.0.0.1:80/user/made?userid=${userid}`,
       );
       console.log(response.data.result);
       setEaten(response.data.result);
@@ -121,9 +125,9 @@ function MyRecipe() {
     }
   }
   useEffect(() => {
-    getMade();
-    getLike();
-  }, []);
+    getMade(KEY);
+    getLike(KEY);
+  }, [isFocused]);
   return (
     <SafeAreaProvider>
       <SafeAreaView
@@ -195,6 +199,8 @@ function MyRecipe() {
                           {
                             text: '네',
                             onPress: () => {
+                              AsyncStorage.removeItem('KEY');
+                              AsyncStorage.removeItem('USERNICKNAME');
                               AsyncStorage.removeItem('user_id');
                               navigation.replace('Splash');
                             },

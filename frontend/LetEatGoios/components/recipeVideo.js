@@ -9,12 +9,13 @@ import {
   Share,
   DatePickerAndroid,
 } from 'react-native';
-
+import {useRecoilState} from 'recoil';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import foodid from '../recoil/foodid';
 import {useRecoilValue} from 'recoil';
+import userkey from '../recoil/userKey';
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 
@@ -24,13 +25,13 @@ function RecipeTopArea({food_name}) {
   const [playing, setPlaying] = useState(true);
   const [videoName, setVideoName] = useState('');
   const [videoId, setVideoId] = useState('j7s9VRsrm9o');
-
+  const [USERID, setUserId] = useRecoilState(userkey);
   const FoodId = useRecoilValue(foodid);
 
   async function getLike() {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:80/user/like?userid=97`,
+        `http://127.0.0.1:80/user/like?userid=${USERID}`,
       );
 
       response.data.result.map(key => {
@@ -47,7 +48,7 @@ function RecipeTopArea({food_name}) {
   async function getMade() {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:80/user/made?userid=97`,
+        `http://127.0.0.1:80/user/made?userid=${USERID}`,
       );
 
       response.data.result.map(key => {
@@ -67,7 +68,7 @@ function RecipeTopArea({food_name}) {
   }, []);
   async function putLike(Like) {
     console.log(Like);
-    const userid = 97;
+    const userid = USERID;
     try {
       const response = await axios.put('http://127.0.0.1:80/user/like/update', {
         favorite: Like,
@@ -84,7 +85,7 @@ function RecipeTopArea({food_name}) {
       const response = await axios.put('http://127.0.0.1:80/user/made/update', {
         made: Made,
         foodid: FoodId,
-        userid: 97,
+        userid: USERID,
       });
     } catch (e) {
       console.log(e);

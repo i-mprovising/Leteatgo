@@ -11,6 +11,7 @@ import axios from 'axios';
 import {useRecoilState} from 'recoil';
 
 import userkey from '../recoil/userKey';
+import {useIsFocused} from '@react-navigation/native';
 function CartCategory(Props) {
   const [USERID, setUserId] = useRecoilState(userkey);
   category = Props.category;
@@ -18,12 +19,16 @@ function CartCategory(Props) {
   const setSelectedList = Props.setSelectedList;
   const selectedList = Props.selectedList;
   const [submit, setSubmit] = useState(false);
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    getList();
+  }, [isFocused]);
   const [List, setList] = useState([]);
   const [post, setpost] = useState(false);
   async function postcart(id, selectedList) {
     try {
       const response = await axios.post('http://127.0.0.1:80/user/cart', {
-        userid: 97,
+        userid: USERID,
         material: selectedList,
       });
       console.log(selectedList);
@@ -36,7 +41,7 @@ function CartCategory(Props) {
   async function getList() {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:80/user/cart?userid=97`,
+        `http://127.0.0.1:80/user/cart?userid=${USERID}`,
       );
 
       setSelectedList(response.data.result);

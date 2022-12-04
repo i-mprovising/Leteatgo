@@ -15,7 +15,7 @@ function BeforeRecommend(Props) {
       </View>
       <TouchableOpacity
         activeOpacity={0.65}
-        onPress={() => (Props.setSurvey(true), navigation.navigate(location))}>
+        onPress={() => navigation.navigate(location)}>
         <View style={styles.TextBox}>
           <Text style={styles.ButtonText}>{Props.button}</Text>
         </View>

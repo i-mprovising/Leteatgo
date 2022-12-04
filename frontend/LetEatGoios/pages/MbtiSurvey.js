@@ -31,6 +31,7 @@ import {
   aCount,
   pCount,
 } from '../recoil/mbtiCount';
+import userid from '../recoil/userId';
 
 const Question = [
   {
@@ -117,6 +118,8 @@ const Question = [
 
 function MbtiSurvey() {
   const navigation = useNavigation();
+
+  const [userId, setUserId] = useRecoilState(userid);
   const [eTemp, setETemp] = useRecoilState(eCount);
   const [iTemp, setITemp] = useRecoilState(iCount);
   const [sTemp, setSTemp] = useRecoilState(sCount);
@@ -163,11 +166,26 @@ function MbtiSurvey() {
             <TouchableOpacity
               style={styles.MbtisubmitButton}
               onPress={() => {
-                AsyncStorage.setItem('one', eTemp >= iTemp ? 'E' : 'I');
-                AsyncStorage.setItem('two', sTemp >= wTemp ? 'S' : 'W');
-                AsyncStorage.setItem('three', uTemp >= fTemp ? 'U' : 'F');
-                AsyncStorage.setItem('four', rTemp >= vTemp ? 'R' : 'V');
-                AsyncStorage.setItem('five', aTemp >= pTemp ? 'A' : 'P');
+                AsyncStorage.setItem(
+                  `${userId}one`,
+                  eTemp >= iTemp ? 'E' : 'I',
+                );
+                AsyncStorage.setItem(
+                  `${userId}two`,
+                  sTemp >= wTemp ? 'S' : 'W',
+                );
+                AsyncStorage.setItem(
+                  `${userId}three`,
+                  uTemp >= fTemp ? 'U' : 'F',
+                );
+                AsyncStorage.setItem(
+                  `${userId}four`,
+                  rTemp >= vTemp ? 'R' : 'V',
+                );
+                AsyncStorage.setItem(
+                  `${userId}five`,
+                  aTemp >= pTemp ? 'A' : 'P',
+                );
                 navigation.navigate('MbtiResult');
               }}>
               <Text

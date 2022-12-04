@@ -8,40 +8,46 @@ import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useRecoilState} from 'recoil';
 import usernickname from '../recoil/userNickname';
+import userid from '../recoil/userId';
 import userkey from '../recoil/userKey';
-const SplashScreen = () => {
-  // AsyncStorage.removeItem('user_id');
+import LinearGradient from 'react-native-linear-gradient';
 
+const SplashScreen = () => {
   const navigation = useNavigation();
   const [animating, setAnimating] = useState(true);
   const [KEY, setKEY] = useRecoilState(userkey);
+  const [userId, setUserId] = useRecoilState(userid);
   const [userNickname, setUserNickName] = useRecoilState(usernickname);
+  const STORAGE_KEY = `nickname`;
   useEffect(() => {
     setTimeout(() => {
       setAnimating(false);
-      AsyncStorage.getItem('KEY').then(value => setKEY(value));
-      AsyncStorage.getItem('USERNICKNAME').then(value =>
-        setUserNickName(value),
-      );
-      AsyncStorage.getItem('user_id').then(value =>
-        navigation.replace(value === null ? 'SignIn' : 'Main'),
-      );
+      AsyncStorage.getItem('KEY').then(value => {
+        setKEY(parseInt(value));
+        console.log(value);
+      });
+
+      AsyncStorage.getItem(STORAGE_KEY).then(value => setUserNickName(value));
+      AsyncStorage.getItem('user_id').then(value => {
+        navigation.replace(value === null ? 'SignIn' : 'Main');
+        setUserId(value);
+      });
     }, 3000);
   }, []);
 
   return (
-    <View style={styles.container}>
+    <LinearGradient colors={['#FFCDD2', '#FFAAB3']} style={styles.container}>
       <Image
-        source={require('../assets/icons/Text_logo.png')}
-        style={{width: wp(75), resizeMode: 'contain', margin: 30}}
+        source={require('../assets/icons/Login_logo.png')}
+        style={{width: wp(75), height: wp(75)}}
       />
       <ActivityIndicator
         animating={animating}
         color="white"
         size="large"
-        style={styles.ActivityIndicator}
+        style={{marginBottom: '20%'}}
       />
-    </View>
+    </LinearGradient>
   );
 };
 const styles = StyleSheet.create({
@@ -50,11 +56,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#FFAAB3',
-  },
-  ActivityIndicator: {
-    alignItems: 'center',
-
-    height: 80,
   },
 });
 export default SplashScreen;

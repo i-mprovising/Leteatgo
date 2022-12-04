@@ -14,12 +14,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import styles from '../style';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
+import userid from '../recoil/userId';
 import {useNavigation} from '@react-navigation/native';
 function Mbti() {
   const {top} = useSafeAreaInsets();
+  const [userId, setUserId] = useRecoilState(userid);
+
   const navigation = useNavigation();
   const [first, setFirst] = useState('');
   const [second, setSecond] = useState('');
@@ -28,19 +30,19 @@ function Mbti() {
   const [fifth, setFifth] = useState('');
 
   useEffect(() => {
-    AsyncStorage.getItem('one').then(value => {
+    AsyncStorage.getItem(`${userId}one`).then(value => {
       setFirst(value);
     });
-    AsyncStorage.getItem('two').then(value => {
+    AsyncStorage.getItem(`${userId}two`).then(value => {
       setSecond(value);
     });
-    AsyncStorage.getItem('three').then(value => {
+    AsyncStorage.getItem(`${userId}three`).then(value => {
       setThird(value);
     });
-    AsyncStorage.getItem('four').then(value => {
+    AsyncStorage.getItem(`${userId}four`).then(value => {
       setFourth(value);
     });
-    AsyncStorage.getItem('five').then(value => {
+    AsyncStorage.getItem(`${userId}five`).then(value => {
       setFifth(value);
     });
   }, []);

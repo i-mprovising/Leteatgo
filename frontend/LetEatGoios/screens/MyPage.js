@@ -152,7 +152,7 @@ function MyRecipe() {
   const [KEY, setKEY] = useRecoilState(userkey);
   // const [put, setPut] = useRecoilState(click);
 
-  function doublcCheck(foodid, made) {
+  function doubleCheck(foodid, made) {
     check = false;
     made.map(key => {
       if (key.foodid == foodid) {
@@ -306,6 +306,29 @@ function MyRecipe() {
                 <TouchableOpacity
                   style={{
                     ...styles.myblock,
+
+                    backgroundColor: active ? '#F0F0F0' : '#FFCDD2',
+                  }}
+                  onPress={() => {
+                    if (active) {
+                      getLike(KEY);
+                      setActive(!active);
+                    }
+                  }}>
+                  <Text
+                    style={{
+                      marginBottom: 8,
+                      fontFamily: 'Happiness-Sans-Regular',
+                      fontSize: 15,
+                      color: !active ? 'white' : 'black',
+                      fontWeight: !active ? '700' : '400',
+                    }}>
+                    관심 있는 레시피
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    ...styles.myblock,
                     backgroundColor: active ? '#FFCDD2' : '#F0F0F0',
                   }}
                   onPress={() => {
@@ -327,34 +350,11 @@ function MyRecipe() {
                     만들어 본 레시피
                   </Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                  style={{
-                    ...styles.myblock,
-
-                    backgroundColor: active ? '#F0F0F0' : '#FFCDD2',
-                  }}
-                  onPress={() => {
-                    if (active) {
-                      getLike(KEY);
-                      setActive(!active);
-                    }
-                  }}>
-                  <Text
-                    style={{
-                      marginBottom: 8,
-                      fontFamily: 'Happiness-Sans-Regular',
-                      fontSize: 15,
-                      color: !active ? 'white' : 'black',
-                      fontWeight: !active ? '700' : '400',
-                    }}>
-                    관심 있는 레시피
-                  </Text>
-                </TouchableOpacity>
               </View>
               <ScrollView style={{flex: 0.9}}>
                 {active
                   ? eat.map((key, index) =>
-                      doublcCheck(key.foodid, favorite) === true ? (
+                      doubleCheck(key.foodid, favorite) === true ? (
                         <RecipeComponent
                           key={index}
                           src={key.Image}
@@ -375,7 +375,7 @@ function MyRecipe() {
                       ),
                     )
                   : favorite.map((key, index) =>
-                      doublcCheck(key.foodid, eat) === true ? (
+                      doubleCheck(key.foodid, eat) === true ? (
                         <RecipeComponent
                           key={index + 2000}
                           src={key.Image}

@@ -18,7 +18,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import Category from '../data/categoryIndex';
 import IngreCategory from '../components/IngredientsAdd';
 import axios from 'axios';
-import {RecoilValueReadOnly, useRecoilState} from 'recoil';
+import {useRecoilState} from 'recoil';
 
 import userkey from '../recoil/userKey';
 function RefrigeratorScreen() {

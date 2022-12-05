@@ -21,13 +21,47 @@ import usernickname from '../recoil/userNickname';
 import userkey from '../recoil/userKey';
 import userid from '../recoil/userId';
 import axios from 'axios';
+import foodid from '../recoil/foodid';
+import recipename from '../recoil/recipename';
+import click from '../recoil/mypagePut';
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 import styles from '../style';
 import {useIsFocused} from '@react-navigation/native';
 function RecipeComponent(Props) {
-  const [like, setLike] = useState(false);
-  const [check, setCheck] = useState(false);
+  const navigation = useNavigation();
+  const [FoodId, setFoodId] = useRecoilState(foodid);
+  const [RecipeName, setRecipename] = useRecoilState(recipename);
+  const [like, setLike] = useState(Props.like);
+  const [check, setCheck] = useState(Props.check);
+
+  const [KEY, setKEY] = useRecoilState(userkey);
+  // const [put, setPut] = useRecoilState(click);
+  async function putLike(Like, foodid) {
+    console.log(Like);
+
+    try {
+      const response = await axios.put('http://127.0.0.1:80/user/like/update', {
+        favorite: Like,
+        foodid: foodid,
+        userid: KEY,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  async function putMade(Made, foodid) {
+    console.log(Made);
+    try {
+      const response = await axios.put('http://127.0.0.1:80/user/made/update', {
+        made: Made,
+        foodid: foodid,
+        userid: KEY,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   return (
     <View style={{position: 'relative'}}>
@@ -35,14 +69,21 @@ function RecipeComponent(Props) {
         style={{
           ...styles.mybox,
           height: Height * 0.2,
-
           flexDirection: 'row',
         }}>
-        <Image
-          style={{...styles.myImage, marginLeft: 10}}
-          source={{
-            uri: Props.src,
-          }}></Image>
+        <TouchableOpacity
+          activeOpacity={0.65}
+          onPress={() => {
+            setFoodId(Props.foodid);
+            setRecipename(Props.Name);
+            navigation.navigate('Recipe');
+          }}>
+          <Image
+            style={{...styles.myImage, marginLeft: 10}}
+            source={{
+              uri: Props.src,
+            }}></Image>
+        </TouchableOpacity>
         <View
           style={{
             alignItems: 'center',
@@ -63,7 +104,11 @@ function RecipeComponent(Props) {
       </View>
       <View style={{flexDirection: 'row-reverse'}}>
         <TouchableOpacity
-          onPress={() => setCheck(!check)}
+          onPress={() => {
+            setCheck(!check);
+            // setPut(!put);
+            putMade(!check, Props.foodid);
+          }}
           style={{position: 'absolute', bottom: 26, left: 10}}>
           <Image
             source={
@@ -75,7 +120,11 @@ function RecipeComponent(Props) {
           />
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => setLike(!like)}
+          onPress={() => {
+            setLike(!like);
+            // setPut(!put);
+            putLike(!like, Props.foodid);
+          }}
           style={{position: 'absolute', bottom: 26, left: 50}}>
           <Image
             source={
@@ -101,13 +150,25 @@ function MyRecipe() {
   const [favorite, setFavorite] = useState([]);
   const isFocused = useIsFocused();
   const [KEY, setKEY] = useRecoilState(userkey);
+  // const [put, setPut] = useRecoilState(click);
+
+  function doublcCheck(foodid, made) {
+    check = false;
+    made.map(key => {
+      if (key.foodid == foodid) {
+        check = true;
+      }
+    });
+    return check;
+  }
 
   async function getLike(userid) {
     try {
       const response = await axios.get(
         `http://127.0.0.1:80/user/like?userid=${userid}`,
       );
-
+      console.log('like');
+      console.log(response.data.result);
       setFavorite(response.data.result);
     } catch (e) {
       console.log(e);
@@ -128,6 +189,10 @@ function MyRecipe() {
     getMade(KEY);
     getLike(KEY);
   }, [isFocused]);
+  // useEffect(() => {
+  //   getMade(KEY);
+  //   getLike(KEY);
+  // }, [put]);
   return (
     <SafeAreaProvider>
       <SafeAreaView
@@ -243,7 +308,14 @@ function MyRecipe() {
                     ...styles.myblock,
                     backgroundColor: active ? '#FFCDD2' : '#F0F0F0',
                   }}
-                  onPress={active ? null : () => setActive(!active)}>
+                  onPress={() => {
+                    if (active) {
+                      null;
+                    } else {
+                      getMade(KEY);
+                      setActive(!active);
+                    }
+                  }}>
                   <Text
                     style={{
                       marginBottom: 8,
@@ -261,7 +333,12 @@ function MyRecipe() {
 
                     backgroundColor: active ? '#F0F0F0' : '#FFCDD2',
                   }}
-                  onPress={active ? () => setActive(!active) : null}>
+                  onPress={() => {
+                    if (active) {
+                      getLike(KEY);
+                      setActive(!active);
+                    }
+                  }}>
                   <Text
                     style={{
                       marginBottom: 8,
@@ -276,12 +353,48 @@ function MyRecipe() {
               </View>
               <ScrollView style={{flex: 0.9}}>
                 {active
-                  ? eat.map(key => (
-                      <RecipeComponent src={key.Image} Name={key.Name} />
-                    ))
-                  : favorite.map(key => (
-                      <RecipeComponent src={key.Image} Name={key.Name} />
-                    ))}
+                  ? eat.map((key, index) =>
+                      doublcCheck(key.foodid, favorite) === true ? (
+                        <RecipeComponent
+                          key={index}
+                          src={key.Image}
+                          Name={key.Name}
+                          foodid={key.foodid}
+                          like={true}
+                          check={true}
+                        />
+                      ) : (
+                        <RecipeComponent
+                          key={index}
+                          src={key.Image}
+                          Name={key.Name}
+                          foodid={key.foodid}
+                          like={false}
+                          check={true}
+                        />
+                      ),
+                    )
+                  : favorite.map((key, index) =>
+                      doublcCheck(key.foodid, eat) === true ? (
+                        <RecipeComponent
+                          key={index + 2000}
+                          src={key.Image}
+                          Name={key.Name}
+                          foodid={key.foodid}
+                          like={true}
+                          check={true}
+                        />
+                      ) : (
+                        <RecipeComponent
+                          key={index + 2000}
+                          src={key.Image}
+                          Name={key.Name}
+                          foodid={key.foodid}
+                          like={true}
+                          check={false}
+                        />
+                      ),
+                    )}
               </ScrollView>
             </View>
           </View>

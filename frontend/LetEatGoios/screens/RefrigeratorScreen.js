@@ -18,7 +18,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import Category from '../data/categoryIndex';
 import IngreCategory from '../components/IngredientsAdd';
 import axios from 'axios';
-import {useRecoilState} from 'recoil';
+import {RecoilValueReadOnly, useRecoilState} from 'recoil';
 
 import userkey from '../recoil/userKey';
 function RefrigeratorScreen() {
@@ -29,7 +29,7 @@ function RefrigeratorScreen() {
   const [selectedList, setSelectedList] = useState([]);
   const [USERID, setUserId] = useRecoilState(userkey);
   const [Delete, setDelete] = useState(false);
-
+  const [Post, setPost] = useState(false);
   async function deleteIngred(userid, index) {
     try {
       const response = await axios.delete(
@@ -61,9 +61,25 @@ function RefrigeratorScreen() {
     }
   }, [Delete]);
   useEffect(() => {
+    if (Post) {
+      getIngred(USERID);
+    }
+  }, [Post]);
+  useEffect(() => {
     getIngred(USERID);
   }, []);
 
+  async function postIngre(id, selectedList) {
+    try {
+      const response = await axios.post('http://127.0.0.1:80/user/ingredient', {
+        userid: id,
+        material: selectedList,
+      });
+      setPost(true);
+    } catch (e) {
+      console.log(e);
+    }
+  }
   return (
     <SafeAreaProvider>
       <SafeAreaView
@@ -168,7 +184,13 @@ function RefrigeratorScreen() {
           </Text>
           <TextInput
             autoCorrect={false}
-            // onSubmitEditing={addHistory}
+            onSubmitEditing={() => {
+              const postList = [];
+              postList.push({name: text, category: -1});
+              postIngre(USERID, postList);
+              setPost(false);
+              setText('');
+            }}
             onChangeText={onChangeText}
             style={styles.refrigeSearch}
             value={text}></TextInput>

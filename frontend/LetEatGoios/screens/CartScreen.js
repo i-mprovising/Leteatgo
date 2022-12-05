@@ -30,7 +30,19 @@ function Cart() {
   const [Delete, setDelete] = useState(false);
   const [USERID, setUserId] = useRecoilState(userkey);
   const [POST, setPOST] = useRecoilState(postRefrig);
-
+  const [cartpost, setCartpost] = useState(false);
+  async function postcart(id, selectedList) {
+    try {
+      const response = await axios.post('http://127.0.0.1:80/user/cart', {
+        userid: USERID,
+        material: selectedList,
+      });
+      console.log(selectedList);
+      setCartpost(true);
+    } catch (e) {
+      console.log(e);
+    }
+  }
   async function deleteList(userid, index) {
     try {
       const response = await axios.delete(
@@ -73,6 +85,11 @@ function Cart() {
       getList();
     }
   }, [Delete]);
+  useEffect(() => {
+    if (cartpost) {
+      getList();
+    }
+  }, [cartpost]);
   useEffect(() => {
     getList();
   }, []);
@@ -221,7 +238,13 @@ function Cart() {
           </Text>
           <TextInput
             autoCorrect={false}
-            // onSubmitEditing={addHistory}
+            onSubmitEditing={() => {
+              const list = [];
+              list.push(text);
+              postcart(USERID, list);
+              setCartpost(false);
+              setText('');
+            }}
             onChangeText={onChangeText}
             style={styles.refrigeSearch}
             value={text}></TextInput>

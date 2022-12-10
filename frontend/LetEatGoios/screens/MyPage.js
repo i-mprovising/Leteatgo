@@ -198,12 +198,12 @@ function MyRecipe() {
     }
   }
   useEffect(() => {
-    getMade(KEY);
     getLike(KEY);
+    getMade(KEY);
   }, [isFocused]);
   useEffect(() => {
-    getMade(KEY);
     getLike(KEY);
+    getMade(KEY);
   }, []);
 
   const [imgUrl, setImgUrl] = useState('');
@@ -381,6 +381,7 @@ function MyRecipe() {
                   onPress={() => {
                     if (active) {
                       getLike(KEY);
+                      getMade(KEY);
                       setActive(!active);
                     }
                   }}>
@@ -405,6 +406,7 @@ function MyRecipe() {
                       null;
                     } else {
                       getMade(KEY);
+                      getLike(KEY);
                       setActive(!active);
                     }
                   }}>

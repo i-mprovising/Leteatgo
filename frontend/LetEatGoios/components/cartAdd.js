@@ -77,7 +77,7 @@ function CartCategory(Props) {
             justifyContent: 'center',
             flexWrap: 'wrap',
           }}>
-          {array.map(key => (
+          {array.map((key, index) => (
             <ItemList
               Key={key}
               Array={array}

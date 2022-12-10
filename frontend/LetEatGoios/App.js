@@ -10,6 +10,7 @@ import MbitSurvery from './pages/MbtiSurvey';
 import AfterSurvery from './pages/AfterSurvey';
 import SearchResult from './pages/SearchResult';
 import Mbti from './pages/Mbti';
+import Tos from './pages/tos';
 Stack = createNativeStackNavigator();
 import {RecoilRoot} from 'recoil';
 function Selection_Screen() {
@@ -40,6 +41,9 @@ function Register_Screen() {
 function After_Screen() {
   return <AfterSurvery />;
 }
+function Tos_Screen() {
+  return <Tos />;
+}
 function App() {
   return (
     <RecoilRoot>
@@ -56,7 +60,20 @@ function App() {
           <Stack.Screen
             name="SignIn"
             component={SignIn_Screen}
-            options={{title: '', headerTransparent: true}}
+            options={{
+              title: '',
+              headerTransparent: true,
+              headerTintColor: 'white',
+            }}
+          />
+          <Stack.Screen
+            name="Tos"
+            component={Tos_Screen}
+            options={{
+              title: '',
+              headerTransparent: true,
+              headerTintColor: 'white',
+            }}
           />
           <Stack.Screen
             name="Main"

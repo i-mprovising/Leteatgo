@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFCDD2',
     paddingVertical: Height * 0.0146,
     borderBottomRightRadius: 23,
-    marginBottom: Height * 0.006,
+
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -264,6 +264,15 @@ const styles = StyleSheet.create({
     width: Width * 0.12,
     marginHorizontal: '6%',
     // marginRight: Width * 0.07,
+  },
+  btn: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 10,
+
+    height: 50,
+    backgroundColor: '#DDB4B9',
+    borderRadius: 5,
   },
   texticon: {
     height: Height * 0.02,

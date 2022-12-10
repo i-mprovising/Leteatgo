@@ -20,6 +20,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useRecoilValue} from 'recoil';
 import foodid from '../recoil/foodid';
 import recipename from '../recoil/recipename';
+
 import userkey from '../recoil/userKey';
 import FindIcon from '../components/findIcon';
 
@@ -87,7 +88,6 @@ function Recipe() {
         <View style={{...styles.block, justifyContent: 'center'}}>
           <Text style={styles.title}>{RecipeName}</Text>
         </View>
-
         <RecipeTopArea food_name={RecipeName} />
         <ScrollView
           style={{
@@ -134,6 +134,7 @@ function Recipe() {
               }}>
               {material.map((key, index) => (
                 <TouchableOpacity
+                  key={index}
                   activeOpacity={0.5}
                   style={{
                     justifyContent: 'center',

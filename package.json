@@ -2,11 +2,12 @@
   "scripts": {
     "server": "cd backend && node server.js",
     "client": "cd frontend && cd LetEatGoios && yarn ios",
-    "start":"concurrently \"npm run server\" \"npm run client\""
+    "start": "concurrently \"npm run server\" \"npm run client\""
   },
   "dependencies": {
     "concurrently": "^7.4.0",
     "cors": "^2.8.5",
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "react-native-image-picker": "^4.10.2"
   }
 }

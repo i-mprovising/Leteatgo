@@ -122,7 +122,7 @@ function SearchResult() {
         <ScrollView style={{marginLeft: 10}}>
           {searchResult.length ? (
             searchResult.map((key, index) => (
-              <View style={{padding: 7}}>
+              <View style={{padding: 7}} key={index}>
                 <TouchableOpacity
                   activeOpacity={0.3}
                   style={{flexDirection: 'row', maxWidth: '65%'}}

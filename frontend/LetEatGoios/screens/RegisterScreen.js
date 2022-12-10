@@ -17,7 +17,6 @@ import {
   TextInput,
 } from 'react-native';
 import axios from 'axios';
-
 function RegisterScreen() {
   const navigation = useNavigation();
   const [userId, setUserId] = useState('');
@@ -26,10 +25,8 @@ function RegisterScreen() {
   const [nickname, setNickname] = useState('');
   const [sex, setSex] = useState(0);
   const [errortext, setErrortext] = useState('');
-  const placeholder = {
-    label: '성별을 선택해주세요',
-    value: null,
-  };
+  const placeholder = '성별을 선택해주세요';
+
   async function postData(id, password, nickname, sex) {
     setErrortext('');
     if (!id) {
@@ -64,48 +61,10 @@ function RegisterScreen() {
       console.log(e);
     }
   }
-  async function handleSubmitButton(
-    userId,
-    userPassword,
-    userPasswordCheck,
-    nickname,
-    sex,
-  ) {
-    setErrortext('');
-    if (!userId) {
-      alert('아이디를 입력해주세요 .');
-      return;
-    }
-    if (!userPassword) {
-      alert('비밀번호를 입력해주세요 .');
-      return;
-    }
-    if (!userPasswordCheck) {
-      alert('비밀번호 확인을 입력해주세요 .');
-      return;
-    }
-    if (!nickname) {
-      alert('닉네임을 입력해주세요 .');
-      return;
-    }
-    // if (!sex) {
-    //   alert('성별을 입력해주세요 .');
-    //   return;
-    // }
-    // if (!contact) {
-    //   alert('연락처를 입력해주세요 .');
-    //   return;
-    // }
-  }
   return (
     <LinearGradient colors={['#FFCDD2', '#FFAAB3']} style={styles.container}>
       <View style={styles.topArea}>
-        <View style={styles.titleArea}>
-          <Image
-            source={require('../assets/icons/Register_logo.png')}
-            style={{width: wp(30), resizeMode: 'contain'}}
-          />
-        </View>
+        <View style={styles.titleArea}></View>
         <View style={styles.textArea}>
           <Text style={styles.Text}>회원가입하여 나만의 레시피 공간</Text>
           <Text style={styles.Text}>입맛춤을 사용해보세요 🍖</Text>
@@ -161,6 +120,11 @@ function RegisterScreen() {
         />
         {
           <RNPickerSelect
+            placeholder={{
+              label: placeholder,
+              value: null,
+              color: 'black',
+            }}
             style={pickerSelectStyles}
             onValueChange={value => setSex(value)}
             items={[
@@ -175,7 +139,7 @@ function RegisterScreen() {
           <TouchableOpacity
             style={styles.btn}
             onPress={() => postData(userId, userPassword, nickname, sex)}>
-            <Text style={{color: 'white', fontSize: wp(4)}}>회원가입</Text>
+            <Text style={{fontSize: wp(4)}}>회원가입</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -196,51 +160,57 @@ const styles = StyleSheet.create({
     paddingTop: wp(5),
   },
   titleArea: {
-    flex: 0.6,
+    flex: 0.4,
+
     justifyContent: 'center',
   },
   textArea: {
     flex: 0.4,
+    alignItems: 'center',
     justifyContent: 'center',
   },
   Text: {
-    fontSize: wp(4),
+    fontWeight: '500',
+    color: 'white',
+    fontFamily: 'Happiness-Sans-Regular',
+    fontSize: 20,
   },
   formArea: {
-    flex: 0.21,
+    // flex: 0.21,
     padding: 0,
   },
   formArea2: {
-    flex: 0.2,
+    flex: 0.3,
   },
   formAreaTop: {
+    marginTop: 20,
     borderWidth: 2,
-    borderColor: 'black',
+    borderColor: '#ffe0e3',
     borderTopLeftRadius: 7,
     borderTopRightRadius: 7,
     borderBottomWidth: 1,
     paddingLeft: 10,
     backgroundColor: 'white',
-    paddingVertical: 12,
+    paddingVertical: 20,
   },
   formAreaMiddle: {
     borderWidth: 2,
-    borderColor: 'black',
+    borderColor: '#ffe0e3',
     borderTopWidth: 1,
     borderBottomWidth: 1,
     paddingLeft: 10,
     backgroundColor: 'white',
-    paddingVertical: 12,
+    paddingVertical: 20,
   },
   formAreaBottom: {
     borderWidth: 2,
-    borderColor: 'black',
+    borderColor: '#ffe0e3',
     borderBottomLeftRadius: 7,
     borderBottomRightRadius: 7,
     borderTopWidth: 1,
     paddingLeft: 10,
     backgroundColor: 'white',
-    paddingVertical: 12,
+    paddingVertical: 20,
   },
   btnArea: {
     height: hp(8),
@@ -253,20 +223,23 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'black',
+    backgroundColor: '#DDB4B9',
     borderRadius: 5,
   },
 });
 
 const pickerSelectStyles = StyleSheet.create({
+  placeholder: {color: '#CACACD'},
   inputIOS: {
     borderWidth: 2,
-    borderColor: 'black',
+    borderColor: '#ffe0e3',
     borderTopWidth: 1,
     borderBottomWidth: 1,
     paddingLeft: 10,
     backgroundColor: 'white',
-    paddingVertical: 12,
+    paddingVertical: 20,
+    borderBottomLeftRadius: 7,
+    borderBottomRightRadius: 7,
   },
   inputAndroid: {
     borderWidth: 2,

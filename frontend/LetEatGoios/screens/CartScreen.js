@@ -170,8 +170,9 @@ function Cart() {
             alignItems: 'center',
           }}>
           {selectedList ? (
-            selectedList.map(key => (
+            selectedList.map((key, index) => (
               <View
+                key={index}
                 style={{
                   marginBottom: 10,
                 }}>
@@ -257,8 +258,9 @@ function Cart() {
             }}></Image>
         </View>
         <ScrollView>
-          {Category.map(key => (
+          {Category.map((key, index) => (
             <CartCategory
+              key={index}
               category={key.name}
               array={key.array}
               selectedList={selectedList}

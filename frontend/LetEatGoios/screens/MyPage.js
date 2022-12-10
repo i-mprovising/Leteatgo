@@ -12,6 +12,7 @@ import {
   Alert,
 } from 'react-native';
 import {useRecoilState} from 'recoil';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -37,6 +38,7 @@ function RecipeComponent(Props) {
 
   const [KEY, setKEY] = useRecoilState(userkey);
   // const [put, setPut] = useRecoilState(click);
+
   async function putLike(Like, foodid) {
     console.log(Like);
 
@@ -151,7 +153,17 @@ function MyRecipe() {
   const isFocused = useIsFocused();
   const [KEY, setKEY] = useRecoilState(userkey);
   // const [put, setPut] = useRecoilState(click);
+  async function deleteUser() {
+    try {
+      const response = await axios.delete(
+        `http://127.0.0.1:80/user/withdraw?userid=${KEY}`,
+      );
 
+      console.log(response.config);
+    } catch (e) {
+      console.log(e.response);
+    }
+  }
   function doubleCheck(foodid, made) {
     check = false;
     made.map(key => {
@@ -189,10 +201,33 @@ function MyRecipe() {
     getMade(KEY);
     getLike(KEY);
   }, [isFocused]);
-  // useEffect(() => {
-  //   getMade(KEY);
-  //   getLike(KEY);
-  // }, [put]);
+  useEffect(() => {
+    getMade(KEY);
+    getLike(KEY);
+  }, []);
+
+  const [imgUrl, setImgUrl] = useState('');
+  const onSelectImage = () => {
+    launchImageLibrary(
+      {
+        mediaType: 'photo',
+        maxWidth: 512,
+        maxHeight: 512,
+        includeBase64: Platform.OS === 'ios',
+      },
+      res => {
+        console.log(res.assets[0].uri);
+        if (res.didCancel) return;
+        // setImgUrl(res.assets[0].uri);
+        AsyncStorage.setItem(`userImg${userId}`, res.assets[0].uri);
+        AsyncStorage.getItem(`userImg${userId}`).then(value =>
+          value === null ? setImgUrl('') : setImgUrl(value),
+        );
+        // console.log('img come');
+        // console.log(imgUrl);
+      },
+    );
+  };
   return (
     <SafeAreaProvider>
       <SafeAreaView
@@ -234,14 +269,20 @@ function MyRecipe() {
           <View style={{flex: 1, paddingHorizontal: Width * 0.03}}>
             <View style={{flex: 0.25}}>
               <View style={{...styles.mybox, flexDirection: 'row'}}>
-                <Image
-                  source={require('../assets/icons/User_default.png')}
-                  style={{
-                    marginLeft: Width * 0.05,
-                    width: Width * 0.27,
-                    height: Width * 0.27,
-                  }}
-                />
+                <TouchableOpacity onPress={onSelectImage}>
+                  <Image
+                    source={
+                      imgUrl == ''
+                        ? require('../assets/icons/User_default.png')
+                        : {uri: imgUrl}
+                    }
+                    style={{
+                      marginLeft: Width * 0.05,
+                      width: Width * 0.27,
+                      height: Width * 0.27,
+                    }}
+                  />
+                </TouchableOpacity>
                 <View style={{marginLeft: Width * 0.02}}>
                   <View
                     style={{
@@ -254,11 +295,22 @@ function MyRecipe() {
                         fontSize: 17,
                         marginLeft: 15,
                         fontWeight: '500',
+                        maxWidth: '80%',
                       }}>
                       {nickname}
                     </Text>
+                  </View>
+                  <Text
+                    style={{
+                      fontFamily: 'Happiness-Sans-Regular',
+                      fontSize: 14,
+                      marginLeft: 10,
+                      fontWeight: '400',
+                    }}>
+                    {userId}
+                  </Text>
+                  <View style={{flexDirection: 'row', marginTop: 10}}>
                     <TouchableOpacity
-                      style={styles.mylogoutButton}
                       onPress={() => {
                         Alert.alert('로그아웃 하시겠습니까?', '', [
                           {
@@ -283,16 +335,33 @@ function MyRecipe() {
                         로그아웃
                       </Text>
                     </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => {
+                        Alert.alert('회원을 탈퇴 하시겠습니까?', '', [
+                          {
+                            text: '네',
+                            onPress: () => {
+                              AsyncStorage.removeItem('KEY');
+                              AsyncStorage.removeItem('USERNICKNAME');
+                              AsyncStorage.removeItem('user_id');
+                              navigation.replace('Splash');
+                              deleteUser();
+                            },
+                          },
+                          {
+                            text: '아니오',
+                          },
+                        ]);
+                      }}>
+                      <Text
+                        style={{
+                          ...styles.mylogoutText,
+                          textDecorationLine: 'underline',
+                        }}>
+                        회원탈퇴
+                      </Text>
+                    </TouchableOpacity>
                   </View>
-                  <Text
-                    style={{
-                      fontFamily: 'Happiness-Sans-Regular',
-                      fontSize: 14,
-                      marginLeft: 10,
-                      fontWeight: '400',
-                    }}>
-                    {userId}
-                  </Text>
                 </View>
               </View>
             </View>

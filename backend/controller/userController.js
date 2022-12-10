@@ -4,6 +4,13 @@ const bcrypt = require("bcrypt");
 const CODE = require("../modules/statusCode");
 const Prefer = require("../models/prefer");
 const { Op } = require("sequelize");
+const recommend = require("./recommendController");
+const { PythonShell } = require("python-shell");
+const { SUCCESS } = require("../modules/statusCode");
+
+let options = {
+  scriptPath: ".",
+};
 
 const user = {
   signup: async (req, res, next) => {
@@ -157,7 +164,12 @@ const user = {
             foodid: req.body.foodid,
           },
         }
-      ); // User 찾고 좋아요 업데이트
+      );
+      await recommend.write();
+      PythonShell.run("./py/recommend.py", options, async function (err, data) {
+        if (err) console.error(err);
+        console.log(data);
+      });
       if (updateUser) {
         return res.json({
           statusCode: CODE.SUCCESS,
@@ -187,11 +199,19 @@ const user = {
           },
         }
       );
-
+      await recommend.write();
+      PythonShell.run("./py/recommend.py", options, async function (err, data) {
+        if (err) console.error(err);
+        console.log(data);
+      });
       if (deleteFood) {
+        const firstData = spawn("python3", ["./py/recommend.py"]);
+        firstData.stderr.on("data", function (data) {
+          console.error("stderr", data.toString());
+        });
         return res.json({
           statusCOde: CODE.SUCCESS,
-          msg: "만들어본 음식을 삭제하였습니다.",
+          msg: "만들어본 음식을 업데이트하였습니다.",
         });
       } else {
         return (
@@ -202,6 +222,28 @@ const user = {
           })
         );
       }
+    } catch (error) {
+      console.error(error);
+      return res.json({ statusCode: CODE.FAIL, msg: "db 오류" });
+    }
+  },
+  delete: async (req, res) => {
+    try {
+      const userid = req.query.userid;
+      const deleteFlag = await User.destroy({
+        where: {
+          userid: userid,
+        },
+      });
+      if (!deleteFlag)
+        return res.json({
+          statusCode: CODE.FAIL,
+          msg: "해당 회원을 찾을 수 없습니다.",
+        });
+      return res.json({
+        statusCode: CODE.SUCCESS,
+        msg: "해당 회원을 삭제하였습니다.",
+      });
     } catch (error) {
       console.error(error);
       return res.json({ statusCode: CODE.FAIL, msg: "db 오류" });

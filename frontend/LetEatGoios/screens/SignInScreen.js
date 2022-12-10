@@ -49,9 +49,9 @@ function Login() {
         AsyncStorage.setItem(STORAGE_KEY, response.data.result.nickname);
         navigation.replace('Main');
       } else {
-        alert('아이디와 비밀번호를 다시 확인해주세요 .');
       }
     } catch (e) {
+      alert('아이디와 비밀번호를 다시 확인해주세요 .');
       console.log(e);
     }
   }
@@ -61,7 +61,10 @@ function Login() {
       <View style={styles.topArea}>
         <Image
           source={require('../assets/icons/Login_logo.png')}
-          style={{width: wp(50), resizeMode: 'contain'}}
+          style={{
+            width: wp(50),
+            resizeMode: 'contain',
+          }}
         />
       </View>
 
@@ -89,14 +92,14 @@ function Login() {
             onPress={() => postData(userId, userPassword)}
             // onPress={() => navigation.navigate('Main')}
           >
-            <Text style={{color: 'white'}}>로그인</Text>
+            <Text>로그인</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.btnArea}>
           <TouchableOpacity
-            style={styles.btn}
-            onPress={() => navigation.navigate('Register')}>
-            <Text style={{color: 'white'}}>회원가입</Text>
+            style={{...styles.btn, backgroundColor: '#DDB4B9'}}
+            onPress={() => navigation.navigate('Tos')}>
+            <Text>회원가입</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -110,13 +113,15 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: 'white',
+
     paddingLeft: wp(7),
     paddingRight: wp(7),
   },
   topArea: {
-    flex: 1,
+    flex: 2,
     marginTop: wp(30),
     justifyContent: 'center',
+    alignItems: 'center',
     // backgroundColor: 'red',
     marginBottom: wp(7),
   },
@@ -144,7 +149,7 @@ const styles = StyleSheet.create({
   textFormTop: {
     borderWidth: 2,
     borderBottomWidth: 1,
-    borderColor: 'black',
+    borderColor: 'pink',
     borderTopLeftRadius: 7,
     borderTopRightRadius: 7,
     width: '100%',
@@ -156,7 +161,7 @@ const styles = StyleSheet.create({
   textFormBottom: {
     borderWidth: 2,
     borderTopWidth: 1,
-    borderColor: 'black',
+    borderColor: 'pink',
     borderBottomLeftRadius: 7,
     borderBottomRightRadius: 7,
     width: '100%',
@@ -177,7 +182,7 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'black',
+    backgroundColor: '#ffe0e3',
   },
 });
 

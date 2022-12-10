@@ -181,7 +181,7 @@ function SearchPage() {
         {searchResult.length ? (
           <ScrollView style={{marginLeft: 20}}>
             {searchResult.map((key, index) => (
-              <View style={{flexDirection: 'row', padding: 10}}>
+              <View style={{flexDirection: 'row', padding: 10}} key={index}>
                 <Image
                   style={{
                     height: 20,

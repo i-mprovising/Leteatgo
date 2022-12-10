@@ -77,7 +77,6 @@ function HomeScreen() {
       );
 
       if (response.data) {
-        console.log('dbsal');
         console.log(response.data);
         setuserResult(response.data.data[0]);
         setIngreResult(response.data.data[1]);
@@ -149,7 +148,10 @@ function HomeScreen() {
           </TouchableOpacity>
         </LinearGradient>
         <ScrollView>
-          <View style={{alignItems: 'center'}}>
+          <View
+            style={{
+              alignItems: 'center',
+            }}>
             <View>
               <Text
                 style={{
@@ -157,6 +159,7 @@ function HomeScreen() {
                   fontWeight: '400',
                   fontFamily: 'Happiness-Sans-Regular',
                   marginTop: 20,
+                  marginHorizontal: 15,
                 }}>
                 안녕하세요? {userNickname}님🥘,
               </Text>
@@ -166,7 +169,8 @@ function HomeScreen() {
                   fontWeight: '400',
                   fontFamily: 'Happiness-Sans-Regular',
                   marginBottom: 8,
-                  marginTop: 10,
+                  marginHorizontal: 10,
+                  marginTop: 15,
                 }}>
                 {userNickname}님에게 꼭 맞는 레시피를 추천해드릴게요!
               </Text>

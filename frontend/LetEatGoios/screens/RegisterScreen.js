@@ -43,12 +43,15 @@ function RegisterScreen() {
     }
 
     try {
-      const response = await axios.post('http://127.0.0.1:80/user/signup', {
-        id,
-        password,
-        nickname,
-        sex,
-      });
+      const response = await axios.post(
+        'ec2-3-34-153-73.ap-northeast-2.compute.amazonaws.com:8080/user/signup',
+        {
+          id,
+          password,
+          nickname,
+          sex,
+        },
+      );
 
       if (response.data.statusCode === 200) {
         navigation.replace('SignIn');

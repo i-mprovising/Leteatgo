@@ -79,6 +79,7 @@ function CartCategory(Props) {
           }}>
           {array.map((key, index) => (
             <ItemList
+              key={index}
               Key={key}
               Array={array}
               Submit={submit}

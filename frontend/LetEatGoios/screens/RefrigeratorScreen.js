@@ -204,8 +204,9 @@ function RefrigeratorScreen() {
             }}></Image>
         </View>
         <ScrollView>
-          {Category.map(key => (
+          {Category.map((key, index) => (
             <IngreCategory
+              key={key.name}
               category={key.name}
               array={key.array}
               categoryId={key.id}

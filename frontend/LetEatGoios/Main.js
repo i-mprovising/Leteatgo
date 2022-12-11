@@ -79,9 +79,8 @@ function Main() {
         tabBarStyle: {
           height: 80,
         },
-      }}
-      tabBarOptions={{
-        labelStyle: {
+
+        tabBarLabelStyle: {
           color: '#FFAAB3',
           fontWeight: '500',
           fontSize: 11,

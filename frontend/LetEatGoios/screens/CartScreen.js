@@ -260,7 +260,7 @@ function Cart() {
         <ScrollView>
           {Category.map((key, index) => (
             <CartCategory
-              key={index}
+              key={key.name}
               category={key.name}
               array={key.array}
               selectedList={selectedList}

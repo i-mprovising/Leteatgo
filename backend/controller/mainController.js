@@ -46,6 +46,7 @@ function recommPromise(userid) {
 const main = {
   main: async (req, res, err) => {
     try {
+      let start = new Date();
       let section = [];
       const isReq = req;
       if (req) {
@@ -107,6 +108,8 @@ const main = {
         }
         console.log("final data", finaldata);
         section.push(finaldata);
+        let end = new Date();
+        console.log(end - start);
         let secondData;
         const pythonres = await recommPromise(req.query.userid).then((data) => {
           secondData = data;
@@ -132,6 +135,8 @@ const main = {
         }
         console.log("final data", section);
         section.push(secondData);
+        let end1 = new Date();
+        console.log(end1 - start);
         return res.json({
           statusCode: CODE.SUCCESS,
           msg: "성공",

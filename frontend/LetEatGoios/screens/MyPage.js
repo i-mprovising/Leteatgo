@@ -215,6 +215,7 @@ function MyRecipe() {
         maxHeight: 512,
         includeBase64: Platform.OS === 'ios',
       },
+
       res => {
         console.log(res.assets[0].uri);
         if (res.didCancel) return;

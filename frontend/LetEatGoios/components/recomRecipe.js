@@ -36,6 +36,7 @@ function RecomRecipe(Props) {
           ) : (
             Props.data.map((key, index) => (
               <TouchableOpacity
+                key={index}
                 activeOpacity={0.7}
                 onPress={() => {
                   setFoodId(Props.data[index].foodid);

@@ -54,6 +54,7 @@ function App() {
             component={Splash_Screen}
             options={{
               title: '',
+              headerTintColor: 'white',
               headerTransparent: true,
             }}
           />

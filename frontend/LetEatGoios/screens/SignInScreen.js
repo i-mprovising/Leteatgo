@@ -49,6 +49,7 @@ function Login() {
         AsyncStorage.setItem(STORAGE_KEY, response.data.result.nickname);
         navigation.replace('Main');
       } else {
+        alert('아이디와 비밀번호를 다시 확인해주세요 .');
       }
     } catch (e) {
       alert('아이디와 비밀번호를 다시 확인해주세요 .');

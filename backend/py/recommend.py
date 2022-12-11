@@ -3,8 +3,8 @@ import numpy as np
 from sklearn.utils import shuffle
 from sklearn.metrics.pairwise import cosine_similarity
 
-readpath = "./csv/prefer.csv"
-savepath = "./csv/Hybrid_predict.csv"
+readpath = "../csv/prefer.csv"
+savepath = "../csv/Hybrid_predict.csv"
 
 r_cols = ['userid', 'sex','foodid', 'survey', 'like', 'made', 'view']
 a, b, c, d = 1, 1, 1, 2
@@ -173,48 +173,6 @@ for i in range(len(item_similarity[0])) :
         item_similarity[i, i] = 1.0
 item_similarity = pd.DataFrame(item_similarity, index=rating_matrix_t.index, columns=rating_matrix_t.index)
 
-# 정확도(RMSE)를 계산하는 함수
-def RMSE(y_true, y_pred):
-    a = np.sqrt(np.mean((np.array(y_true) - np.array(y_pred))**2))
-    return a
-
-# 모델별 RMSE를 계산하는 함수
-def score(model):
-    id_pairs = zip(ratings_test['userid'], ratings_test['foodid'])
-    pred = np.array([model(user, food) for (user, food) in id_pairs])
-    true = np.array(ratings_test['rate'])
-    pred = np.nan_to_num(pred)
-    true = np.nan_to_num(true)
-    return RMSE(true, pred)
-
-# 주어진 음식의 (food_id) 가중평균 rating을 계산하는 함수,
-# 가중치는 주어진 아이템과 다른 아이템 간의 유사도(item_similarity)
-def CF_IBCF(userid, foodid):
-    if foodid in item_similarity:      # 현재 음식이 train set에 있는지 확인
-        if userid in rating_matrix_t:  
-        # 현재 음식과 다른 음식의 similarity 값 가져오기
-            sim_scores = item_similarity[foodid]
-            # 현 사용자의 모든 rating 값 가져오기
-            user_rating = rating_matrix_t[userid]
-            # 사용자가 평가하지 않은 음식 index 가져오기
-            non_rating_idx = user_rating[user_rating.isnull()].index
-            # 사용자가 평가하지 않은 음식 제거
-            user_rating = user_rating.dropna()
-            # 사용자가 평가하지 않은 음식의 similarity 값 제거
-            sim_scores = sim_scores.drop(non_rating_idx)
-            # 현 음식에 대한 예상 rating 계산, 가중치는 현 음식과 사용자가 평가한 음식의 유사도
-            average = rating_matrix_t[userid].sum()/ rating_matrix_t[userid].notnull().sum()
-            rating = np.dot(sim_scores, user_rating) / sim_scores.sum()
-            mean_rating = rating + average
-        else:
-            mean_rating = 1.5
-    else:
-        mean_rating = 1.5
-    return mean_rating
-
-# 정확도 계산
-ibcf_score = score(CF_IBCF)
-
 #KNN 을 활용한 iBCF
 def ibcf_knn(userid, foodid, neighbor_size=40):
     if userid in rating_matrix_t:       # 사용자가 train set에 있는지 확인
@@ -260,8 +218,6 @@ def ibcf_knn(userid, foodid, neighbor_size=40):
     else:
         mean_rating = 1.5
     return mean_rating
-# 정확도 계산
-knn_score = score(ibcf_knn)
 
 def recommend(model) :
     id_pairs = zip(ratings['userid'], ratings['foodid'])
@@ -272,7 +228,7 @@ def recommend(model) :
     for (user, food) in id_pairs :
         foodid.append(food)
         userid.append(user)
-        pred.append(ibcf_knn(user, food))
+        pred.append(model(user, food))
     pred = np.nan_to_num(pred)
     res_df = res_df.assign(foodid = foodid)
     res_df = res_df.assign(userid = userid)
@@ -280,9 +236,7 @@ def recommend(model) :
     return res_df
 
 
-if (ibcf_score > knn_score) :
-    result = recommend(knn_score)
-else : result = recommend(ibcf_score)
+result = recommend(ibcf_knn)
 #print(result)
 IBCF_matrix = result.pivot_table(index='userid', columns='foodid', values='pred').fillna(0)
 print(IBCF_matrix)

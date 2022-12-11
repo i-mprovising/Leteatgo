@@ -11,8 +11,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 start = time.time()
 
 threads = []
-readpath = "./csv/prefer.csv"
-savepath = "multithread_Hybrid_predict.csv"
+readpath = "../csv/prefer.csv"
+savepath = "../csv/multithread_Hybrid_predict.csv"
 
 r_cols = ['userid', 'sex', 'foodid', 'survey', 'like', 'made', 'view']
 a, b, c, d = 1, 1, 1, 2

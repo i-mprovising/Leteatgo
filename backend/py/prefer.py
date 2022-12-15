@@ -8,7 +8,7 @@ sys.path.append("/opt/homebrew/lib/python3.9/site-packages")
 if __name__ == '__main__':
     r_cols = ['userid', 'sex', 'foodid', 'survey', 'like', 'made', 'view']
     a, b, c, d = 1, 1, 1, 2
-    ratings = pd.read_csv("./csv/prefer.csv", names=r_cols, encoding='latin-1')
+    ratings = pd.read_csv("../csv/prefer.csv", names=r_cols, encoding='latin-1')
     ratings = ratings.iloc[1:]
     ratings = ratings[['userid', 'foodid', 'survey',
                        'like', 'made', 'view']].astype(float)

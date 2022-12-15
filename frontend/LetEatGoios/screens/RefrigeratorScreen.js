@@ -46,7 +46,7 @@ function RefrigeratorScreen() {
   async function getIngred(userid) {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:80/user/ingredient?userid=${userid}`,
+        `http://3.34.153.73:8081/user/ingredient?userid=${userid}`,
       );
 
       // console.log(response.data.result);
@@ -71,10 +71,13 @@ function RefrigeratorScreen() {
 
   async function postIngre(id, selectedList) {
     try {
-      const response = await axios.post('http://127.0.0.1:80/user/ingredient', {
-        userid: id,
-        material: selectedList,
-      });
+      const response = await axios.post(
+        'http://3.34.153.73:8081/user/ingredient',
+        {
+          userid: id,
+          material: selectedList,
+        },
+      );
       setPost(true);
     } catch (e) {
       console.log(e);
@@ -115,65 +118,7 @@ function RefrigeratorScreen() {
             />
           </TouchableOpacity>
         </LinearGradient>
-        <Text
-          style={{
-            paddingLeft: 20,
-            paddingVertical: 17,
-            fontSize: 16,
-            fontWeight: '800',
-          }}>
-          나의 냉장고
-        </Text>
-        <View style={{flexDirection: 'row', flexWrap: 'wrap', marginLeft: 17}}>
-          {selectedList ? (
-            selectedList.map((key, index) => (
-              <View
-                key={index}
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginBottom: 10,
-                }}>
-                <FindIcon
-                  key={key.index}
-                  category={key.category}
-                  foodname={key.materials}
-                />
-
-                <View style={{flexDirection: 'row'}}>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      // marginLeft: 18,
-                      fontFamily: 'Happiness-Sans-Regular',
-                    }}>
-                    {key.materials}
-                  </Text>
-                  <TouchableOpacity
-                    activeOpacity={0.5}
-                    onPress={() => {
-                      deleteIngred(USERID, key.index);
-                      setDelete(false);
-                    }}>
-                    <Image
-                      source={require('../assets/icons/deleteIcon.png')}
-                      style={{
-                        width: 17,
-                        height: 17,
-                        marginLeft: 5,
-                      }}></Image>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            ))
-          ) : (
-            <ActivityIndicator
-              style={{marginLeft: '47%', marginBottom: '10%'}}
-            />
-          )}
-        </View>
-
-        <View style={{position: 'relative'}}>
+        <ScrollView>
           <Text
             style={{
               paddingLeft: 20,
@@ -181,39 +126,100 @@ function RefrigeratorScreen() {
               fontSize: 16,
               fontWeight: '800',
             }}>
-            재료 추가하기
+            나의 냉장고
           </Text>
-          <TextInput
-            autoCorrect={false}
-            onSubmitEditing={() => {
-              const postList = [];
-              postList.push({name: text, category: -1});
-              postIngre(USERID, postList);
-              setPost(false);
-              setText('');
-            }}
-            onChangeText={onChangeText}
-            style={styles.refrigeSearch}
-            value={text}></TextInput>
-          <Image
-            source={require('../assets/icons/PinkSearch.png')}
-            style={{
-              position: 'absolute',
-              top: '68%',
-              left: '86%',
-            }}></Image>
-        </View>
-        <ScrollView>
-          {Category.map((key, index) => (
-            <IngreCategory
-              key={key.name}
-              category={key.name}
-              array={key.array}
-              categoryId={key.id}
-              selectedList={selectedList}
-              setSelectedList={setSelectedList}
-            />
-          ))}
+          <View
+            style={{flexDirection: 'row', flexWrap: 'wrap', marginLeft: 17}}>
+            {selectedList ? (
+              selectedList.map((key, index) => (
+                <View
+                  key={index}
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginBottom: 10,
+                  }}>
+                  <FindIcon
+                    key={key.index}
+                    category={key.category}
+                    foodname={key.materials}
+                  />
+
+                  <View style={{flexDirection: 'row'}}>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        // marginLeft: 18,
+                        fontFamily: 'Happiness-Sans-Regular',
+                      }}>
+                      {key.materials}
+                    </Text>
+                    <TouchableOpacity
+                      activeOpacity={0.5}
+                      onPress={() => {
+                        deleteIngred(USERID, key.index);
+                        setDelete(false);
+                      }}>
+                      <Image
+                        source={require('../assets/icons/deleteIcon.png')}
+                        style={{
+                          width: 17,
+                          height: 17,
+                          marginLeft: 5,
+                        }}></Image>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              ))
+            ) : (
+              <ActivityIndicator
+                style={{marginLeft: '47%', marginBottom: '10%'}}
+              />
+            )}
+          </View>
+
+          <View style={{position: 'relative'}}>
+            <Text
+              style={{
+                paddingLeft: 20,
+                paddingVertical: 17,
+                fontSize: 16,
+                fontWeight: '800',
+              }}>
+              재료 추가하기
+            </Text>
+            <TextInput
+              autoCorrect={false}
+              onSubmitEditing={() => {
+                const postList = [];
+                postList.push({name: text, category: -1});
+                postIngre(USERID, postList);
+                setPost(false);
+                setText('');
+              }}
+              onChangeText={onChangeText}
+              style={styles.refrigeSearch}
+              value={text}></TextInput>
+            <Image
+              source={require('../assets/icons/PinkSearch.png')}
+              style={{
+                position: 'absolute',
+                top: '68%',
+                left: '86%',
+              }}></Image>
+          </View>
+          <ScrollView>
+            {Category.map((key, index) => (
+              <IngreCategory
+                key={key.name}
+                category={key.name}
+                array={key.array}
+                categoryId={key.id}
+                selectedList={selectedList}
+                setSelectedList={setSelectedList}
+              />
+            ))}
+          </ScrollView>
         </ScrollView>
       </SafeAreaView>
     </SafeAreaProvider>

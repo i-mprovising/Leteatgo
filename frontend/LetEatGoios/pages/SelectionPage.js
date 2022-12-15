@@ -145,7 +145,7 @@ function SelectionPage() {
   const [KEY, setKey] = useRecoilState(userkey);
   async function getFood() {
     try {
-      const response = await axios.get('http://127.0.0.1:80/survey');
+      const response = await axios.get('http://3.34.153.73:8081/survey');
 
       setFood(response.data.food);
       if (response.data.food) {

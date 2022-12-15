@@ -287,17 +287,19 @@ function Tos() {
                 }}>
                 {agree ? (
                   <TouchableOpacity
-                    style={{marginRight: 10, backgroundColor: '#ffe0e3'}}
+                    style={{marginRight: 20}}
                     onPress={() => setAgree(false)}>
                     <Image
-                      source={require('../assets/icons/CheckButton.png')}></Image>
+                      style={{marginTop: 2}}
+                      source={require('../assets/icons/Checked.png')}></Image>
                   </TouchableOpacity>
                 ) : (
                   <TouchableOpacity
-                    style={{marginRight: 10, backgroundColor: '#ffe0e3'}}
+                    style={{marginRight: 20}}
                     onPress={() => setAgree(true)}>
                     <Image
-                      source={require('../assets/icons/NonCheckButton.png')}></Image>
+                      style={{marginTop: 2}}
+                      source={require('../assets/icons/Check.png')}></Image>
                   </TouchableOpacity>
                 )}
                 <Text style={{fontWeight: '600', fontSize: 17}}>

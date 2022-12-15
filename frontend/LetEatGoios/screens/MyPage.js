@@ -156,7 +156,7 @@ function MyRecipe() {
   async function deleteUser() {
     try {
       const response = await axios.delete(
-        `http://127.0.0.1:80/user/withdraw?userid=${KEY}`,
+        `http://3.34.153.73:8081/user/withdraw?userid=${KEY}`,
       );
 
       console.log(response.config);
@@ -177,7 +177,7 @@ function MyRecipe() {
   async function getLike(userid) {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:80/user/like?userid=${userid}`,
+        `http://3.34.153.73:8081/user/like?userid=${userid}`,
       );
       console.log('like');
       console.log(response.data.result);
@@ -202,6 +202,10 @@ function MyRecipe() {
     getMade(KEY);
   }, [isFocused]);
   useEffect(() => {
+    AsyncStorage.getItem(`userImg${userId}`).then(value => {
+      value === null ? setImgUrl('') : setImgUrl(value);
+      console.log(value);
+    });
     getLike(KEY);
     getMade(KEY);
   }, []);
@@ -217,7 +221,7 @@ function MyRecipe() {
       },
 
       res => {
-        console.log(res.assets[0].uri);
+        // console.log(res.assets[0].uri);
         if (res.didCancel) return;
         // setImgUrl(res.assets[0].uri);
         AsyncStorage.setItem(`userImg${userId}`, res.assets[0].uri);
@@ -345,8 +349,9 @@ function MyRecipe() {
                               AsyncStorage.removeItem('KEY');
                               AsyncStorage.removeItem('USERNICKNAME');
                               AsyncStorage.removeItem('user_id');
-                              navigation.replace('Splash');
+
                               deleteUser();
+                              navigation.replace('Splash');
                             },
                           },
                           {
